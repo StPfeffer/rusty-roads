@@ -12,6 +12,28 @@ pub struct RequestQueryDTO {
     pub limit: Option<usize>,
 }
 
+#[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
+pub struct RegisterCountryDTO {
+    #[validate(length(
+        min = 1,
+        max = 100,
+        message = "Country name must have a maximum of 100 characters"
+    ))]
+    pub name: String,
+
+    #[validate(length(min = 2, max = 2, message = "Alpha 2 code must be 2 characters long"))]
+    #[serde(rename = "alpha2")]
+    pub alpha_2: String,
+
+    #[validate(length(min = 3, max = 3, message = "Alpha 3 code must be 3 characters long"))]
+    #[serde(rename = "alpha3")]
+    pub alpha_3: String,
+
+    #[validate(length(min = 3, max = 3, message = "Numeric 3 code must be 3 characters long"))]
+    #[serde(rename = "numeric3")]
+    pub numeric_3: String,
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct FilterCountryDTO {
     pub id: String,
@@ -22,7 +44,6 @@ pub struct FilterCountryDTO {
     pub alpha_3: String,
     #[serde(rename = "numeric3")]
     pub numeric_3: String,
-    pub capital: String,
 }
 
 impl FilterCountryDTO {
@@ -33,7 +54,6 @@ impl FilterCountryDTO {
             alpha_2: country.alpha_2.to_owned(),
             alpha_3: country.alpha_3.to_owned(),
             numeric_3: country.numeric_3.to_owned(),
-            capital: country.capital.to_owned(),
         }
     }
 
@@ -46,19 +66,13 @@ impl FilterCountryDTO {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct CountryData {
-    pub country: FilterCountryDTO,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
 pub struct CountryResponseDTO {
     pub status: String,
-    pub data: CountryData,
+    pub data: FilterCountryDTO,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CountryListResponseDTO {
-    pub status: String,
     pub countries: Vec<FilterCountryDTO>,
     pub results: usize,
 }

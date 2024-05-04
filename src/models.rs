@@ -7,5 +7,4 @@ pub struct Country {
     pub alpha_2: String,
     pub alpha_3: String,
     pub numeric_3: String,
-    pub capital: String,
 }
