@@ -35,6 +35,11 @@ pub trait CountryExt {
         alpha_3: T,
         numeric_3: T,
     ) -> Result<Country, sqlx::Error>;
+
+    async fn delete_country(
+        &self,
+        country_id: Option<Uuid>,
+    ) -> Result<Option<Country>, sqlx::Error>;
 }
 
 #[async_trait]
@@ -52,7 +57,7 @@ impl CountryExt for DBClient {
         if let Some(country_id) = country_id {
             country = sqlx::query_as!(
                 Country,
-                r#"SELECT id, name, alpha_2, alpha_3, numeric_3 FROM countries WHERE id = $1"#,
+                r#"SELECT * FROM countries WHERE id = $1"#,
                 country_id
             )
             .fetch_optional(&self.pool)
@@ -60,7 +65,7 @@ impl CountryExt for DBClient {
         } else if let Some(name) = name {
             country = sqlx::query_as!(
                 Country,
-                r#"SELECT id, name, alpha_2, alpha_3, numeric_3 FROM countries WHERE name = $1"#,
+                r#"SELECT * FROM countries WHERE name = $1"#,
                 name
             )
             .fetch_optional(&self.pool)
@@ -68,7 +73,7 @@ impl CountryExt for DBClient {
         } else if let Some(alpha_2) = alpha_2 {
             country = sqlx::query_as!(
                 Country,
-                r#"SELECT id, name, alpha_2, alpha_3, numeric_3 FROM countries WHERE alpha_2 = $1"#,
+                r#"SELECT * FROM countries WHERE alpha_2 = $1"#,
                 alpha_2
             )
             .fetch_optional(&self.pool)
@@ -76,13 +81,13 @@ impl CountryExt for DBClient {
         } else if let Some(alpha_3) = alpha_3 {
             country = sqlx::query_as!(
                 Country,
-                r#"SELECT id, name, alpha_2, alpha_3, numeric_3 FROM countries WHERE alpha_3 = $1"#,
+                r#"SELECT * FROM countries WHERE alpha_3 = $1"#,
                 alpha_3
             )
             .fetch_optional(&self.pool)
             .await?;
         } else if let Some(numeric_3) = numeric_3 {
-            country = sqlx::query_as!(Country, r#"SELECT id, name, alpha_2, alpha_3, numeric_3 FROM countries WHERE numeric_3 = $1"#, numeric_3) 
+            country = sqlx::query_as!(Country, r#"SELECT * FROM countries WHERE numeric_3 = $1"#, numeric_3) 
                 .fetch_optional(&self.pool)
                 .await?;
         }
@@ -114,7 +119,7 @@ impl CountryExt for DBClient {
     ) -> Result<Country, sqlx::Error> {
         let country = sqlx::query_as!(
             Country,
-            r#"INSERT INTO countries (name, alpha_2, alpha_3, numeric_3) VALUES ($1, $2, $3, $4) RETURNING id, name, alpha_2, alpha_3, numeric_3"#,
+            r#"INSERT INTO countries (name, alpha_2, alpha_3, numeric_3) VALUES ($1, $2, $3, $4) RETURNING *"#,
             &name.into(),
             &alpha_2.into(),
             &alpha_3.into(),
@@ -122,6 +127,25 @@ impl CountryExt for DBClient {
         )
         .fetch_one(&self.pool)
         .await?;
+
+        Ok(country)
+    }
+
+    async fn delete_country(
+        &self,
+        country_id: Option<Uuid>,
+    ) -> Result<Option<Country>, sqlx::Error> {
+        let mut country = None;
+
+        if let Some(country_id) = country_id {
+            country = sqlx::query_as!(
+                Country,
+                r#"DELETE FROM countries WHERE id = $1 RETURNING *"#,
+                country_id
+            )
+            .fetch_optional(&self.pool)
+            .await?;
+        }
 
         Ok(country)
     }
