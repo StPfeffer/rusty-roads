@@ -2,7 +2,7 @@ mod config;
 mod db;
 
 use actix_cors::Cors;
-use actix_web::{http::header, middleware::Logger, web, App, HttpServer};
+use actix_web::{get, http::header, middleware::Logger, web, App, HttpResponse, HttpServer, Responder};
 use config::Config;
 use db::DBClient;
 use dotenv::dotenv;
@@ -68,11 +68,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .wrap(Logger::default())
             // .service(scopes::auth::auth_scope())
             // .service(scopes::users::users_scope())
-            // .service(health_checker_handler)
+            .service(health_checker_handler)
     })
     .bind(("0.0.0.0", config.port))?
     .run()
     .await?;
 
     Ok(())
+}
+
+#[get("/api/healthchecker")]
+async fn health_checker_handler() -> impl Responder {
+    const MESSAGE: &str = "Rust Route Manager";
+
+    HttpResponse::Ok().json(serde_json::json!({"status": "success", "message": MESSAGE}))
 }
