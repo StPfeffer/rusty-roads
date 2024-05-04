@@ -24,6 +24,7 @@ pub struct Response {
 #[derive(Debug, PartialEq)]
 pub enum ErrorMessage {
     ServerError,
+    CountryExist,
 }
 
 impl ToString for ErrorMessage {
@@ -42,6 +43,9 @@ impl ErrorMessage {
     fn to_str(&self) -> String {
         match self {
             ErrorMessage::ServerError => "Server Error. Please try again later".to_string(),
+            ErrorMessage::CountryExist => {
+                "There is already a country with the provided data".to_string()
+            }
         }
     }
 }
@@ -53,13 +57,6 @@ pub struct HttpError {
 }
 
 impl HttpError {
-    pub fn new(message: impl Into<String>, status: u16) -> Self {
-        HttpError {
-            message: message.into(),
-            status,
-        }
-    }
-
     pub fn server_error(message: impl Into<String>) -> Self {
         HttpError {
             message: message.into(),
@@ -78,13 +75,6 @@ impl HttpError {
         HttpError {
             message: message.into(),
             status: 409,
-        }
-    }
-
-    pub fn unauthorized(message: impl Into<String>) -> Self {
-        HttpError {
-            message: message.into(),
-            status: 401,
         }
     }
 
