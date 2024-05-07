@@ -2,13 +2,16 @@ use actix_web::{web, HttpResponse, Scope};
 use validator::Validate;
 
 use crate::{
-    db::CountryExt,
-    dtos::{CountryListResponseDTO, FilterCountryDTO, RegisterCountryDTO, RequestQueryDTO},
+    db::country::CountryExt,
+    dtos::{
+        country::{CountryListResponseDTO, FilterCountryDTO, RegisterCountryDTO},
+        request::RequestQueryDTO,
+    },
     error::{ErrorMessage, HttpError},
     AppState,
 };
 
-pub fn countries_scope() -> Scope {
+pub fn country_scope() -> Scope {
     web::scope("/api/countries")
         .route("", web::get().to(list_countries))
         .route("/{id}", web::get().to(get_country))
