@@ -1,8 +1,14 @@
 mod config;
 mod db;
+mod dtos;
+mod error;
+mod models;
+mod scopes;
 
 use actix_cors::Cors;
-use actix_web::{get, http::header, middleware::Logger, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{
+    get, http::header, middleware::Logger, web, App, HttpResponse, HttpServer, Responder,
+};
 use config::Config;
 use db::DBClient;
 use dotenv::dotenv;
@@ -21,7 +27,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     dotenv().ok();
-    // env_logger::init();
 
     let config = Config::init();
 
@@ -31,8 +36,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .max_connections(10)
         .connect(&config.database_url)
         .await?;
-
-    println!("AQUI");
 
     // match sqlx::migrate!("./migrations").run(&pool).await {
     //     Ok(_) => println!("Migrations executed successfully."),
@@ -66,8 +69,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .app_data(web::Data::new(app_state.clone()))
             .wrap(cors)
             .wrap(Logger::default())
-            // .service(scopes::auth::auth_scope())
-            // .service(scopes::users::users_scope())
+            .service(scopes::countries::countries_scope())
             .service(health_checker_handler)
     })
     .bind(("0.0.0.0", config.port))?
