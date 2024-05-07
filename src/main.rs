@@ -10,7 +10,7 @@ use actix_web::{
     get, http::header, middleware::Logger, web, App, HttpResponse, HttpServer, Responder,
 };
 use config::Config;
-use db::DBClient;
+use db::client::DBClient;
 use dotenv::dotenv;
 use sqlx::postgres::PgPoolOptions;
 
@@ -69,7 +69,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .app_data(web::Data::new(app_state.clone()))
             .wrap(cors)
             .wrap(Logger::default())
-            .service(scopes::countries::countries_scope())
+            .service(scopes::country::country_scope())
             .service(health_checker_handler)
     })
     .bind(("0.0.0.0", config.port))?
