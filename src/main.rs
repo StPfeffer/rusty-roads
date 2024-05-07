@@ -1,10 +1,16 @@
 mod config;
 mod db;
+mod dtos;
+mod error;
+mod models;
+mod scopes;
 
 use actix_cors::Cors;
-use actix_web::{http::header, middleware::Logger, web, App, HttpServer};
+use actix_web::{
+    get, http::header, middleware::Logger, web, App, HttpResponse, HttpServer, Responder,
+};
 use config::Config;
-use db::DBClient;
+use db::client::DBClient;
 use dotenv::dotenv;
 use sqlx::postgres::PgPoolOptions;
 
@@ -21,7 +27,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     dotenv().ok();
-    // env_logger::init();
 
     let config = Config::init();
 
@@ -32,12 +37,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .connect(&config.database_url)
         .await?;
 
-    println!("AQUI");
-
-    // match sqlx::migrate!("./migrations").run(&pool).await {
-    //     Ok(_) => println!("Migrations executed successfully."),
-    //     Err(e) => eprintln!("Error executing migrations: {}", e),
-    // };
+    match sqlx::migrate!("./migrations").run(&pool).await {
+        Ok(_) => println!("Migrations executed successfully."),
+        Err(e) => eprintln!("Error executing migrations: {}", e),
+    };
 
     let db_client = DBClient::new(pool);
     let app_state: AppState = AppState {
@@ -66,13 +69,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .app_data(web::Data::new(app_state.clone()))
             .wrap(cors)
             .wrap(Logger::default())
-            // .service(scopes::auth::auth_scope())
-            // .service(scopes::users::users_scope())
-            // .service(health_checker_handler)
+            .service(scopes::country::country_scope())
+            .service(health_checker_handler)
     })
     .bind(("0.0.0.0", config.port))?
     .run()
     .await?;
 
     Ok(())
+}
+
+#[get("/api/healthchecker")]
+async fn health_checker_handler() -> impl Responder {
+    const MESSAGE: &str = "Rust Route Manager";
+
+    HttpResponse::Ok().json(serde_json::json!({"status": "success", "message": MESSAGE}))
 }
