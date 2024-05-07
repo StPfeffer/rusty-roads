@@ -16,7 +16,6 @@ impl Config {
         Config {
             database_url,
             jwt_secret,
-            // parse the String received from the environment variable to an i64
             jwt_maxage: jwt_maxage.parse::<i64>().unwrap(),
             port: port.parse::<u16>().unwrap_or(8080),
         }
