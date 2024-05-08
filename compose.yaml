@@ -1,0 +1,47 @@
+name: rust-route-manager
+
+services:
+  postgres:
+    image: postgres:16.2
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - 6500:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - route-manager
+
+  rust_route_manager:
+    container_name: rust_route_manager
+    image: rust_route_manager:0.1.0
+    build:
+      context: .
+      target: final
+      args:
+        DATABASE_URL: ${DATABASE_URL_DOCKER}
+    env_file:
+      - ./.env
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+    restart: always
+    networks:
+      - route-manager
+
+volumes:
+  pgdata: {}
+
+networks:
+  route-manager:
+    external: true
