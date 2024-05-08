@@ -1,19 +1,9 @@
 use async_trait::async_trait;
-use sqlx::{Pool, Postgres};
 use uuid::Uuid;
 
 use crate::models::Country;
 
-#[derive(Debug, Clone)]
-pub struct DBClient {
-    pool: Pool<Postgres>,
-}
-
-impl DBClient {
-    pub fn new(pool: Pool<Postgres>) -> Self {
-        DBClient { pool }
-    }
-}
+use super::client::DBClient;
 
 #[async_trait]
 pub trait CountryExt {
@@ -63,13 +53,9 @@ impl CountryExt for DBClient {
             .fetch_optional(&self.pool)
             .await?;
         } else if let Some(name) = name {
-            country = sqlx::query_as!(
-                Country,
-                r#"SELECT * FROM countries WHERE name = $1"#,
-                name
-            )
-            .fetch_optional(&self.pool)
-            .await?;
+            country = sqlx::query_as!(Country, r#"SELECT * FROM countries WHERE name = $1"#, name)
+                .fetch_optional(&self.pool)
+                .await?;
         } else if let Some(alpha_2) = alpha_2 {
             country = sqlx::query_as!(
                 Country,
@@ -87,9 +73,13 @@ impl CountryExt for DBClient {
             .fetch_optional(&self.pool)
             .await?;
         } else if let Some(numeric_3) = numeric_3 {
-            country = sqlx::query_as!(Country, r#"SELECT * FROM countries WHERE numeric_3 = $1"#, numeric_3) 
-                .fetch_optional(&self.pool)
-                .await?;
+            country = sqlx::query_as!(
+                Country,
+                r#"SELECT * FROM countries WHERE numeric_3 = $1"#,
+                numeric_3
+            )
+            .fetch_optional(&self.pool)
+            .await?;
         }
 
         Ok(country)
