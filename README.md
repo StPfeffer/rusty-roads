@@ -10,7 +10,7 @@ This code is using a [PostgreSQL](https://www.postgresql.org/) container in [Doc
 
 To start the PostgreSQL container:
 
-`docker-compose -f up -d`
+`docker-compose up postgres`
 
 To end the container:
 
