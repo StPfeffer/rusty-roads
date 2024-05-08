@@ -1,0 +1,46 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "DELETE FROM countries WHERE id = $1 RETURNING *",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "alpha_2",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "alpha_3",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "numeric_3",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "cc33e962dea1b04d3a1ab842a65d40ee884541d8bc2d7846548df7052c3cb835"
+}

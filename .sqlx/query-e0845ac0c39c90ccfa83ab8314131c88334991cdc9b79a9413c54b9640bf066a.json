@@ -1,0 +1,46 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT * FROM countries WHERE numeric_3 = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "alpha_2",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "alpha_3",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "numeric_3",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "e0845ac0c39c90ccfa83ab8314131c88334991cdc9b79a9413c54b9640bf066a"
+}
