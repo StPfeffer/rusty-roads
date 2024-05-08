@@ -11,8 +11,9 @@ use actix_web::{
 };
 use config::Config;
 use db::client::DBClient;
-use dotenv::dotenv;
+use dotenvy::dotenv;
 use sqlx::postgres::PgPoolOptions;
+use std::time::Duration;
 
 #[derive(Debug, Clone)]
 pub struct AppState {
@@ -32,10 +33,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("{}", &config.database_url);
 
-    let pool = PgPoolOptions::new()
-        .max_connections(10)
-        .connect(&config.database_url)
-        .await?;
+    let pool = establish_database_connection(&config.database_url).await?;
 
     match sqlx::migrate!("./migrations").run(&pool).await {
         Ok(_) => println!("Migrations executed successfully."),
@@ -77,6 +75,33 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     .await?;
 
     Ok(())
+}
+
+async fn establish_database_connection(
+    database_url: &str,
+) -> Result<sqlx::PgPool, Box<dyn std::error::Error>> {
+    let max_retries = 10;
+    let mut retries = 0;
+    loop {
+        match PgPoolOptions::new()
+            .max_connections(10)
+            .connect(database_url)
+            .await
+        {
+            Ok(pool) => return Ok(pool),
+            Err(err) => {
+                eprintln!("Error connecting to the database: {}", err);
+                retries += 1;
+
+                if retries >= max_retries {
+                    return Err(Box::new(err));
+                }
+
+                println!("Retrying database connection...");
+                tokio::time::sleep(Duration::from_secs(5)).await; // Wait for 5 seconds before retrying
+            }
+        }
+    }
 }
 
 #[get("/api/healthchecker")]
