@@ -10,11 +10,11 @@ This code is using a [PostgreSQL](https://www.postgresql.org/) container in [Doc
 
 To start the PostgreSQL container:
 
-`docker-compose up postgres`
+`docker compose up postgres`
 
 To end the container:
 
-`docker-compose -f down`
+`docker compose -f down`
 
 ### Cargo
 
