@@ -1,4 +1,4 @@
-# Rust API
+# Rust Route Manager
 
 This is a simple API written in [Rust](https://www.rust-lang.org/).
 
@@ -14,7 +14,7 @@ To start the PostgreSQL container:
 
 To end the container:
 
-`docker compose -f down`
+`docker compose down postgres`
 
 ### Cargo
 
