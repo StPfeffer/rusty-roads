@@ -21,7 +21,7 @@ services:
     networks:
       - route-manager
 
-  rust_route_manager:
+  backend:
     container_name: rust_route_manager
     image: rust_route_manager:0.1.0
     build:
