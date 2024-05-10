@@ -21,6 +21,8 @@ pub struct AppState {
     pub db_client: DBClient,
 }
 
+const MAX_RETRIES: i32 = 10;
+
 #[actix_web::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     if std::env::var_os("RUST_LOG").is_none() {
@@ -33,7 +35,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("{}", &config.database_url);
 
-    let pool = establish_database_connection(&config.database_url).await?;
+    let pool = establish_database_connection(&config.database_url, MAX_RETRIES).await?;
 
     match sqlx::migrate!("./migrations").run(&pool).await {
         Ok(_) => println!("Migrations executed successfully."),
@@ -78,10 +80,67 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
+/// Establishes a connection to a PostgreSQL database using the provided URL.
+///
+/// # Arguments
+///
+/// * `database_url` - A string slice representing the URL of the PostgreSQL database.
+/// * `max_retries` - An integer representing the maximum number of retries in case of connection failure.
+///
+/// # Returns
+///
+/// Returns a Result containing a PostgreSQL connection pool (`sqlx::PgPool`) if successful,
+/// otherwise returns an error boxed as `Box<dyn std::error::Error>`.
+///
+/// # Errors
+///
+/// Returns an error if the connection to the database fails after the maximum number of retries
+/// specified by `max_retries`.
+///
+/// # Examples
+///
+/// ```rust
+/// use std::time::Duration;
+///
+/// // Example usage to establish a database connection with a maximum of 3 retries
+/// let database_url = "postgres://username:password@localhost:5432/database_name";
+/// let max_retries = 3;
+/// let connection_result = establish_database_connection(database_url, max_retries).await;
+///
+/// match connection_result {
+///     Ok(pool) => {
+///         println!("Connected to the database successfully!");
+///         // Further database operations using the pool
+///     }
+///     Err(err) => {
+///         eprintln!("Failed to establish database connection: {}", err);
+///         // Handle the error appropriately
+///     }
+/// }
+/// ```
+///
+/// # Notes
+///
+/// This function retries connecting to the database with an interval of 5 seconds between retries.
+///
+/// # Panics
+///
+/// This function does not panic under normal circumstances. However, it may panic if the provided
+/// `database_url` is malformed or if there is an issue with the Tokio runtime.
+///
+/// # Safety
+///
+/// This function does not contain unsafe code.
+///
+/// # Performance
+///
+/// The performance of this function depends on the network latency and the responsiveness of the
+/// PostgreSQL server. Retrying the connection multiple times may impact performance if the server
+/// is slow to respond or if there are network issues.
 async fn establish_database_connection(
     database_url: &str,
+    max_retries: i32,
 ) -> Result<sqlx::PgPool, Box<dyn std::error::Error>> {
-    let max_retries = 10;
     let mut retries = 0;
     loop {
         match PgPoolOptions::new()
@@ -105,6 +164,38 @@ async fn establish_database_connection(
     }
 }
 
+/// Handles HTTP GET requests to '/api/v1/healthchecker', providing a simple health check response.
+///
+/// # Returns
+///
+/// Returns an `impl Responder` representing an HTTP response with status code 200 (OK) and a JSON payload
+/// containing a status message indicating success and a custom message.
+///
+/// # Examples
+///
+/// ```rust
+/// use actix_web::{test, App};
+///
+/// #[actix_rt::test]
+/// async fn test_health_checker_handler() {
+///     let mut app = test::init_service(App::new().service(health_checker_handler)).await;
+///     let req = test::TestRequest::get().uri("/api/v1/healthchecker").to_request();
+///     let resp = test::call_service(&mut app, req).await;
+///
+///     assert!(resp.status().is_success());
+///     let body = test::read_body(resp).await;
+///     assert_eq!(body, "{\"status\":\"success\",\"message\":\"Rust Route Manager\"}");
+/// }
+/// ```
+///
+/// # Safety
+///
+/// This function does not contain unsafe code.
+///
+/// # Performance
+///
+/// The performance of this function is dependent on the performance of the Actix Web framework
+/// and the overhead associated with JSON serialization and HTTP response handling.
 #[get("/api/v1/healthchecker")]
 async fn health_checker_handler() -> impl Responder {
     const MESSAGE: &str = "Rust Route Manager";
