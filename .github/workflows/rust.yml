@@ -1,4 +1,4 @@
-name: Build Rust with Cargo.
+name: Build Rust with Cargo
 
 on:
   push:
