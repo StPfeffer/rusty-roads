@@ -1,4 +1,4 @@
-name: Build and test a Rust project with Cargo.
+name: Build Rust with Cargo.
 
 on:
   push:
@@ -12,6 +12,7 @@ on:
 env:
   CARGO_TERM_COLOR: always
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  SQLX_OFFLINE: true
 
 jobs:
   build:
