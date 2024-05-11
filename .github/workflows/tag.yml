@@ -22,12 +22,19 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Get tag"
-        id: "get-tag"
+        id: get-tag
         shell: "bash"
         run: |
           echo PKG_VERSION=$(awk -F ' = ' '$1 ~ /version/ { gsub(/["]/, "", $2); printf("%s",$2) }' Cargo.toml) >> $GITHUB_OUTPUT
 
+      - name: "Check if tag exists"
+        id: tagged
+        shell: bash
+        run: git show-ref --tags --verify --quiet -- "refs/tags/v${{ steps.get-tag.outputs.PKG_VERSION }}" && echo "::set-output name=tagged::0" || echo "::set-output name=tagged::1"
+
       - name: "Set Tag"
+        id: set-tag
+        if: steps.tagged.outputs.tagged == 1
         shell: "bash"
         run: |
           git tag v${{ steps.get-tag.outputs.PKG_VERSION }} && git push --tags
