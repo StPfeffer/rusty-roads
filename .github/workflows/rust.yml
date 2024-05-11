@@ -1,4 +1,4 @@
-name: Rust
+name: Build and test a Rust project with Cargo.
 
 on:
   push:
@@ -7,6 +7,7 @@ on:
     branches: [ "main" ]
   schedule:
     - cron: '*/5 * * * *'
+  workflow_dispatch:
 
 env:
   CARGO_TERM_COLOR: always
@@ -14,7 +15,7 @@ env:
 
 jobs:
   build:
-
+    name: Build project
     runs-on: ubuntu-latest
 
     steps:
