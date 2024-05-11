@@ -12,11 +12,7 @@ pub struct RegisterStateDTO {
     ))]
     pub name: String,
 
-    #[validate(length(
-        min = 2,
-        max = 2,
-        message = "State code must be 2 characters long."
-    ))]
+    #[validate(length(min = 2, max = 2, message = "State code must be 2 characters long."))]
     pub code: String,
 
     #[serde(rename = "countryId")]
