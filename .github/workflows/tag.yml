@@ -10,6 +10,9 @@ on:
 
 jobs:
   create-tag:
+    permissions:
+      contents: write
+
     name: "Create tag"
     runs-on: "ubuntu-latest"
     steps:
