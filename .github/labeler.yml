@@ -1,0 +1,30 @@
+workflows:
+  - changed-files:
+    - any-glob-to-any-file: ['.github/workflows/**/*']
+
+tests:
+  - changed-files:
+    - any-glob-to-any-file: ['tests/**/*']
+
+dependency:
+  - changed-files:
+    - any-glob-to-any-file: ['Cargo.toml', 'Cargo.lock']
+
+api:
+  - changed-files:
+    - any-glob-to-any-file: ['src/scopes/**/*']
+
+docker:
+  - changed-files:
+    - any-glob-to-any-file: ['Dockerfile', 'compose.yaml', '.dockerignore']
+
+database:
+  - changed-files:
+    - any-glob-to-any-file: ['src/db/**/*', 'src/models/**/*', 'migrations', '.sqlx']
+
+bug:
+  - head-branch: ['^fix', 'fix']
+
+documentation:
+  - changed-files:
+    - any-glob-to-any-file: docs/**
