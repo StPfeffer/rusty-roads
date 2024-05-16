@@ -1,4 +1,4 @@
-name: Rust
+name: Build Rust with Cargo
 
 on:
   push:
@@ -6,15 +6,17 @@ on:
   pull_request:
     branches: [ "main" ]
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '0 */12 * * *'
+  workflow_dispatch:
 
 env:
   CARGO_TERM_COLOR: always
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  SQLX_OFFLINE: true
 
 jobs:
   build:
-
+    name: Build project
     runs-on: ubuntu-latest
 
     steps:
