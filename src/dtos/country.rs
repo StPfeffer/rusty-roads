@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-use crate::models::Country;
+use crate::models::country::Country;
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
 pub struct RegisterCountryDTO {
@@ -54,12 +54,6 @@ impl FilterCountryDTO {
             .map(FilterCountryDTO::filter_country)
             .collect()
     }
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct CountryResponseDTO {
-    pub status: String,
-    pub data: FilterCountryDTO,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
