@@ -1,4 +1,4 @@
-use std::fmt;
+use std::fmt::{self, Display, Formatter, Result};
 
 use actix_web::{HttpResponse, ResponseError};
 use serde::{Deserialize, Serialize};
@@ -27,9 +27,9 @@ pub enum ErrorMessage {
     CountryExist,
 }
 
-impl ToString for ErrorMessage {
-    fn to_string(&self) -> String {
-        self.to_str().to_owned()
+impl Display for ErrorMessage {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        write!(f, "{}", self.to_str())
     }
 }
 
