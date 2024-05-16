@@ -33,9 +33,9 @@ impl ToString for ErrorMessage {
     }
 }
 
-impl Into<String> for ErrorMessage {
-    fn into(self) -> String {
-        self.to_string()
+impl From<ErrorMessage> for String {
+    fn from(error_message: ErrorMessage) -> Self {
+        error_message.to_string()
     }
 }
 
