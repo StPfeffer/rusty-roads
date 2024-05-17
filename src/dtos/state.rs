@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-use crate::models::State;
+use crate::models::state::State;
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
 pub struct RegisterStateDTO {

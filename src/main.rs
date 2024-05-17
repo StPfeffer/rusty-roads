@@ -30,9 +30,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
 
     let config = Config::init();
-
-    println!("{}", &config.database_url);
-
     let pool = establish_database_connection(&config.database_url).await?;
 
     match sqlx::migrate!("./migrations").run(&pool).await {

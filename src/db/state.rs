@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use uuid::Uuid;
 
-use crate::models::State;
+use crate::models::state::State;
 
 use super::client::DBClient;
 
