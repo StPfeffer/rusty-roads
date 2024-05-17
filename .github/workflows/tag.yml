@@ -32,7 +32,6 @@ jobs:
         id: tagged
         shell: bash
         run: git show-ref --tags --verify --quiet -- "refs/tags/v${{ steps.get-tag.outputs.PKG_VERSION }}" && echo "::set-output name=tagged::0" || echo "::set-output name=tagged::1"
-  
 
       - name: "Set tag"
         if: steps.tagged.outputs.tagged == 1
