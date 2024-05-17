@@ -23,7 +23,7 @@ database:
     - any-glob-to-any-file: ['src/db/**/*', 'src/models/**/*', 'migrations', '.sqlx']
 
 bug:
-  - head-branch: ['^fix', 'fix', '!code-scanning', 'scanning', 'fix-code-scanning']
+  - head-branch: ['^fix', 'fix', '!code-scanning', '!scanning', '!fix-code-scanning']
 
 documentation:
   - changed-files:
