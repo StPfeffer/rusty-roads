@@ -1,7 +1,7 @@
 # A tag is generated based on the project version from
 # the Cargo.toml file and pushed to the repo.
 
-name: "Tag"
+name: "Create Tag"
 
 on:
   push:
