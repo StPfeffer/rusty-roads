@@ -1,3 +1,4 @@
+pub mod address;
 pub mod city;
 pub mod client;
 pub mod colaborator;
