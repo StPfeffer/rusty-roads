@@ -1,4 +1,4 @@
-use std::fmt;
+use std::fmt::{self, Display, Formatter, Result};
 
 use actix_web::{HttpResponse, ResponseError};
 use serde::{Deserialize, Serialize};
@@ -27,15 +27,15 @@ pub enum ErrorMessage {
     CountryExist,
 }
 
-impl ToString for ErrorMessage {
-    fn to_string(&self) -> String {
-        self.to_str().to_owned()
+impl Display for ErrorMessage {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        write!(f, "{}", self.to_str())
     }
 }
 
-impl Into<String> for ErrorMessage {
-    fn into(self) -> String {
-        self.to_string()
+impl From<ErrorMessage> for String {
+    fn from(error_message: ErrorMessage) -> Self {
+        error_message.to_string()
     }
 }
 
@@ -82,19 +82,19 @@ impl HttpError {
         match self.status {
             400 => HttpResponse::BadRequest().json(Response {
                 status: "fail",
-                message: self.message.into(),
+                message: self.message,
             }),
             401 => HttpResponse::Unauthorized().json(Response {
                 status: "fail",
-                message: self.message.into(),
+                message: self.message,
             }),
             409 => HttpResponse::Conflict().json(Response {
                 status: "fail",
-                message: self.message.into(),
+                message: self.message,
             }),
             500 => HttpResponse::InternalServerError().json(Response {
                 status: "error",
-                message: self.message.into(),
+                message: self.message,
             }),
             _ => {
                 eprintln!(

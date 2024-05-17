@@ -1,9 +1,8 @@
 use async_trait::async_trait;
 use uuid::Uuid;
 
-use crate::models::Country;
-
 use super::client::DBClient;
+use crate::models::country::Country;
 
 #[async_trait]
 pub trait CountryExt {
