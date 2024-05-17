@@ -30,9 +30,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
 
     let config = Config::init();
-
-    println!("{}", &config.database_url);
-
     let pool = establish_database_connection(&config.database_url).await?;
 
     match sqlx::migrate!("./migrations").run(&pool).await {
@@ -65,6 +62,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .wrap(cors)
             .wrap(Logger::default())
             .service(scopes::country::country_scope())
+            .service(scopes::state::state_scope())
             .service(health_checker_handler)
     })
     .bind(("0.0.0.0", config.port))?
@@ -101,7 +99,7 @@ async fn establish_database_connection(
     }
 }
 
-#[get("/api/healthchecker")]
+#[get("/api/v1/healthchecker")]
 async fn health_checker_handler() -> impl Responder {
     const MESSAGE: &str = "Rust Route Manager";
 

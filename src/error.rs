@@ -25,6 +25,7 @@ pub struct Response {
 pub enum ErrorMessage {
     ServerError,
     CountryExist,
+    StateExist,
 }
 
 impl Display for ErrorMessage {
@@ -45,6 +46,9 @@ impl ErrorMessage {
             ErrorMessage::ServerError => "Server Error. Please try again later".to_string(),
             ErrorMessage::CountryExist => {
                 "There is already a country with the provided data".to_string()
+            }
+            ErrorMessage::StateExist => {
+                "There is already a state with the provided code and countryId".to_string()
             }
         }
     }

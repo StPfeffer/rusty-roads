@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-use crate::models::collaborator::{self, Collaborator};
+use crate::models::collaborator::Collaborator;
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
 pub struct RegisterCollaboratorDTO {
@@ -52,6 +52,7 @@ pub struct FilterCollaboratorDTO {
 }
 
 impl FilterCollaboratorDTO {
+    #[allow(dead_code)]
     pub fn filter_collaborator(collaborator: &Collaborator) -> Self {
         FilterCollaboratorDTO {
             id: collaborator.id.to_string(),
@@ -64,6 +65,7 @@ impl FilterCollaboratorDTO {
         }
     }
 
+    #[allow(dead_code)]
     pub fn filter_collaborators(collaborators: &[Collaborator]) -> Vec<FilterCollaboratorDTO> {
         collaborators
             .iter()
