@@ -1,0 +1,78 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT * FROM addresses WHERE address = $1 AND number = $2 AND zip_code = $3",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "address",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "number",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "neighbourhood",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "reference",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "complement",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 6,
+        "name": "zip_code",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 7,
+        "name": "latitude",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 8,
+        "name": "longitude",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 9,
+        "name": "city_id",
+        "type_info": "Uuid"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false
+    ]
+  },
+  "hash": "8ccf599d31ede43df4355af547f93622a800d06604dd7187c3edfe0189da852e"
+}
