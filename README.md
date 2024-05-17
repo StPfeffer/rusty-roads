@@ -1,6 +1,8 @@
 <div align="center">
 
-<h1 align="center">Rust Route Manager</h1>
+<img src=".github/logo.svg" width="120" height="120" alt="Logo"/>
+
+<h1 align="center">Rusty Roads</h1>
 
 <p align="center">
     <strong>A simple route manager application written in Rust</strong>
