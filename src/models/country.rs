@@ -15,16 +15,3 @@ pub struct Country {
     /// The ISO 3166-1 numeric-3 code of the country.
     pub numeric_3: String,
 }
-
-/// Represents a database table storing information about states/provinces.
-#[derive(Debug, Deserialize, sqlx::FromRow, sqlx::Type, Serialize, Clone)]
-pub struct State {
-    /// The unique identifier of the state/province.
-    pub id: Uuid,
-    /// The name of the state/province.
-    pub name: String,
-    /// The code of the state/province.
-    pub code: String,
-    /// The foreign key referencing the country to which the state/province belongs.
-    pub country_id: Uuid,
-}

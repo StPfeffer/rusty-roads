@@ -48,10 +48,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         db_client,
     };
 
-    println!(
-        "{}",
-        format!("Server is running on http://localhost:{}", config.port)
-    );
+    println!("Server is running on http://localhost:{}", config.port);
 
     HttpServer::new(move || {
         let cors = Cors::default()
