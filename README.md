@@ -8,10 +8,10 @@
     <strong>A simple route manager application written in Rust</strong>
 </p>
 
-[![Build](https://github.com/StPfeffer/rust-route-manager/actions/workflows/build.yml/badge.svg)](https://github.com/StPfeffer/rust-route-manager/actions/workflows/build.yml)
-[![Rust Analyze](https://github.com/StPfeffer/rust-route-manager/actions/workflows/rust-clippy.yml/badge.svg)](https://github.com/StPfeffer/rust-route-manager/actions/workflows/rust-clippy.yml)
-[![Rust Check](https://github.com/StPfeffer/rust-route-manager/actions/workflows/rust.yml/badge.svg)](https://github.com/StPfeffer/rust-route-manager/actions/workflows/rust.yml)
-[![Release](https://img.shields.io/github/v/release/StPfeffer/rust-route-manager?color=%23c694ff)](https://github.com/StPfeffer/rust-route-manager/releases/latest)
+[![Build](https://github.com/StPfeffer/rusty-roads/actions/workflows/build.yml/badge.svg)](https://github.com/StPfeffer/rusty-roads/actions/workflows/build.yml)
+[![Rust Analyze](https://github.com/StPfeffer/rusty-roads/actions/workflows/rust-clippy.yml/badge.svg)](https://github.com/StPfeffer/rusty-roads/actions/workflows/rust-clippy.yml)
+[![Rust Check](https://github.com/StPfeffer/rusty-roads/actions/workflows/rust.yml/badge.svg)](https://github.com/StPfeffer/rusty-roads/actions/workflows/rust.yml)
+[![Release](https://img.shields.io/github/v/release/StPfeffer/rusty-roads?color=%23c694ff)](https://github.com/StPfeffer/rusty-roads/releases/latest)
 
 </div>
 
@@ -39,7 +39,7 @@ This project is part of our college coursework, aiming to develop a simple route
 
 ## Installation
 
-Work in progress
+Work in progress.
 
 ## Build from source
 
@@ -49,14 +49,14 @@ Ensure you have Rust installed on your machine. If not, download and install it 
 
 ### Install Docker
 
-Ensure you have Docker installed on your machine. If not, download and install ir from [docker.com](https://www.docker.com/).
+Ensure you have Docker installed on your machine. If not, download and install it from [docker.com](https://www.docker.com/).
 
 #### Database Setup
 
-After installing Docker, go to the project directory and start the PostgreSQL container:
+After installing Docker, navigate to the project directory and start the PostgreSQL container:
 
 ```shell
-docker compose up postgres
+docker-compose up postgres
 ```
 
 ### Install Dependencies
@@ -77,7 +77,7 @@ Once you have it, you can copy or rename the `.env.example` file to `.env` and p
 
 ## Running
 
-Once you've got all things set up, you can run the following command to start the application:
+Once everything is set up, you can run the following command to start the application:
 
 ```shell
 cargo run
@@ -85,4 +85,4 @@ cargo run
 
 ## License
 
-This project is licensed under the [MIT License](https://github.com/StPfeffer/rust-route-manager/blob/main/LICENSE).
+This project is licensed under the [MIT License](https://github.com/StPfeffer/rusty-roads/blob/main/LICENSE).

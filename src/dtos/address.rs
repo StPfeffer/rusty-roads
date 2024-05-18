@@ -2,7 +2,7 @@ use bigdecimal::BigDecimal;
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-use crate::models::address::Address;
+use crate::{models::address::Address, utils::uuid::is_valid_uuid};
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
 pub struct RegisterAddressDTO {
@@ -28,15 +28,15 @@ pub struct RegisterAddressDTO {
     pub neighbourhood: String,
 
     #[validate(length(
-        min = 10,
-        max = 10,
+        min = 1,
+        max = 60,
         message = "Reference must have a maximum of 60 characters"
     ))]
     pub reference: Option<String>,
 
     #[validate(length(
-        min = 10,
-        max = 10,
+        min = 1,
+        max = 60,
         message = "Complement must have a maximum of 60 characters"
     ))]
     pub complement: Option<String>,
@@ -52,6 +52,7 @@ pub struct RegisterAddressDTO {
     pub latitude: Option<BigDecimal>,
     pub longitude: Option<BigDecimal>,
 
+    #[validate(custom(function = "is_valid_uuid", message = "City ID must be a valid UUID"))]
     #[serde(rename = "cityId")]
     pub city_id: String,
 }

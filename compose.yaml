@@ -1,4 +1,4 @@
-name: rust-route-manager
+name: rusty-roads
 
 services:
   postgres:
@@ -22,8 +22,8 @@ services:
       - route-manager
 
   backend:
-    container_name: rust_route_manager
-    image: rust_route_manager:0.1.0
+    container_name: rusty-roads
+    image: rusty-roads:0.1.1
     build:
       context: .
       target: final
