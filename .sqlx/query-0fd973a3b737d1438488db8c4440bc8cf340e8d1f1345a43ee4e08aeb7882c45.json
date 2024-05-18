@@ -1,0 +1,77 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT * FROM addresses LIMIT $1 OFFSET $2",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "address",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "number",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "neighbourhood",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "reference",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "complement",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 6,
+        "name": "zip_code",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 7,
+        "name": "latitude",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 8,
+        "name": "longitude",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 9,
+        "name": "city_id",
+        "type_info": "Uuid"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false
+    ]
+  },
+  "hash": "0fd973a3b737d1438488db8c4440bc8cf340e8d1f1345a43ee4e08aeb7882c45"
+}

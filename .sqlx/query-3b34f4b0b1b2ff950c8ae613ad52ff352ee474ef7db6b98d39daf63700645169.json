@@ -1,0 +1,84 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            INSERT INTO addresses (address, number, neighbourhood, reference, complement, zip_code, latitude, longitude, city_id) \n            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) \n            RETURNING *",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "address",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "number",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "neighbourhood",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "reference",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "complement",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 6,
+        "name": "zip_code",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 7,
+        "name": "latitude",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 8,
+        "name": "longitude",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 9,
+        "name": "city_id",
+        "type_info": "Uuid"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Numeric",
+        "Numeric",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false
+    ]
+  },
+  "hash": "3b34f4b0b1b2ff950c8ae613ad52ff352ee474ef7db6b98d39daf63700645169"
+}

@@ -31,7 +31,7 @@ jobs:
       - name: 'Check if tag already exists'
         id: tagged
         shell: bash
-        run: git show-ref --tags --verify --quiet -- "refs/tags/v0.10.0" && echo "tagged=0" >> $GITHUB_OUTPUT || echo "tagged=1" >> $GITHUB_OUTPUT
+        run: git show-ref --tags --verify --quiet -- "refs/tags/v${{ steps.get-tag.outputs.PKG_VERSION }}" && echo "tagged=0" >> $GITHUB_OUTPUT || echo "tagged=1" >> $GITHUB_OUTPUT
 
       - name: "Set tag"
         if: steps.tagged.outcome.tagged == 1
