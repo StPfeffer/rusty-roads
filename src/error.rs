@@ -52,11 +52,10 @@ impl ErrorMessage {
             ErrorMessage::StateExist => {
                 "There is already a state with the provided code and countryId".to_string()
             }
-            ErrorMessage::CityExist => {
-                "There is already a city with the provided code".to_string()
-            }
+            ErrorMessage::CityExist => "There is already a city with the provided code".to_string(),
             ErrorMessage::AddressExist => {
-                "There is already an address with the provided address, number and zipCode".to_string()
+                "There is already an address with the provided address, number and zipCode"
+                    .to_string()
             }
         }
     }
