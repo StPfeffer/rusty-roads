@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-use crate::models::collaborator::{self, Collaborator};
+use crate::models::collaborator::{Collaborator};
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
 pub struct RegisterCollaboratorDTO {
@@ -11,7 +11,7 @@ pub struct RegisterCollaboratorDTO {
     #[validate(length(min = 1, max = 11, message = "Collaborator CPF must have a maximum of 11 characters"))]
     pub cpf: String,
 
-    #[validate(length(min = 1, max = 9, message = "Collaborator CPF must have a maximum of 9 characters"))]
+    #[validate(length(min = 1, max = 9, message = "Collaborator RG must have a maximum of 9 characters"))]
     pub rg: String,
 
     #[validate(email)]
