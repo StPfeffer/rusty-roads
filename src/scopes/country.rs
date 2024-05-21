@@ -12,7 +12,7 @@ use crate::{
 };
 
 pub fn country_scope() -> Scope {
-    web::scope("/api/countries")
+    web::scope("/api/v1/countries")
         .route("", web::get().to(list_countries))
         .route("/{id}", web::get().to(get_country))
         .route("", web::post().to(save_country))

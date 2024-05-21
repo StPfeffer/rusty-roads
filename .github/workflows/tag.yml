@@ -1,7 +1,7 @@
 # A tag is generated based on the project version from
 # the Cargo.toml file and pushed to the repo.
 
-name: "Tag"
+name: "Create Tag"
 
 on:
   push:
@@ -15,9 +15,10 @@ jobs:
 
     name: "Create tag"
     runs-on: "ubuntu-latest"
+
     steps:
       - name: "Check out the repo"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -27,7 +28,13 @@ jobs:
         run: |
           echo PKG_VERSION=$(awk -F ' = ' '$1 ~ /version/ { gsub(/["]/, "", $2); printf("%s",$2) }' Cargo.toml) >> $GITHUB_OUTPUT
 
-      - name: "Set Tag"
+      - name: 'Check if tag already exists'
+        id: tagged
+        shell: bash
+        run: git show-ref --tags --verify --quiet -- "refs/tags/v${{ steps.get-tag.outputs.PKG_VERSION }}" && echo "tagged=0" >> $GITHUB_OUTPUT || echo "tagged=1" >> $GITHUB_OUTPUT
+
+      - name: "Set tag"
+        if: steps.tagged.outputs.tagged == 1
         shell: "bash"
         run: |
-          git tag v${{ steps.get-tag.outputs.PKG_VERSION }} && git push --tags
+          git tag v${{ steps.get-tag.outputs.PKG_VERSION }} && git pull --tags -f && git push --tags
