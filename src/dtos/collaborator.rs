@@ -1,7 +1,8 @@
+use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-use crate::models::collaborator::{Collaborator};
+use crate::models::collaborator::Collaborator;
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
 pub struct RegisterCollaboratorDTO {
@@ -19,17 +20,21 @@ pub struct RegisterCollaboratorDTO {
     ))]
     pub cpf: String,
 
-    #[validate(length(min = 1, max = 9, message = "Collaborator RG must have a maximum of 9 characters"))]
+    #[validate(length(
+        min = 1,
+        max = 9,
+        message = "Collaborator RG must have a maximum of 9 characters"
+    ))]
     pub rg: String,
 
     #[validate(email)]
     pub email: String,
 
     #[serde(rename = "updatedAt")]
-    pub updated_at: String,
+    pub updated_at: NaiveDateTime,
 
     #[serde(rename = "createdAt")]
-    pub crated_at: String,
+    pub crated_at: NaiveDateTime,
 }
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
@@ -41,10 +46,10 @@ pub struct FilterCollaboratorDTO {
     pub email: String,
 
     #[serde(rename = "updatedAt")]
-    pub updated_at: String,
+    pub updated_at: NaiveDateTime,
 
     #[serde(rename = "createdAt")]
-    pub crated_at: String,
+    pub crated_at: NaiveDateTime,
 }
 
 impl FilterCollaboratorDTO {
