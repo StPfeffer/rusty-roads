@@ -6,8 +6,16 @@ use crate::models::vehicle::Vehicle;
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
 pub struct RegisterVehicleDTO {
+    #[validate(length(
+        min = 1,
+        max = 50,
+        message = "Name must have a maximum of 50 characters"
+    ))]
+    pub name: String,
+
     #[serde(rename = "initialMileage")]
     pub initial_mileage: i32,
+
     #[serde(rename = "actualMileage")]
     pub actual_mileage: i32,
 }
@@ -15,13 +23,17 @@ pub struct RegisterVehicleDTO {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct FilterVehicleDTO {
     pub id: String,
+    pub name: String,
 
     #[serde(rename = "initialMileage")]
     pub initial_mileage: i32,
+
     #[serde(rename = "actualMileage")]
     pub actual_mileage: i32,
+
     #[serde(rename = "createdAt")]
     pub created_at: NaiveDateTime,
+
     #[serde(rename = "updatedAt")]
     pub updated_at: NaiveDateTime,
 }
@@ -30,6 +42,7 @@ impl FilterVehicleDTO {
     pub fn filter_vehicle(vehicle: &Vehicle) -> Self {
         FilterVehicleDTO {
             id: vehicle.id.to_string(),
+            name: vehicle.name.to_owned(),
             initial_mileage: vehicle.initial_mileage.to_owned(),
             actual_mileage: vehicle.actual_mileage.to_owned(),
             created_at: vehicle.created_at.to_owned(),

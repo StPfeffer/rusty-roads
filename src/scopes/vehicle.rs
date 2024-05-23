@@ -66,7 +66,7 @@ pub async fn save_vehicle(
 
     let result = app_state
         .db_client
-        .save_vehicle(body.initial_mileage, body.actual_mileage)
+        .save_vehicle(&body.name, body.initial_mileage, body.actual_mileage)
         .await;
 
     match result {

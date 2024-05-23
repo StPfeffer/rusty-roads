@@ -11,8 +11,9 @@ pub trait VehicleExt {
 
     async fn list_vehicles(&self, page: u32, limit: usize) -> Result<Vec<Vehicle>, sqlx::Error>;
 
-    async fn save_vehicle(
+    async fn save_vehicle<T: Into<String> + Send>(
         &self,
+        name: T,
         initial_mileage: i32,
         actual_mileage: i32,
     ) -> Result<Vehicle, sqlx::Error>;
@@ -55,14 +56,16 @@ impl VehicleExt for DBClient {
         Ok(vehicles)
     }
 
-    async fn save_vehicle(
+    async fn save_vehicle<T: Into<String> + Send>(
         &self,
+        name: T,
         initial_mileage: i32,
         actual_mileage: i32,
     ) -> Result<Vehicle, sqlx::Error> {
         let vehicle = sqlx::query_as!(
             Vehicle,
-            r#"INSERT INTO vehicles (initial_mileage, actual_mileage) VALUES ($1, $2) RETURNING *"#,
+            r#"INSERT INTO vehicles (name, initial_mileage, actual_mileage) VALUES ($1, $2, $3) RETURNING *"#,
+            &name.into(),
             &initial_mileage,
             &actual_mileage
         )
@@ -72,19 +75,19 @@ impl VehicleExt for DBClient {
         Ok(vehicle)
     }
 
-    async fn delete_vehicle(&self, state_id: Option<Uuid>) -> Result<Option<Vehicle>, sqlx::Error> {
-        let mut state = None;
+    async fn delete_vehicle(&self, vehicle_id: Option<Uuid>) -> Result<Option<Vehicle>, sqlx::Error> {
+        let mut vehicle = None;
 
-        if let Some(state_id) = state_id {
-            state = sqlx::query_as!(
+        if let Some(vehicle_id) = vehicle_id {
+            vehicle = sqlx::query_as!(
                 Vehicle,
                 r#"DELETE FROM vehicles WHERE id = $1 RETURNING *"#,
-                state_id
+                vehicle_id
             )
             .fetch_optional(&self.pool)
             .await?;
         }
 
-        Ok(state)
+        Ok(vehicle)
     }
 }
