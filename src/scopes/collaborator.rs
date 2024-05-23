@@ -4,7 +4,9 @@ use validator::Validate;
 use crate::{
     db::collaborator::CollaboratorExt,
     dtos::{
-        collaborator::{CollaboratorListResponseDTO, FilterCollaboratorDTO, RegisterCollaboratorDTO},
+        collaborator::{
+            CollaboratorListResponseDTO, FilterCollaboratorDTO, RegisterCollaboratorDTO,
+        },
         request::RequestQueryDTO,
     },
     error::{ErrorMessage, HttpError},
@@ -29,7 +31,11 @@ pub async fn get_collaborator(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(HttpResponse::Ok().json(FilterCollaboratorDTO::filter_collaborator(&collaborator.unwrap())))
+    Ok(
+        HttpResponse::Ok().json(FilterCollaboratorDTO::filter_collaborator(
+            &collaborator.unwrap(),
+        )),
+    )
 }
 
 pub async fn list_collaborators(
@@ -70,7 +76,10 @@ pub async fn save_collaborator(
         .await;
 
     match result {
-        Ok(collaborator) => Ok(HttpResponse::Created().json(FilterCollaboratorDTO::filter_collaborator(&collaborator))),
+        Ok(collaborator) => {
+            Ok(HttpResponse::Created()
+                .json(FilterCollaboratorDTO::filter_collaborator(&collaborator)))
+        }
         Err(sqlx::Error::Database(db_err)) => {
             if db_err.is_unique_violation() {
                 Err(HttpError::unique_constraint_violation(
@@ -94,5 +103,9 @@ pub async fn delete_collaborator(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(HttpResponse::Ok().json(FilterCollaboratorDTO::filter_collaborator(&collaborator.unwrap())))
+    Ok(
+        HttpResponse::Ok().json(FilterCollaboratorDTO::filter_collaborator(
+            &collaborator.unwrap(),
+        )),
+    )
 }
