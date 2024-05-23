@@ -78,6 +78,8 @@ pub async fn save_address(
                 Err(HttpError::unique_constraint_violation(
                     ErrorMessage::StateExist,
                 ))
+            } else if db_err.is_foreign_key_violation() {
+                Err(HttpError::bad_request(ErrorMessage::CityNotFound))
             } else {
                 Err(HttpError::server_error(db_err.to_string()))
             }
