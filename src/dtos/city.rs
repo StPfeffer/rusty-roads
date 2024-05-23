@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-use crate::models::city::City;
+use crate::{models::city::City, utils::uuid::is_valid_uuid};
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
 pub struct RegisterCityDTO {
@@ -15,6 +15,7 @@ pub struct RegisterCityDTO {
     #[validate(length(min = 7, max = 7, message = "City code must be 7 characters long."))]
     pub code: String,
 
+    #[validate(custom(function = "is_valid_uuid", message = "State ID must be a valid UUID"))]
     #[serde(rename = "stateId")]
     pub state_id: String,
 }
