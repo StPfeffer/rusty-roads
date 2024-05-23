@@ -29,7 +29,10 @@ pub async fn get_address(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(HttpResponse::Ok().json(FilterAddressDTO::filter_address(&address.unwrap())))
+    match address {
+        Some(address) => Ok(HttpResponse::Ok().json(FilterAddressDTO::filter_address(&address))),
+        None => Ok(HttpResponse::NotFound().finish()),
+    }
 }
 
 pub async fn list_addresses(
@@ -98,5 +101,8 @@ pub async fn delete_address(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(HttpResponse::Ok().json(FilterAddressDTO::filter_address(&address.unwrap())))
+    match address {
+        Some(address) => Ok(HttpResponse::Ok().json(FilterAddressDTO::filter_address(&address))),
+        None => Ok(HttpResponse::NotFound().finish()),
+    }
 }

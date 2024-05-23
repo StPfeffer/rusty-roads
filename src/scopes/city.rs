@@ -29,7 +29,10 @@ pub async fn get_city(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(HttpResponse::Ok().json(FilterCityDTO::filter_city(&city.unwrap())))
+    match city {
+        Some(city) => Ok(HttpResponse::Ok().json(FilterCityDTO::filter_city(&city))),
+        None => Ok(HttpResponse::NotFound().finish()),
+    }
 }
 
 pub async fn list_cities(
@@ -96,5 +99,8 @@ pub async fn delete_city(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(HttpResponse::Ok().json(FilterCityDTO::filter_city(&city.unwrap())))
+    match city {
+        Some(city) => Ok(HttpResponse::Ok().json(FilterCityDTO::filter_city(&city))),
+        None => Ok(HttpResponse::NotFound().finish()),
+    }
 }

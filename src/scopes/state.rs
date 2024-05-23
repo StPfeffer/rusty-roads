@@ -29,7 +29,10 @@ pub async fn get_state(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(HttpResponse::Ok().json(FilterStateDTO::filter_state(&state.unwrap())))
+    match state {
+        Some(state) => Ok(HttpResponse::Ok().json(FilterStateDTO::filter_state(&state))),
+        None => Ok(HttpResponse::NotFound().finish()),
+    }
 }
 
 pub async fn list_states(
@@ -96,5 +99,8 @@ pub async fn delete_state(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(HttpResponse::Ok().json(FilterStateDTO::filter_state(&state.unwrap())))
+    match state {
+        Some(state) => Ok(HttpResponse::Ok().json(FilterStateDTO::filter_state(&state))),
+        None => Ok(HttpResponse::NotFound().finish()),
+    }
 }

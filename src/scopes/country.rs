@@ -29,7 +29,10 @@ pub async fn get_country(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(HttpResponse::Ok().json(FilterCountryDTO::filter_country(&country.unwrap())))
+    match country {
+        Some(country) => Ok(HttpResponse::Ok().json(FilterCountryDTO::filter_country(&country))),
+        None => Ok(HttpResponse::NotFound().finish()),
+    }
 }
 
 pub async fn list_countries(
@@ -94,5 +97,8 @@ pub async fn delete_country(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(HttpResponse::Ok().json(FilterCountryDTO::filter_country(&country.unwrap())))
+    match country {
+        Some(country) => Ok(HttpResponse::Ok().json(FilterCountryDTO::filter_country(&country))),
+        None => Ok(HttpResponse::NotFound().finish()),
+    }
 }
