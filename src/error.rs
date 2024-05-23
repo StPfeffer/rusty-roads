@@ -87,13 +87,13 @@ impl ErrorMessage {
         match self {
             ErrorMessage::ServerError => "Check server logs for more details and ensure the server is running correctly.".to_string(),
             ErrorMessage::CountryExist => "Verify the country data you are trying to add is unique and does not already exist.".to_string(),
-            ErrorMessage::CountryNotFound => "Ensure the country ID is correct and exists in the database. Use the 'GET /api/v1/countries' endpoint to retrieve available country IDs.".to_string(),
-            ErrorMessage::StateExist => "Verify the state code and country ID are unique and do not already exist.".to_string(),
-            ErrorMessage::StateNotFound => "Ensure the state ID is correct and exists in the database. Use the 'GET /api/v1/states' endpoint to retrieve available state IDs.".to_string(),
+            ErrorMessage::CountryNotFound => "Ensure the countryId is correct and exists in the database. Use the 'GET /api/v1/countries' endpoint to retrieve available country IDs.".to_string(),
+            ErrorMessage::StateExist => "Verify the state code and countryId are unique and do not already exist.".to_string(),
+            ErrorMessage::StateNotFound => "Ensure the stateId is correct and exists in the database. Use the 'GET /api/v1/states' endpoint to retrieve available state IDs.".to_string(),
             ErrorMessage::CityExist => "Verify the city code is unique and does not already exist.".to_string(),
-            ErrorMessage::CityNotFound => "Ensure the city ID is correct and exists in the database. Use the 'GET /api/v1/cities' endpoint to retrieve available city IDs.".to_string(),
-            ErrorMessage::AddressExist => "Verify the address details are unique and do not already exist.".to_string(),
-            ErrorMessage::AddressNotFound => "Ensure the address ID is correct and exists in the database. Use the 'GET /api/v1/addresses' endpoint to retrieve available address IDs.".to_string(),
+            ErrorMessage::CityNotFound => "Ensure the cityId is correct and exists in the database. Use the 'GET /api/v1/cities' endpoint to retrieve available city IDs.".to_string(),
+            ErrorMessage::AddressExist => "Verify the address details (address, number and zipCode) are unique and do not already exist.".to_string(),
+            ErrorMessage::AddressNotFound => "Ensure the addressId is correct and exists in the database. Use the 'GET /api/v1/addresses' endpoint to retrieve available address IDs.".to_string(),
         }
     }
 }
