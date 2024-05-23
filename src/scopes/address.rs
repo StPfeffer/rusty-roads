@@ -31,7 +31,7 @@ pub async fn get_address(
 
     match address {
         Some(address) => Ok(HttpResponse::Ok().json(FilterAddressDTO::filter_address(&address))),
-        None => Ok(HttpResponse::NotFound().finish()),
+        None => Err(HttpError::from_error_message(ErrorMessage::AddressNotFound)),
     }
 }
 
@@ -103,6 +103,6 @@ pub async fn delete_address(
 
     match address {
         Some(address) => Ok(HttpResponse::Ok().json(FilterAddressDTO::filter_address(&address))),
-        None => Ok(HttpResponse::NotFound().finish()),
+        None => Err(HttpError::from_error_message(ErrorMessage::AddressNotFound)),
     }
 }

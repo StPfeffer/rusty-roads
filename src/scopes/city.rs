@@ -31,7 +31,7 @@ pub async fn get_city(
 
     match city {
         Some(city) => Ok(HttpResponse::Ok().json(FilterCityDTO::filter_city(&city))),
-        None => Ok(HttpResponse::NotFound().finish()),
+        None => Err(HttpError::from_error_message(ErrorMessage::CityNotFound)),
     }
 }
 
@@ -101,6 +101,6 @@ pub async fn delete_city(
 
     match city {
         Some(city) => Ok(HttpResponse::Ok().json(FilterCityDTO::filter_city(&city))),
-        None => Ok(HttpResponse::NotFound().finish()),
+        None => Err(HttpError::from_error_message(ErrorMessage::CityNotFound)),
     }
 }

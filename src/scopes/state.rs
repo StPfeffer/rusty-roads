@@ -31,7 +31,7 @@ pub async fn get_state(
 
     match state {
         Some(state) => Ok(HttpResponse::Ok().json(FilterStateDTO::filter_state(&state))),
-        None => Ok(HttpResponse::NotFound().finish()),
+        None => Err(HttpError::from_error_message(ErrorMessage::StateNotFound)),
     }
 }
 
@@ -101,6 +101,6 @@ pub async fn delete_state(
 
     match state {
         Some(state) => Ok(HttpResponse::Ok().json(FilterStateDTO::filter_state(&state))),
-        None => Ok(HttpResponse::NotFound().finish()),
+        None => Err(HttpError::from_error_message(ErrorMessage::StateNotFound)),
     }
 }
