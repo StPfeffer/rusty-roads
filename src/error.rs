@@ -25,7 +25,13 @@ pub struct Response {
 pub enum ErrorMessage {
     ServerError,
     CountryExist,
+    CountryNotFound,
     StateExist,
+    StateNotFound,
+    CityExist,
+    CityNotFound,
+    AddressExist,
+    AddressNotFound,
 }
 
 impl Display for ErrorMessage {
@@ -47,8 +53,25 @@ impl ErrorMessage {
             ErrorMessage::CountryExist => {
                 "There is already a country with the provided data".to_string()
             }
+            ErrorMessage::CountryNotFound => {
+                "The country with the provided ID does not exist in our records".to_string()
+            }
             ErrorMessage::StateExist => {
                 "There is already a state with the provided code and countryId".to_string()
+            }
+            ErrorMessage::StateNotFound => {
+                "The state with the provided ID does not exist in our records".to_string()
+            }
+            ErrorMessage::CityExist => "There is already a city with the provided code".to_string(),
+            ErrorMessage::CityNotFound => {
+                "The city with the provided ID does not exist in our records".to_string()
+            }
+            ErrorMessage::AddressExist => {
+                "There is already a address with the provided address, number and zipCode"
+                    .to_string()
+            }
+            ErrorMessage::AddressNotFound => {
+                "The address with the provided ID does not exist in our records".to_string()
             }
         }
     }
