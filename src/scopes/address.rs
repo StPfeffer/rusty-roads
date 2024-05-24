@@ -29,7 +29,10 @@ pub async fn get_address(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(HttpResponse::Ok().json(FilterAddressDTO::filter_address(&address.unwrap())))
+    match address {
+        Some(address) => Ok(HttpResponse::Ok().json(FilterAddressDTO::filter_address(&address))),
+        None => Err(HttpError::from_error_message(ErrorMessage::AddressNotFound)),
+    }
 }
 
 pub async fn list_addresses(
@@ -78,6 +81,8 @@ pub async fn save_address(
                 Err(HttpError::unique_constraint_violation(
                     ErrorMessage::StateExist,
                 ))
+            } else if db_err.is_foreign_key_violation() {
+                Err(HttpError::bad_request(ErrorMessage::CityNotFound))
             } else {
                 Err(HttpError::server_error(db_err.to_string()))
             }
@@ -96,5 +101,8 @@ pub async fn delete_address(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(HttpResponse::Ok().json(FilterAddressDTO::filter_address(&address.unwrap())))
+    match address {
+        Some(address) => Ok(HttpResponse::Ok().json(FilterAddressDTO::filter_address(&address))),
+        None => Err(HttpError::from_error_message(ErrorMessage::AddressNotFound)),
+    }
 }

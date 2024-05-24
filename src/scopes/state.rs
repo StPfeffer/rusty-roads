@@ -29,7 +29,10 @@ pub async fn get_state(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(HttpResponse::Ok().json(FilterStateDTO::filter_state(&state.unwrap())))
+    match state {
+        Some(state) => Ok(HttpResponse::Ok().json(FilterStateDTO::filter_state(&state))),
+        None => Err(HttpError::from_error_message(ErrorMessage::StateNotFound)),
+    }
 }
 
 pub async fn list_states(
@@ -76,6 +79,8 @@ pub async fn save_state(
                 Err(HttpError::unique_constraint_violation(
                     ErrorMessage::StateExist,
                 ))
+            } else if db_err.is_foreign_key_violation() {
+                Err(HttpError::bad_request(ErrorMessage::CountryNotFound))
             } else {
                 Err(HttpError::server_error(db_err.to_string()))
             }
@@ -94,5 +99,8 @@ pub async fn delete_state(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(HttpResponse::Ok().json(FilterStateDTO::filter_state(&state.unwrap())))
+    match state {
+        Some(state) => Ok(HttpResponse::Ok().json(FilterStateDTO::filter_state(&state))),
+        None => Err(HttpError::from_error_message(ErrorMessage::StateNotFound)),
+    }
 }

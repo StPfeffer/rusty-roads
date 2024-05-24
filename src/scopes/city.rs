@@ -29,7 +29,10 @@ pub async fn get_city(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(HttpResponse::Ok().json(FilterCityDTO::filter_city(&city.unwrap())))
+    match city {
+        Some(city) => Ok(HttpResponse::Ok().json(FilterCityDTO::filter_city(&city))),
+        None => Err(HttpError::from_error_message(ErrorMessage::CityNotFound)),
+    }
 }
 
 pub async fn list_cities(
@@ -76,6 +79,8 @@ pub async fn save_city(
                 Err(HttpError::unique_constraint_violation(
                     ErrorMessage::StateExist,
                 ))
+            } else if db_err.is_foreign_key_violation() {
+                Err(HttpError::bad_request(ErrorMessage::StateNotFound))
             } else {
                 Err(HttpError::server_error(db_err.to_string()))
             }
@@ -94,5 +99,8 @@ pub async fn delete_city(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(HttpResponse::Ok().json(FilterCityDTO::filter_city(&city.unwrap())))
+    match city {
+        Some(city) => Ok(HttpResponse::Ok().json(FilterCityDTO::filter_city(&city))),
+        None => Err(HttpError::from_error_message(ErrorMessage::CityNotFound)),
+    }
 }
