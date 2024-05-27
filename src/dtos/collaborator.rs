@@ -21,11 +21,7 @@ pub struct RegisterCollaboratorDTO {
     ))]
     pub cpf: String,
 
-    #[validate(length(
-        min = 1,
-        max = 9,
-        message = "RG must have a maximum of 9 characters"
-    ))]
+    #[validate(length(min = 1, max = 9, message = "RG must have a maximum of 9 characters"))]
     pub rg: String,
 
     #[validate(email)]
