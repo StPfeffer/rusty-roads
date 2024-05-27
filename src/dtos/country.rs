@@ -4,6 +4,7 @@ use validator::Validate;
 use crate::models::country::Country;
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct RegisterCountryDTO {
     #[validate(length(
         min = 1,
@@ -13,30 +14,22 @@ pub struct RegisterCountryDTO {
     pub name: String,
 
     #[validate(length(min = 2, max = 2, message = "Alpha 2 code must be 2 characters long"))]
-    #[serde(rename = "alpha2")]
     pub alpha_2: String,
 
     #[validate(length(min = 3, max = 3, message = "Alpha 3 code must be 3 characters long"))]
-    #[serde(rename = "alpha3")]
     pub alpha_3: String,
 
     #[validate(length(min = 3, max = 3, message = "Numeric 3 code must be 3 characters long"))]
-    #[serde(rename = "numeric3")]
     pub numeric_3: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct FilterCountryDTO {
     pub id: String,
     pub name: String,
-
-    #[serde(rename = "alpha2")]
     pub alpha_2: String,
-
-    #[serde(rename = "alpha3")]
     pub alpha_3: String,
-
-    #[serde(rename = "numeric3")]
     pub numeric_3: String,
 }
 

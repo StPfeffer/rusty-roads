@@ -4,15 +4,16 @@ use validator::Validate;
 use crate::{models::city::City, utils::uuid::is_valid_uuid};
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct RegisterCityDTO {
     #[validate(length(
         min = 1,
         max = 100,
-        message = "City name must have a maximum of 100 characters"
+        message = "Name must have a maximum of 100 characters"
     ))]
     pub name: String,
 
-    #[validate(length(min = 7, max = 7, message = "City code must be 7 characters long."))]
+    #[validate(length(min = 7, max = 7, message = "Code must be 7 characters long."))]
     pub code: String,
 
     #[validate(custom(function = "is_valid_uuid", message = "State ID must be a valid UUID"))]
@@ -21,11 +22,11 @@ pub struct RegisterCityDTO {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct FilterCityDTO {
     pub id: String,
     pub name: String,
     pub code: String,
-    #[serde(rename = "stateId")]
     pub state_id: String,
 }
 

@@ -39,6 +39,8 @@ pub enum ErrorMessage {
     CityNotFound,
     AddressExist,
     AddressNotFound,
+    CollaboratorExist,
+    CollaboratorNotFound,
 }
 
 impl fmt::Display for ErrorMessage {
@@ -80,6 +82,13 @@ impl ErrorMessage {
             ErrorMessage::AddressNotFound => {
                 "The address with the provided ID does not exist in our records".to_string()
             }
+            ErrorMessage::CollaboratorExist => {
+                "There is already a collaborator with the provided email or cpf".to_string()
+            }
+            ErrorMessage::CollaboratorNotFound => {
+                "The collaborator with the provided ID, email or cpf does not exist in our records"
+                    .to_string()
+            }
         }
     }
 
@@ -94,6 +103,8 @@ impl ErrorMessage {
             ErrorMessage::CityNotFound => "Ensure the cityId is correct and exists in the database. Use the 'GET /api/v1/cities' endpoint to retrieve available city IDs.".to_string(),
             ErrorMessage::AddressExist => "Verify the address details (address, number and zipCode) are unique and do not already exist.".to_string(),
             ErrorMessage::AddressNotFound => "Ensure the addressId is correct and exists in the database. Use the 'GET /api/v1/addresses' endpoint to retrieve available address IDs.".to_string(),
+            ErrorMessage::CollaboratorExist => "Verify the collaborator details (email, cpf) are unique and do not already exist.".to_string(),
+            ErrorMessage::CollaboratorNotFound => "Ensure the collaboratorId, email or cpf is correct and exists in the database. Use the 'GET /api/v1/collaborators' endpoint to retrieve available collaborator IDs.".to_string(),
         }
     }
 }
