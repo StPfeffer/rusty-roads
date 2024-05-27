@@ -15,7 +15,10 @@ pub struct RegisterStateDTO {
     #[validate(length(min = 2, max = 2, message = "Code must be 2 characters long."))]
     pub code: String,
 
-    #[validate(custom(function = "is_valid_uuid", message = "Country ID must be a valid UUID"))]
+    #[validate(custom(
+        function = "is_valid_uuid",
+        message = "Country ID must be a valid UUID"
+    ))]
     #[serde(rename = "countryId")]
     pub country_id: String,
 }
