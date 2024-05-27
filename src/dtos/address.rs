@@ -5,6 +5,7 @@ use validator::Validate;
 use crate::{models::address::Address, utils::uuid::is_valid_uuid};
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct RegisterAddressDTO {
     #[validate(length(
         min = 1,
@@ -46,14 +47,12 @@ pub struct RegisterAddressDTO {
         max = 8,
         message = "Zip code must have a minimum of 5 and a maximum of 8 characters"
     ))]
-    #[serde(rename = "zipCode")]
     pub zip_code: String,
 
     pub latitude: Option<BigDecimal>,
     pub longitude: Option<BigDecimal>,
 
     #[validate(custom(function = "is_valid_uuid", message = "City ID must be a valid UUID"))]
-    #[serde(rename = "cityId")]
     pub city_id: String,
 }
 
@@ -87,6 +86,7 @@ pub struct SaveAddressParamsDTO<T, B> {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct FilterAddressDTO {
     pub id: String,
     pub address: String,
@@ -94,14 +94,9 @@ pub struct FilterAddressDTO {
     pub neighbourhood: String,
     pub reference: Option<String>,
     pub complement: Option<String>,
-
-    #[serde(rename = "zipCode")]
     pub zip_code: String,
-
     pub latitude: Option<BigDecimal>,
     pub longitude: Option<BigDecimal>,
-
-    #[serde(rename = "cityId")]
     pub city_id: String,
 }
 

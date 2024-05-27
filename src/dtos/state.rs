@@ -4,6 +4,7 @@ use validator::Validate;
 use crate::models::state::State;
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct RegisterStateDTO {
     #[validate(length(
         min = 1,
@@ -15,16 +16,15 @@ pub struct RegisterStateDTO {
     #[validate(length(min = 2, max = 2, message = "State code must be 2 characters long."))]
     pub code: String,
 
-    #[serde(rename = "countryId")]
     pub country_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct FilterStateDTO {
     pub id: String,
     pub name: String,
     pub code: String,
-    #[serde(rename = "countryId")]
     pub country_id: String,
 }
 

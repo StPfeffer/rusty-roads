@@ -4,6 +4,7 @@ use validator::Validate;
 use crate::models::city::City;
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct RegisterCityDTO {
     #[validate(length(
         min = 1,
@@ -15,16 +16,15 @@ pub struct RegisterCityDTO {
     #[validate(length(min = 7, max = 7, message = "City code must be 7 characters long."))]
     pub code: String,
 
-    #[serde(rename = "stateId")]
     pub state_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct FilterCityDTO {
     pub id: String,
     pub name: String,
     pub code: String,
-    #[serde(rename = "stateId")]
     pub state_id: String,
 }
 
