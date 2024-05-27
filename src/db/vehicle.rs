@@ -75,7 +75,10 @@ impl VehicleExt for DBClient {
         Ok(vehicle)
     }
 
-    async fn delete_vehicle(&self, vehicle_id: Option<Uuid>) -> Result<Option<Vehicle>, sqlx::Error> {
+    async fn delete_vehicle(
+        &self,
+        vehicle_id: Option<Uuid>,
+    ) -> Result<Option<Vehicle>, sqlx::Error> {
         let mut vehicle = None;
 
         if let Some(vehicle_id) = vehicle_id {
