@@ -5,6 +5,7 @@ use validator::Validate;
 use crate::models::vehicle::Vehicle;
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct RegisterVehicleDTO {
     #[validate(length(
         min = 1,
@@ -13,28 +14,18 @@ pub struct RegisterVehicleDTO {
     ))]
     pub name: String,
 
-    #[serde(rename = "initialMileage")]
     pub initial_mileage: i32,
-
-    #[serde(rename = "actualMileage")]
     pub actual_mileage: i32,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct FilterVehicleDTO {
     pub id: String,
     pub name: String,
-
-    #[serde(rename = "initialMileage")]
     pub initial_mileage: i32,
-
-    #[serde(rename = "actualMileage")]
     pub actual_mileage: i32,
-
-    #[serde(rename = "createdAt")]
     pub created_at: NaiveDateTime,
-
-    #[serde(rename = "updatedAt")]
     pub updated_at: NaiveDateTime,
 }
 
