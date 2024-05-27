@@ -43,7 +43,7 @@ pub async fn list_vehicles(
         .map_err(|e| HttpError::bad_request(e.to_string()))?;
 
     let page = query_params.page.unwrap_or(1);
-    let limit = query_params.limit.unwrap_or(10);
+    let limit = query_params.limit.unwrap_or(50);
 
     let vehicles = app_state
         .db_client
