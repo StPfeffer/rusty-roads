@@ -13,11 +13,10 @@ pub struct RegisterCityDTO {
     ))]
     pub name: String,
 
-    #[validate(length(min = 7, max = 7, message = "Code must be 7 characters long."))]
+    #[validate(length(min = 7, max = 7, message = "Code must be 7 characters long"))]
     pub code: String,
 
     #[validate(custom(function = "is_valid_uuid", message = "State ID must be a valid UUID"))]
-    #[serde(rename = "stateId")]
     pub state_id: String,
 }
 
