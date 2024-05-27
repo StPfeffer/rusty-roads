@@ -15,6 +15,6 @@ well-known, it would be helpful to add a link to an article explaining it with m
 ## Checklist
 
 - [ ] I ran `cargo clippy --all -- -D warnings` just before my last commit and fixed any issue that was found.
-- [ ] I ran `cargo fmt` just before my last commit.
+- [ ] I ran `cargo fmt --all -- --check` just before my last commit.
 - [ ] I ran `cargo test` just before my last commit and all tests passed.
 - [ ] I added my algorithm to the corresponding `mod.rs` file within its own folder, and in any parent folder(s).
