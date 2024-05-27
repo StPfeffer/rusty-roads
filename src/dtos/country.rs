@@ -9,7 +9,7 @@ pub struct RegisterCountryDTO {
     #[validate(length(
         min = 1,
         max = 100,
-        message = "Country name must have a maximum of 100 characters"
+        message = "Name must have a maximum of 100 characters"
     ))]
     pub name: String,
 
