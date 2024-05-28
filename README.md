@@ -69,13 +69,13 @@ cargo build
 
 This will install all the required dependencies to run the application.
 
-## Environment Variables
+### Environment Variables
 
 You'll need a PostgreSQL user, password, database and URL.
 
 Once you have it, you can copy or rename the `.env.example` file to `.env` and put it on `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` and `DATABASE_URL`.
 
-## Running
+### Running
 
 Once everything is set up, you can run the following command to start the application:
 
