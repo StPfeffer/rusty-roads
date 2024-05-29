@@ -64,9 +64,14 @@ pub async fn save_vehicle(
     body.validate()
         .map_err(|e| HttpError::bad_request(e.to_string()))?;
 
+    let mut actual_mileage = body.initial_mileage;
+    if let Some(body_actual_mileage) = body.actual_mileage {
+        actual_mileage = body_actual_mileage
+    }
+
     let result = app_state
         .db_client
-        .save_vehicle(&body.name, body.initial_mileage, body.actual_mileage)
+        .save_vehicle(&body.name, body.initial_mileage, actual_mileage)
         .await;
 
     match result {
