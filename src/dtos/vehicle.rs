@@ -15,7 +15,7 @@ pub struct RegisterVehicleDTO {
     pub name: String,
 
     pub initial_mileage: i32,
-    pub actual_mileage: i32,
+    pub actual_mileage: Option<i32>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
