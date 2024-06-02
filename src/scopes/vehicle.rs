@@ -2,43 +2,37 @@ use actix_web::{web, HttpResponse, Scope};
 use validator::Validate;
 
 use crate::{
-    db::collaborator::CollaboratorExt,
+    db::vehicle::VehicleExt,
     dtos::{
-        collaborator::{
-            CollaboratorListResponseDTO, FilterCollaboratorDTO, RegisterCollaboratorDTO,
-        },
         request::RequestQueryDTO,
+        vehicle::{FilterVehicleDTO, RegisterVehicleDTO, VehicleListResponseDTO},
     },
     error::{ErrorMessage, HttpError},
     AppState,
 };
 
-pub fn collaborator_scope() -> Scope {
-    web::scope("/api/v1/collaborators")
-        .route("", web::get().to(list_collaborators))
-        .route("/{id}", web::get().to(get_collaborator))
-        .route("", web::post().to(save_collaborator))
-        .route("/{id}", web::delete().to(delete_collaborator))
+pub fn vehicle_scope() -> Scope {
+    web::scope("/api/v1/vehicles")
+        .route("", web::get().to(list_vehicles))
+        .route("/{id}", web::get().to(get_vehicle))
+        .route("", web::post().to(save_vehicle))
+        .route("/{id}", web::delete().to(delete_vehicle))
 }
 
-pub async fn get_collaborator(
+pub async fn get_vehicle(
     id: web::Path<uuid::Uuid>,
     app_state: web::Data<AppState>,
 ) -> Result<HttpResponse, HttpError> {
-    let collaborator = app_state
+    let vehicle = app_state
         .db_client
-        .get_collaborator(Some(id.into_inner()), None, None)
+        .get_vehicle(Some(id.into_inner()))
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(
-        HttpResponse::Ok().json(FilterCollaboratorDTO::filter_collaborator(
-            &collaborator.unwrap(),
-        )),
-    )
+    Ok(HttpResponse::Ok().json(FilterVehicleDTO::filter_vehicle(&vehicle.unwrap())))
 }
 
-pub async fn list_collaborators(
+pub async fn list_vehicles(
     query: web::Query<RequestQueryDTO>,
     app_state: web::Data<AppState>,
 ) -> Result<HttpResponse, HttpError> {
@@ -51,35 +45,37 @@ pub async fn list_collaborators(
     let page = query_params.page.unwrap_or(1);
     let limit = query_params.limit.unwrap_or(50);
 
-    let collaborators = app_state
+    let vehicles = app_state
         .db_client
-        .list_collaborators(page as u32, limit)
+        .list_vehicles(page as u32, limit)
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(HttpResponse::Ok().json(CollaboratorListResponseDTO {
-        collaborators: FilterCollaboratorDTO::filter_collaborators(&collaborators),
-        results: collaborators.len(),
+    Ok(HttpResponse::Ok().json(VehicleListResponseDTO {
+        vehicles: FilterVehicleDTO::filter_vehicles(&vehicles),
+        results: vehicles.len(),
     }))
 }
 
-pub async fn save_collaborator(
+pub async fn save_vehicle(
     app_state: web::Data<AppState>,
-    body: web::Json<RegisterCollaboratorDTO>,
+    body: web::Json<RegisterVehicleDTO>,
 ) -> Result<HttpResponse, HttpError> {
     body.validate()
         .map_err(|e| HttpError::bad_request(e.to_string()))?;
 
+    let mut actual_mileage = body.initial_mileage;
+    if let Some(body_actual_mileage) = body.actual_mileage {
+        actual_mileage = body_actual_mileage
+    }
+
     let result = app_state
         .db_client
-        .save_collaborator(&body.name, &body.cpf, &body.rg, &body.email)
+        .save_vehicle(&body.name, body.initial_mileage, actual_mileage)
         .await;
 
     match result {
-        Ok(collaborator) => {
-            Ok(HttpResponse::Created()
-                .json(FilterCollaboratorDTO::filter_collaborator(&collaborator)))
-        }
+        Ok(state) => Ok(HttpResponse::Created().json(FilterVehicleDTO::filter_vehicle(&state))),
         Err(sqlx::Error::Database(db_err)) => {
             if db_err.is_unique_violation() {
                 Err(HttpError::unique_constraint_violation(
@@ -93,19 +89,15 @@ pub async fn save_collaborator(
     }
 }
 
-pub async fn delete_collaborator(
+pub async fn delete_vehicle(
     id: web::Path<uuid::Uuid>,
     app_state: web::Data<AppState>,
 ) -> Result<HttpResponse, HttpError> {
-    let collaborator = app_state
+    let vehicle = app_state
         .db_client
-        .delete_collaborator(Some(id.into_inner()))
+        .delete_vehicle(Some(id.into_inner()))
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(
-        HttpResponse::Ok().json(FilterCollaboratorDTO::filter_collaborator(
-            &collaborator.unwrap(),
-        )),
-    )
+    Ok(HttpResponse::Ok().json(FilterVehicleDTO::filter_vehicle(&vehicle.unwrap())))
 }

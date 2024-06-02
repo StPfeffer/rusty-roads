@@ -46,7 +46,7 @@ pub async fn list_cities(
         .map_err(|e| HttpError::bad_request(e.to_string()))?;
 
     let page = query_params.page.unwrap_or(1);
-    let limit = query_params.limit.unwrap_or(10);
+    let limit = query_params.limit.unwrap_or(50);
 
     let cities = app_state
         .db_client
@@ -77,7 +77,7 @@ pub async fn save_city(
         Err(sqlx::Error::Database(db_err)) => {
             if db_err.is_unique_violation() {
                 Err(HttpError::unique_constraint_violation(
-                    ErrorMessage::StateExist,
+                    ErrorMessage::CityExist,
                 ))
             } else if db_err.is_foreign_key_violation() {
                 Err(HttpError::bad_request(ErrorMessage::StateNotFound))

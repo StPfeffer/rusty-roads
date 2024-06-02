@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-use crate::models::city::City;
+use crate::{models::city::City, utils::uuid::is_valid_uuid};
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -13,9 +13,10 @@ pub struct RegisterCityDTO {
     ))]
     pub name: String,
 
-    #[validate(length(min = 7, max = 7, message = "Code must be 7 characters long."))]
+    #[validate(length(min = 7, max = 7, message = "Code must be 7 characters long"))]
     pub code: String,
 
+    #[validate(custom(function = "is_valid_uuid", message = "State ID must be a valid UUID"))]
     pub state_id: String,
 }
 
