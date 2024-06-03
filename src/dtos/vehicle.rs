@@ -111,7 +111,7 @@ pub struct RegisterVehicleDocumentDTO {
     ))]
     pub plate: String,
 
-    pub updatd_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
 
     #[validate(custom(
         function = "is_valid_uuid",
@@ -164,7 +164,7 @@ pub struct FilterVehicleDocumentDTO {
     pub make: String,
     pub model: String,
     pub plate: String,
-    pub updatd_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
     pub vehicle_id: String,
 }
 
@@ -181,7 +181,7 @@ impl FilterVehicleDocumentDTO {
             make: document.make.to_owned(),
             model: document.model.to_owned(),
             plate: document.plate.to_owned(),
-            updatd_at: document.updatd_at.to_owned(),
+            updated_at: document.updated_at.to_owned(),
             vehicle_id: document.vehicle_id.to_string(),
         }
     }

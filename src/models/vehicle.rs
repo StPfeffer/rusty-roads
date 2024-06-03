@@ -24,6 +24,6 @@ pub struct VehicleDocument {
     pub make: String,
     pub model: String,
     pub plate: String,
-    pub updatd_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
     pub vehicle_id: Uuid,
 }
