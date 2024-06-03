@@ -2,10 +2,13 @@ use actix_web::{web, HttpResponse, Scope};
 use validator::Validate;
 
 use crate::{
-    db::vehicle::VehicleExt,
+    db::vehicle::{VehicleDocumentExt, VehicleExt},
     dtos::{
         request::RequestQueryDTO,
-        vehicle::{FilterVehicleDTO, RegisterVehicleDTO, VehicleListResponseDTO},
+        vehicle::{
+            FilterVehicleDTO, FilterVehicleDocumentDTO, RegisterVehicleDTO,
+            RegisterVehicleDocumentDTO, VehicleListResponseDTO,
+        },
     },
     error::{ErrorMessage, HttpError},
     AppState,
@@ -17,6 +20,9 @@ pub fn vehicle_scope() -> Scope {
         .route("/{id}", web::get().to(get_vehicle))
         .route("", web::post().to(save_vehicle))
         .route("/{id}", web::delete().to(delete_vehicle))
+        .route("/{id}/documents", web::get().to(get_vehicle_document))
+        .route("/{id}/documents", web::post().to(save_vehicle_document))
+        .route("/{id}/documents", web::delete().to(delete_vehicle_document))
 }
 
 pub async fn get_vehicle(
@@ -79,7 +85,7 @@ pub async fn save_vehicle(
         Err(sqlx::Error::Database(db_err)) => {
             if db_err.is_unique_violation() {
                 Err(HttpError::unique_constraint_violation(
-                    ErrorMessage::StateExist,
+                    ErrorMessage::VehicleExist,
                 ))
             } else {
                 Err(HttpError::server_error(db_err.to_string()))
@@ -100,4 +106,71 @@ pub async fn delete_vehicle(
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
     Ok(HttpResponse::Ok().json(FilterVehicleDTO::filter_vehicle(&vehicle.unwrap())))
+}
+
+pub async fn get_vehicle_document(
+    id: web::Path<uuid::Uuid>,
+    app_state: web::Data<AppState>,
+) -> Result<HttpResponse, HttpError> {
+    let document = app_state
+        .db_client
+        .get_vehicle_document(Some(id.into_inner()))
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
+
+    Ok(
+        HttpResponse::Ok().json(FilterVehicleDocumentDTO::filter_document(
+            &document.unwrap(),
+        )),
+    )
+}
+
+pub async fn save_vehicle_document(
+    id: web::Path<uuid::Uuid>,
+    app_state: web::Data<AppState>,
+    body: web::Json<RegisterVehicleDocumentDTO>,
+) -> Result<HttpResponse, HttpError> {
+    body.validate()
+        .map_err(|e| HttpError::bad_request(e.to_string()))?;
+
+    let mut dto = body.into_inner();
+    dto.vehicle_id = id.to_string(); // Uses the vehicle ID from path
+
+    let result = app_state
+        .db_client
+        .save_vehicle_document(dto.into_save_vehicle_document_params_dto())
+        .await;
+
+    match result {
+        Ok(state) => {
+            Ok(HttpResponse::Created().json(FilterVehicleDocumentDTO::filter_document(&state)))
+        }
+        Err(sqlx::Error::Database(db_err)) => {
+            if db_err.is_unique_violation() {
+                Err(HttpError::unique_constraint_violation(
+                    ErrorMessage::VehicleDocumentExist,
+                ))
+            } else {
+                Err(HttpError::server_error(db_err.to_string()))
+            }
+        }
+        Err(e) => Err(HttpError::server_error(e.to_string())),
+    }
+}
+
+pub async fn delete_vehicle_document(
+    id: web::Path<uuid::Uuid>,
+    app_state: web::Data<AppState>,
+) -> Result<HttpResponse, HttpError> {
+    let document = app_state
+        .db_client
+        .delete_vehicle_document(Some(id.into_inner()))
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
+
+    Ok(
+        HttpResponse::Ok().json(FilterVehicleDocumentDTO::filter_document(
+            &document.unwrap(),
+        )),
+    )
 }
