@@ -67,19 +67,15 @@ impl RouteExt for DBClient {
         let initial_address_id = initial_address_id
             .map(|id| Uuid::parse_str(&id.into()))
             .transpose()
-            .map_err(|e| {
-                Error::Protocol(format!("Failed to parse initial_address_id: {}", e).into())
-            })?;
+            .map_err(|e| Error::Protocol(format!("Failed to parse initial_address_id: {}", e)))?;
 
         let final_address_id = final_address_id
             .map(|id| Uuid::parse_str(&id.into()))
             .transpose()
-            .map_err(|e| {
-                Error::Protocol(format!("Failed to parse final_address_id: {}", e).into())
-            })?;
+            .map_err(|e| Error::Protocol(format!("Failed to parse final_address_id: {}", e)))?;
 
         let vehicle_id = Uuid::parse_str(&vehicle_id.into())
-            .map_err(|e| Error::Protocol(format!("Failed to parse vehicle_id: {}", e).into()))?;
+            .map_err(|e| Error::Protocol(format!("Failed to parse vehicle_id: {}", e)))?;
 
         let route = sqlx::query_as!(
             Route,
