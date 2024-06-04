@@ -151,32 +151,32 @@ impl VehicleDocumentExt for DBClient {
                 VehicleDocument,
                 r#"SELECT * FROM vehicles_documents WHERE id = $1"#,
                 document_id
-            ).
-            fetch_optional(&self.pool)
+            )
+            .fetch_optional(&self.pool)
             .await?;
         } else if let Some(chassis_number) = chassis_number {
             document = sqlx::query_as!(
                 VehicleDocument,
                 r#"SELECT * FROM vehicles_documents WHERE chassis_number = $1"#,
                 chassis_number
-            ).
-            fetch_optional(&self.pool)
+            )
+            .fetch_optional(&self.pool)
             .await?;
         } else if let Some(registration_number) = registration_number {
             document = sqlx::query_as!(
                 VehicleDocument,
                 r#"SELECT * FROM vehicles_documents WHERE registration_number = $1"#,
                 registration_number
-            ).
-            fetch_optional(&self.pool)
+            )
+            .fetch_optional(&self.pool)
             .await?;
         } else if let Some(plate) = plate {
             document = sqlx::query_as!(
                 VehicleDocument,
                 r#"SELECT * FROM vehicles_documents WHERE plate = $1"#,
                 plate
-            ).
-            fetch_optional(&self.pool)
+            )
+            .fetch_optional(&self.pool)
             .await?;
         }
 
