@@ -91,8 +91,16 @@ impl FilterRouteDTO {
             updated_at: route.updated_at.to_owned(),
             initial_lat: route.initial_lat.to_owned(),
             initial_long: route.initial_long.to_owned(),
-            final_lat: if route.final_lat != Some(BigDecimal::from(0)) { route.final_lat.to_owned() } else { None },
-            final_long: if route.final_long != Some(BigDecimal::from(0)) { route.final_long.to_owned() } else { None },
+            final_lat: if route.final_lat != Some(BigDecimal::from(0)) {
+                route.final_lat.to_owned()
+            } else {
+                None
+            },
+            final_long: if route.final_long != Some(BigDecimal::from(0)) {
+                route.final_long.to_owned()
+            } else {
+                None
+            },
             // driver_id: route.driver_id.to_string(),
             initial_address_id: route.initial_address_id.map(|id| id.to_string()),
             final_address_id: route.final_address_id.map(|id| id.to_string()),
