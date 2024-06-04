@@ -13,8 +13,8 @@ pub struct Route {
     pub updated_at: NaiveDateTime,
     pub initial_lat: BigDecimal,
     pub initial_long: BigDecimal,
-    pub final_lat: BigDecimal,
-    pub final_long: BigDecimal,
+    pub final_lat: Option<BigDecimal>,
+    pub final_long: Option<BigDecimal>,
     // TODO: Waiting for the driver scope
     // pub driver_id: Uuid,
     pub initial_address_id: Option<Uuid>,

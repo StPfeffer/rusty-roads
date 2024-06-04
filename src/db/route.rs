@@ -1,5 +1,6 @@
 use async_trait::async_trait;
 use bigdecimal::BigDecimal;
+use sqlx::Error;
 use uuid::Uuid;
 
 use crate::{dtos::route::SaveRouteParamsDTO, models::route::Route};
@@ -53,7 +54,6 @@ impl RouteExt for DBClient {
         params: SaveRouteParamsDTO<B, S>,
     ) -> Result<Route, sqlx::Error> {
         let SaveRouteParamsDTO {
-            total_distance,
             initial_lat,
             initial_long,
             final_lat,
@@ -64,20 +64,36 @@ impl RouteExt for DBClient {
             vehicle_id,
         } = params;
 
+        let initial_address_id = initial_address_id
+            .map(|id| Uuid::parse_str(&id.into()))
+            .transpose()
+            .map_err(|e| {
+                Error::Protocol(format!("Failed to parse initial_address_id: {}", e).into())
+            })?;
+
+        let final_address_id = final_address_id
+            .map(|id| Uuid::parse_str(&id.into()))
+            .transpose()
+            .map_err(|e| {
+                Error::Protocol(format!("Failed to parse final_address_id: {}", e).into())
+            })?;
+
+        let vehicle_id = Uuid::parse_str(&vehicle_id.into())
+            .map_err(|e| Error::Protocol(format!("Failed to parse vehicle_id: {}", e).into()))?;
+
         let route = sqlx::query_as!(
             Route,
             r#"
-            INSERT INTO routes (total_distance, initial_lat, initial_long, final_lat, final_long, initial_address_id, final_address_id, vehicle_id) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
+            INSERT INTO routes (initial_lat, initial_long, final_lat, final_long, initial_address_id, final_address_id, vehicle_id) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7) 
             RETURNING *"#,
-            &total_distance.into(),
             &initial_lat.into(),
             &initial_long.into(),
-            &final_lat.into(),
-            &final_long.into(),
-            Uuid::parse_str(&initial_address_id.map(Into::into).unwrap_or_default().to_string()).unwrap(),
-            Uuid::parse_str(&final_address_id.map(Into::into).unwrap_or_default().to_string()).unwrap(),
-            Uuid::parse_str(&vehicle_id.into()).unwrap(),
+            &final_lat.map(Into::into).unwrap_or_default(),
+            &final_long.map(Into::into).unwrap_or_default(),
+            initial_address_id,
+            final_address_id,
+            vehicle_id,
             // Uuid::parse_str(&driver_id.into()).unwrap(),
         )
         .fetch_one(&self.pool)
