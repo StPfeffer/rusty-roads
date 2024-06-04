@@ -103,6 +103,10 @@ pub trait VehicleDocumentExt {
     async fn get_vehicle_document(
         &self,
         document_id: Option<Uuid>,
+        vehicle_id: Option<Uuid>,
+        chassis_number: Option<String>,
+        registration_number: Option<String>,
+        plate: Option<String>,
     ) -> Result<Option<VehicleDocument>, sqlx::Error>;
 
     async fn list_vehicle_documents(
@@ -127,19 +131,56 @@ impl VehicleDocumentExt for DBClient {
     async fn get_vehicle_document(
         &self,
         document_id: Option<Uuid>,
+        vehicle_id: Option<Uuid>,
+        chassis_number: Option<String>,
+        registration_number: Option<String>,
+        plate: Option<String>,
     ) -> Result<Option<VehicleDocument>, sqlx::Error> {
-        if let Some(document_id) = document_id {
-            let document = sqlx::query_as!(
+        let mut document = None;
+
+        if let Some(vehicle_id) = vehicle_id {
+            document = sqlx::query_as!(
                 VehicleDocument,
-                r#"SELECT * FROM vehicles_documents WHERE id = $1"#,
-                document_id
+                r#"SELECT * FROM vehicles_documents WHERE vehicle_id = $1"#,
+                vehicle_id
             )
             .fetch_optional(&self.pool)
             .await?;
-            return Ok(document);
+        } else if let Some(document_id) = document_id {
+            document = sqlx::query_as!(
+                VehicleDocument,
+                r#"SELECT * FROM vehicles_documents WHERE id = $1"#,
+                document_id
+            ).
+            fetch_optional(&self.pool)
+            .await?;
+        } else if let Some(chassis_number) = chassis_number {
+            document = sqlx::query_as!(
+                VehicleDocument,
+                r#"SELECT * FROM vehicles_documents WHERE chassis_number = $1"#,
+                chassis_number
+            ).
+            fetch_optional(&self.pool)
+            .await?;
+        } else if let Some(registration_number) = registration_number {
+            document = sqlx::query_as!(
+                VehicleDocument,
+                r#"SELECT * FROM vehicles_documents WHERE registration_number = $1"#,
+                registration_number
+            ).
+            fetch_optional(&self.pool)
+            .await?;
+        } else if let Some(plate) = plate {
+            document = sqlx::query_as!(
+                VehicleDocument,
+                r#"SELECT * FROM vehicles_documents WHERE plate = $1"#,
+                plate
+            ).
+            fetch_optional(&self.pool)
+            .await?;
         }
 
-        Ok(None)
+        Ok(document)
     }
 
     async fn list_vehicle_documents(
@@ -190,7 +231,7 @@ impl VehicleDocumentExt for DBClient {
             &make.into(),
             &model.into(),
             &plate.into(),
-            Uuid::parse_str(&vehicle_id.into()).unwrap(),
+            Uuid::parse_str(&vehicle_id.unwrap().into()).unwrap(),
         )
         .fetch_one(&self.pool)
         .await?;
