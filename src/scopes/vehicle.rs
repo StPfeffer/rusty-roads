@@ -7,7 +7,7 @@ use crate::{
         request::RequestQueryDTO,
         vehicle::{
             FilterVehicleDTO, FilterVehicleDocumentDTO, RegisterVehicleDTO,
-            RegisterVehicleDocumentDTO, VehicleListResponseDTO,
+            RegisterVehicleDocumentDTO, VehicleDocumentListResponseDTO, VehicleListResponseDTO,
         },
     },
     error::{ErrorMessage, HttpError},
@@ -20,9 +20,10 @@ pub fn vehicle_scope() -> Scope {
         .route("/{id}", web::get().to(get_vehicle))
         .route("", web::post().to(save_vehicle))
         .route("/{id}", web::delete().to(delete_vehicle))
-        .route("/{id}/documents", web::get().to(get_vehicle_document))
-        .route("/{id}/documents", web::post().to(save_vehicle_document))
-        .route("/{id}/documents", web::delete().to(delete_vehicle_document))
+        .route("/document", web::get().to(list_vehicles_documents))
+        .route("/{id}/document", web::get().to(get_vehicle_document))
+        .route("/{id}/document", web::post().to(save_vehicle_document))
+        .route("/{id}/document", web::delete().to(delete_vehicle_document))
 }
 
 pub async fn get_vehicle(
@@ -35,7 +36,10 @@ pub async fn get_vehicle(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(HttpResponse::Ok().json(FilterVehicleDTO::filter_vehicle(&vehicle.unwrap())))
+    match vehicle {
+        Some(vehicle) => Ok(HttpResponse::Ok().json(FilterVehicleDTO::filter_vehicle(&vehicle))),
+        None => Err(HttpError::from_error_message(ErrorMessage::VehicleNotFound)),
+    }
 }
 
 pub async fn list_vehicles(
@@ -105,7 +109,10 @@ pub async fn delete_vehicle(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(HttpResponse::Ok().json(FilterVehicleDTO::filter_vehicle(&vehicle.unwrap())))
+    match vehicle {
+        Some(vehicle) => Ok(HttpResponse::Ok().json(FilterVehicleDTO::filter_vehicle(&vehicle))),
+        None => Err(HttpError::from_error_message(ErrorMessage::VehicleNotFound)),
+    }
 }
 
 pub async fn get_vehicle_document(
@@ -114,15 +121,43 @@ pub async fn get_vehicle_document(
 ) -> Result<HttpResponse, HttpError> {
     let document = app_state
         .db_client
-        .get_vehicle_document(Some(id.into_inner()))
+        .get_vehicle_document(None, Some(id.into_inner()), None, None, None)
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(
-        HttpResponse::Ok().json(FilterVehicleDocumentDTO::filter_document(
-            &document.unwrap(),
+    match document {
+        Some(document) => {
+            Ok(HttpResponse::Ok().json(FilterVehicleDocumentDTO::filter_document(&document)))
+        }
+        None => Err(HttpError::from_error_message(
+            ErrorMessage::VehicleDocumentNotFound,
         )),
-    )
+    }
+}
+
+pub async fn list_vehicles_documents(
+    query: web::Query<RequestQueryDTO>,
+    app_state: web::Data<AppState>,
+) -> Result<HttpResponse, HttpError> {
+    let query_params: RequestQueryDTO = query.into_inner();
+
+    query_params
+        .validate()
+        .map_err(|e| HttpError::bad_request(e.to_string()))?;
+
+    let page = query_params.page.unwrap_or(1);
+    let limit = query_params.limit.unwrap_or(50);
+
+    let documents = app_state
+        .db_client
+        .list_vehicle_documents(page as u32, limit)
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
+
+    Ok(HttpResponse::Ok().json(VehicleDocumentListResponseDTO {
+        documents: FilterVehicleDocumentDTO::filter_documents(&documents),
+        results: documents.len(),
+    }))
 }
 
 pub async fn save_vehicle_document(
@@ -134,7 +169,7 @@ pub async fn save_vehicle_document(
         .map_err(|e| HttpError::bad_request(e.to_string()))?;
 
     let mut dto = body.into_inner();
-    dto.vehicle_id = id.to_string(); // Uses the vehicle ID from path
+    dto.vehicle_id = Some(id.to_string()); // Uses the vehicle ID from path
 
     let result = app_state
         .db_client
@@ -168,9 +203,12 @@ pub async fn delete_vehicle_document(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    Ok(
-        HttpResponse::Ok().json(FilterVehicleDocumentDTO::filter_document(
-            &document.unwrap(),
+    match document {
+        Some(document) => {
+            Ok(HttpResponse::Ok().json(FilterVehicleDocumentDTO::filter_document(&document)))
+        }
+        None => Err(HttpError::from_error_message(
+            ErrorMessage::VehicleDocumentNotFound,
         )),
-    )
+    }
 }
