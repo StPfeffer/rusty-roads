@@ -73,6 +73,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .service(scopes::address::address_scope())
             .service(scopes::collaborator::collaborator_scope())
             .service(scopes::vehicle::vehicle_scope())
+            .service(scopes::route::route_scope())
             .service(health_checker_handler)
     })
     .bind(("0.0.0.0", config.port))?
