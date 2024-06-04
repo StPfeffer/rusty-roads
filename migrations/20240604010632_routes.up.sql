@@ -9,8 +9,8 @@ CREATE TABLE IF NOT EXISTS routes
     updated_at         TIMESTAMP      DEFAULT NOW() NOT NULL,
     initial_lat        NUMERIC(10, 8)               NOT NULL,
     initial_long       NUMERIC(11, 8)               NOT NULL,
-    final_lat          NUMERIC(10, 8)               NOT NULL,
-    final_long         NUMERIC(11, 8)               NOT NULL,
+    final_lat          NUMERIC(10, 8),
+    final_long         NUMERIC(11, 8),
     initial_address_id UUID
         CONSTRAINT fk_routes_initial_address_id
             REFERENCES addresses (id),
