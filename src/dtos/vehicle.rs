@@ -77,7 +77,7 @@ pub struct RegisterVehicleDocumentDTO {
     pub manufacture_year: i16,
 
     #[validate(length(
-        min = 10,
+        min = 9,
         max = 20,
         message = "Registration number must have between 10 and 20 characters"
     ))]
@@ -111,13 +111,11 @@ pub struct RegisterVehicleDocumentDTO {
     ))]
     pub plate: String,
 
-    pub updated_at: NaiveDateTime,
-
     #[validate(custom(
         function = "is_valid_uuid",
         message = "Vehicle ID must be a valid UUID"
     ))]
-    pub vehicle_id: String,
+    pub vehicle_id: Option<String>,
 }
 
 impl RegisterVehicleDocumentDTO {
@@ -148,7 +146,7 @@ pub struct SaveVehicleDocumentParamsDTO<T> {
     pub make: T,
     pub model: T,
     pub plate: T,
-    pub vehicle_id: T,
+    pub vehicle_id: Option<T>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
