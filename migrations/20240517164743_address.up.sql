@@ -1,5 +1,5 @@
 -- Add up migration script here
-CREATE TABLE addresses
+CREATE TABLE IF NOT EXISTS addresses
 (
     id            UUID         NOT NULL PRIMARY KEY DEFAULT (uuid_generate_v4()),
     address       VARCHAR(100) NOT NULL,

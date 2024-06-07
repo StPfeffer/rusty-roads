@@ -1,5 +1,5 @@
 -- Add up migration script here
-CREATE TABLE vehicles_documents
+CREATE TABLE IF NOT EXISTS vehicles_documents
 (
     id                  UUID               NOT NULL PRIMARY KEY DEFAULT (uuid_generate_v4()),
     chassis_number      VARCHAR(17) UNIQUE NOT NULL,

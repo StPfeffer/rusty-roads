@@ -1,5 +1,5 @@
 -- Add up migration script here
-CREATE TABLE cities
+CREATE TABLE IF NOT EXISTS cities
 (
     id         UUID         NOT NULL PRIMARY KEY DEFAULT (uuid_generate_v4()),
     name       VARCHAR(100) NOT NULL,
