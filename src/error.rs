@@ -41,6 +41,10 @@ pub enum ErrorMessage {
     AddressNotFound,
     CollaboratorExist,
     CollaboratorNotFound,
+    VehicleExist,
+    VehicleNotFound,
+    VehicleDocumentExist,
+    VehicleDocumentNotFound,
 }
 
 impl fmt::Display for ErrorMessage {
@@ -89,6 +93,20 @@ impl ErrorMessage {
                 "The collaborator with the provided ID, email or cpf does not exist in our records"
                     .to_string()
             }
+            ErrorMessage::VehicleExist => {
+                "There is already a vehicle with the provided data"
+                .to_string()
+            }
+            ErrorMessage::VehicleNotFound => {
+                "The vehicle with the provided ID does not exist in our records".to_string()
+            }
+            ErrorMessage::VehicleDocumentExist => {
+                "There is already a document for the vehicle with the provided chassisNumber, registrationNumber or plate"
+                .to_string()
+            }
+            ErrorMessage::VehicleDocumentNotFound => {
+                "The document for the vehicle with the provided ID does not exist in our records".to_string()
+            }
         }
     }
 
@@ -105,6 +123,10 @@ impl ErrorMessage {
             ErrorMessage::AddressNotFound => "Ensure the addressId is correct and exists in the database. Use the 'GET /api/v1/addresses' endpoint to retrieve available address IDs.".to_string(),
             ErrorMessage::CollaboratorExist => "Verify the collaborator details (email, cpf) are unique and do not already exist.".to_string(),
             ErrorMessage::CollaboratorNotFound => "Ensure the collaboratorId, email or cpf is correct and exists in the database. Use the 'GET /api/v1/collaborators' endpoint to retrieve available collaborator IDs.".to_string(),
+            ErrorMessage::VehicleExist => "Ensure the vehicle information are uique and do not already exist.".to_string(),
+            ErrorMessage::VehicleNotFound => "Ensure the vehicleId is correct and exists in the database. Use the 'GET /api/v1/vehicles' endpoint to retrive available vehicle IDs".to_string(),
+            ErrorMessage::VehicleDocumentExist => "Verify the vehicle document details (chassisNumber, registrationNumber or plate) are unique and do not already exist.".to_string(),
+            ErrorMessage::VehicleDocumentNotFound => "Ensure the vehicleId, chassisNumber, registrationNumber or plate is correct and exists in the database. Use the 'GET /api/v1/vehicles' endpoint to retrieve available vehicle IDs and the 'GET /api/v1/vehicle{vehicleId}/documents' to retrieve the vehicle document.".to_string(),
         }
     }
 }

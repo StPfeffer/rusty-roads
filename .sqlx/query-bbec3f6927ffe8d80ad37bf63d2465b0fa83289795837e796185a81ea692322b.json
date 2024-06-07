@@ -1,0 +1,88 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT * FROM vehicles_documents WHERE chassis_number = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "chassis_number",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "exercise_year",
+        "type_info": "Int2"
+      },
+      {
+        "ordinal": 3,
+        "name": "model_year",
+        "type_info": "Int2"
+      },
+      {
+        "ordinal": 4,
+        "name": "manufacture_year",
+        "type_info": "Int2"
+      },
+      {
+        "ordinal": 5,
+        "name": "registration_number",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 6,
+        "name": "color",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 7,
+        "name": "make",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 8,
+        "name": "model",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 9,
+        "name": "plate",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 10,
+        "name": "updated_at",
+        "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 11,
+        "name": "vehicle_id",
+        "type_info": "Uuid"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "bbec3f6927ffe8d80ad37bf63d2465b0fa83289795837e796185a81ea692322b"
+}
