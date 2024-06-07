@@ -1,0 +1,97 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO vehicles_documents (chassis_number, exercise_year, model_year, manufacture_year, registration_number, color, make, model, plate, vehicle_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "chassis_number",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "exercise_year",
+        "type_info": "Int2"
+      },
+      {
+        "ordinal": 3,
+        "name": "model_year",
+        "type_info": "Int2"
+      },
+      {
+        "ordinal": 4,
+        "name": "manufacture_year",
+        "type_info": "Int2"
+      },
+      {
+        "ordinal": 5,
+        "name": "registration_number",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 6,
+        "name": "color",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 7,
+        "name": "make",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 8,
+        "name": "model",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 9,
+        "name": "plate",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 10,
+        "name": "updated_at",
+        "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 11,
+        "name": "vehicle_id",
+        "type_info": "Uuid"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Int2",
+        "Int2",
+        "Int2",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "4eb48281a837b619bb68006160f2e862729e3a8163254b0c5deebcc96b14c88e"
+}

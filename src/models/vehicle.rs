@@ -11,3 +11,19 @@ pub struct Vehicle {
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
 }
+
+#[derive(Debug, Deserialize, sqlx::Type, Serialize, Clone)]
+pub struct VehicleDocument {
+    pub id: Uuid,
+    pub chassis_number: String,
+    pub exercise_year: i16,
+    pub model_year: i16,
+    pub manufacture_year: i16,
+    pub registration_number: String,
+    pub color: String,
+    pub make: String,
+    pub model: String,
+    pub plate: String,
+    pub updated_at: NaiveDateTime,
+    pub vehicle_id: Uuid,
+}
