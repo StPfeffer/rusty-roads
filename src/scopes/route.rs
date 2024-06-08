@@ -85,12 +85,27 @@ pub async fn save_route(
     match result {
         Ok(route) => Ok(HttpResponse::Created().json(FilterRouteDTO::filter_route(&route))),
         Err(sqlx::Error::Database(db_err)) => {
-            if db_err.is_unique_violation() {
-                Err(HttpError::unique_constraint_violation(
-                    ErrorMessage::AddressExist,
-                ))
-            } else if db_err.is_foreign_key_violation() {
-                Err(HttpError::bad_request(ErrorMessage::CityNotFound))
+            if db_err.is_foreign_key_violation() {
+                match db_err.constraint() {
+                    Some(constraint) => {
+                        if constraint == "fk_routes_initial_address_id" || constraint == "fk_routes_final_address_id" {
+                            Err(HttpError::bad_request(
+                                ErrorMessage::AddressNotFound,
+                            ))
+                        } else if constraint == "fk_routes_vehicle_id" {
+                            Err(HttpError::bad_request(
+                                ErrorMessage::VehicleNotFound,
+                            ))
+                        } else if constraint == "fk_routes_route_status" {
+                            Err(HttpError::bad_request(
+                                ErrorMessage::RouteStatusNotFound,
+                            ))
+                        } else {
+                            Err(HttpError::server_error(db_err.to_string()))
+                        }
+                    }
+                    None => Err(HttpError::server_error(db_err.to_string()))
+                }
             } else {
                 Err(HttpError::server_error(db_err.to_string()))
             }
@@ -217,10 +232,8 @@ pub async fn save_route_status(
         Err(sqlx::Error::Database(db_err)) => {
             if db_err.is_unique_violation() {
                 Err(HttpError::unique_constraint_violation(
-                    ErrorMessage::AddressExist,
+                    ErrorMessage::RouteStatusExist,
                 ))
-            } else if db_err.is_foreign_key_violation() {
-                Err(HttpError::bad_request(ErrorMessage::CityNotFound))
             } else {
                 Err(HttpError::server_error(db_err.to_string()))
             }
