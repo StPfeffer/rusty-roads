@@ -88,23 +88,19 @@ pub async fn save_route(
             if db_err.is_foreign_key_violation() {
                 match db_err.constraint() {
                     Some(constraint) => {
-                        if constraint == "fk_routes_initial_address_id" || constraint == "fk_routes_final_address_id" {
-                            Err(HttpError::bad_request(
-                                ErrorMessage::AddressNotFound,
-                            ))
+                        if constraint == "fk_routes_initial_address_id"
+                            || constraint == "fk_routes_final_address_id"
+                        {
+                            Err(HttpError::bad_request(ErrorMessage::AddressNotFound))
                         } else if constraint == "fk_routes_vehicle_id" {
-                            Err(HttpError::bad_request(
-                                ErrorMessage::VehicleNotFound,
-                            ))
+                            Err(HttpError::bad_request(ErrorMessage::VehicleNotFound))
                         } else if constraint == "fk_routes_route_status" {
-                            Err(HttpError::bad_request(
-                                ErrorMessage::RouteStatusNotFound,
-                            ))
+                            Err(HttpError::bad_request(ErrorMessage::RouteStatusNotFound))
                         } else {
                             Err(HttpError::server_error(db_err.to_string()))
                         }
                     }
-                    None => Err(HttpError::server_error(db_err.to_string()))
+                    None => Err(HttpError::server_error(db_err.to_string())),
                 }
             } else {
                 Err(HttpError::server_error(db_err.to_string()))
@@ -165,11 +161,7 @@ pub async fn get_route_status_from_route(
         Some(route) => {
             status_id = route.status_id;
         }
-        None => {
-            return Err(HttpError::from_error_message(
-                ErrorMessage::RouteNotFound,
-            ))
-        }
+        None => return Err(HttpError::from_error_message(ErrorMessage::RouteNotFound)),
     }
 
     let status = app_state
@@ -256,6 +248,8 @@ pub async fn delete_route_status(
         Some(status) => {
             Ok(HttpResponse::Ok().json(FilterRouteStatusDTO::filter_route_status(&status)))
         }
-        None => Err(HttpError::from_error_message(ErrorMessage::RouteStatusNotFound)),
+        None => Err(HttpError::from_error_message(
+            ErrorMessage::RouteStatusNotFound,
+        )),
     }
 }

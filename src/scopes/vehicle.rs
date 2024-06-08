@@ -187,9 +187,7 @@ pub async fn save_vehicle_document(
                     ErrorMessage::VehicleDocumentExist,
                 ))
             } else if db_err.is_foreign_key_violation() {
-                Err(HttpError::bad_request(
-                    ErrorMessage::VehicleNotFound,
-                ))
+                Err(HttpError::bad_request(ErrorMessage::VehicleNotFound))
             } else {
                 Err(HttpError::server_error(db_err.to_string()))
             }
