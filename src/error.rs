@@ -46,6 +46,7 @@ pub enum ErrorMessage {
     VehicleDocumentExist,
     VehicleDocumentNotFound,
     RouteNotFound,
+    RouteStatusNotFound,
 }
 
 impl fmt::Display for ErrorMessage {
@@ -76,9 +77,10 @@ impl ErrorMessage {
             ErrorMessage::CollaboratorNotFound => "The collaborator with the provided ID, email or cpf does not exist in our ,records",
             ErrorMessage::VehicleExist => "There is already a vehicle with the provided data",
             ErrorMessage::VehicleNotFound => "The vehicle with the provided ID does not exist in our records",
-            ErrorMessage::VehicleDocumentExist => "There is already a document for the vehicle with the provided chassisNumber, ,registrationNumber or plate",
-            ErrorMessage::VehicleDocumentNotFound => "The document for the vehicle with the provided ID does not exist in our ,records",
+            ErrorMessage::VehicleDocumentExist => "There is already a document for the vehicle with the provided chassisNumber, registrationNumber or plate",
+            ErrorMessage::VehicleDocumentNotFound => "The document for the vehicle with the provided ID does not exist in our records",
             ErrorMessage::RouteNotFound => "There route with the provided ID does not exist in our records",
+            ErrorMessage::RouteStatusNotFound => "The status for the route with the provided ID does not exist in our records"
         }
     }
 
@@ -100,6 +102,7 @@ impl ErrorMessage {
             ErrorMessage::VehicleDocumentExist => "Verify the vehicle document details (chassisNumber, registrationNumber or plate) are unique and do not already exist.",
             ErrorMessage::VehicleDocumentNotFound => "Ensure the vehicleId, chassisNumber, registrationNumber or plate is correct and exists in the database. Use the 'GET /api/v1/vehicles' endpoint to retrieve available vehicle IDs and the 'GET /api/v1/vehicle{vehicleId}/documents' to retrieve the vehicle document.",
             ErrorMessage::RouteNotFound => "Ensure the routeId is correct and exists in the database. Use the 'GET /api/v1/routes' endpoint to retrieve available route IDs.",
+            ErrorMessage::RouteStatusNotFound => "Ensure the routeId is correct and exists in the database. Use the 'GET /api/v1/routes' endpoint to retrieve available route IDs."
         }
     }
 }
