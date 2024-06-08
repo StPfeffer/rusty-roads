@@ -23,16 +23,16 @@ services:
 
   backend:
     container_name: rusty-roads
-    image: rusty-roads:0.1.1
+    image: rusty-roads:latest
     build:
       context: .
       target: final
       args:
-        DATABASE_URL: ${DATABASE_URL_DOCKER}
+        DATABASE_URL_DOCKER: ${DATABASE_URL_DOCKER}
     env_file:
       - ./.env
     ports:
-      - 3000:3000
+      - 8000:8000
     depends_on:
       - postgres
     restart: always
