@@ -103,6 +103,7 @@ pub async fn delete_vehicle(
     id: web::Path<uuid::Uuid>,
     app_state: web::Data<AppState>,
 ) -> Result<HttpResponse, HttpError> {
+    // TODO: It needs to delete the vehicle document first
     let vehicle = app_state
         .db_client
         .delete_vehicle(Some(id.into_inner()))
