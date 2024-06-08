@@ -33,7 +33,12 @@ impl Config {
     /// println!("{:?}", config);
     /// ```
     pub fn init() -> Config {
-        let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+        let mut database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+
+        if let Ok(docker_database_url) = std::env::var("DATABASE_URL_DOCKER") {
+            database_url = docker_database_url;
+        }
+
         let jwt_secret = std::env::var("JWT_SECRET_KEY").expect("JWT_SECRET_KEY must be set");
         let jwt_maxage = std::env::var("JWT_MAXAGE").expect("JWT_MAXAGE must be set");
 
