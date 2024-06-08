@@ -122,8 +122,8 @@ impl FilterRouteDTO {
         }
     }
 
-    pub fn filter_routes(states: &[Route]) -> Vec<FilterRouteDTO> {
-        states.iter().map(FilterRouteDTO::filter_route).collect()
+    pub fn filter_routes(routes: &[Route]) -> Vec<FilterRouteDTO> {
+        routes.iter().map(FilterRouteDTO::filter_route).collect()
     }
 }
 
@@ -153,16 +153,16 @@ pub struct FilterRouteStatusDTO {
 }
 
 impl FilterRouteStatusDTO {
-    pub fn filter_route_status(route: &RouteStatus) -> Self {
+    pub fn filter_route_status(status: &RouteStatus) -> Self {
         FilterRouteStatusDTO {
-            id: route.id.to_string(),
-            code: route.code.to_owned(),
-            description: route.description.to_owned(),
+            id: status.id.to_string(),
+            code: status.code.to_owned(),
+            description: status.description.to_owned(),
         }
     }
 
-    pub fn filter_route_statuses(states: &[RouteStatus]) -> Vec<FilterRouteStatusDTO> {
-        states
+    pub fn filter_route_statuses(statuses: &[RouteStatus]) -> Vec<FilterRouteStatusDTO> {
+        statuses
             .iter()
             .map(FilterRouteStatusDTO::filter_route_status)
             .collect()
