@@ -1,0 +1,47 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT * FROM countries LIMIT $1 OFFSET $2",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "alpha_2",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "alpha_3",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "numeric_3",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "e7913361fbbdef34492b4aaf3eb96ea1d3ba15a033500765af897f213133cf29"
+}

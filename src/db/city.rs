@@ -52,7 +52,7 @@ impl CityExt for DBClient {
 
         let cities = sqlx::query_as!(
             City,
-            r#"SELECT id, name, code, state_id FROM cities LIMIT $1 OFFSET $2"#,
+            r#"SELECT * FROM cities LIMIT $1 OFFSET $2"#,
             limit as i64,
             offset as i64
         )

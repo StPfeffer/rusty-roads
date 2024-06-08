@@ -26,9 +26,6 @@ pub struct RegisterCollaboratorDTO {
 
     #[validate(email)]
     pub email: String,
-
-    pub updated_at: NaiveDateTime,
-    pub crated_at: NaiveDateTime,
 }
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]

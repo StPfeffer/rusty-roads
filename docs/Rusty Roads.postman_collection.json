@@ -1,0 +1,1185 @@
+{
+	"info": {
+		"_postman_id": "9183eaca-4461-4d51-baea-1722d331637f",
+		"name": "Rusty Roads",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25630504"
+	},
+	"item": [
+		{
+			"name": "Collaborators",
+			"item": [
+				{
+					"name": "Drivers",
+					"item": [
+						{
+							"name": "Cnh",
+							"item": [
+								{
+									"name": "List all CNH Types",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base}}/v1/collaborators/drivers/cnh",
+											"host": [
+												"{{base}}"
+											],
+											"path": [
+												"v1",
+												"collaborators",
+												"drivers",
+												"cnh"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get a CNH Type by ID",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base}}/v1/collaborators/drivers/cnh/:cnhId",
+											"host": [
+												"{{base}}"
+											],
+											"path": [
+												"v1",
+												"collaborators",
+												"drivers",
+												"cnh",
+												":cnhId"
+											],
+											"variable": [
+												{
+													"key": "cnhId",
+													"value": "75b0ed36-4c4b-4b54-b256-11f017281f6e",
+													"description": "The CNH UUID"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "List all Drivers",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/collaborators/drivers",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"collaborators",
+										"drivers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get a Driver by Collaborator ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/collaborators/:collaboratorId/drivers",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"collaborators",
+										":collaboratorId",
+										"drivers"
+									],
+									"variable": [
+										{
+											"key": "collaboratorId",
+											"value": "7d9e8496-a704-4f77-a988-b13c83c21b0c",
+											"description": "The collaborator UUID"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get a Driver by ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/collaborators/drivers/:driverId",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"collaborators",
+										"drivers",
+										":driverId"
+									],
+									"variable": [
+										{
+											"key": "driverId",
+											"value": "b7e699c3-4c5a-4946-8294-d69584c424d9",
+											"description": "The driver UUID"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Driver",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cnhNumber\": \"12345678910\",\r\n    \"cnhExpirationDate\": \"2024-06-08\",\r\n    \"idCnhType\": \"75b0ed36-4c4b-4b54-b256-11f017281f6e\",\r\n    \"collaboratorId\": \"23ea4a3a-6b2b-47ce-bf53-2475282fe002\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base}}/v1/collaborators/drivers",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"collaborators",
+										"drivers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete a Driver by Collaborator ID",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/collaborators/:collaboratorId/drivers",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"collaborators",
+										":collaboratorId",
+										"drivers"
+									],
+									"variable": [
+										{
+											"key": "collaboratorId",
+											"value": "",
+											"description": "The collaborator UUID"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "List all Collaborators",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/collaborators",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"collaborators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Collaborator by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/collaborators/:collaboratorId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"collaborators",
+								":collaboratorId"
+							],
+							"variable": [
+								{
+									"key": "collaboratorId",
+									"value": "7d9e8496-a704-4f77-a988-b13c83c21b0c",
+									"description": "The collaborator UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Collaborator",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Mateus Pfeffer\",\r\n    \"cpf\": \"08647692745\",\r\n    \"rg\": \"185732951\",\r\n    \"email\": \"mpfeffer@minha.fag.edu.br\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/v1/collaborators",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"collaborators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Collaborator by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/collaborators/:collaboratorId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"collaborators",
+								":collaboratorId"
+							],
+							"variable": [
+								{
+									"key": "collaboratorId",
+									"value": "7d9e8496-a704-4f77-a988-b13c83c21b0c",
+									"description": "The collaborator UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Countries",
+			"item": [
+				{
+					"name": "List all Countries",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/countries",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"countries"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Country by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/countries/:countryId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"countries",
+								":countryId"
+							],
+							"variable": [
+								{
+									"key": "countryId",
+									"value": "e591b9e7-b3b6-400b-b440-f9944dbf963d",
+									"description": "The country UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Country",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Brasil\",\r\n    \"alpha2\": \"BR\",\r\n    \"alpha3\": \"BRA\",\r\n    \"numeric3\": \"076\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/v1/countries",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"countries"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Country by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/countries/:countryId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"countries",
+								":countryId"
+							],
+							"variable": [
+								{
+									"key": "countryId",
+									"value": "e591b9e7-b3b6-400b-b440-f9944dbf963f",
+									"description": "The country UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "States",
+			"item": [
+				{
+					"name": "List all States",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/states",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"states"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a State by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/states/:stateId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"states",
+								":stateId"
+							],
+							"variable": [
+								{
+									"key": "stateId",
+									"value": "",
+									"description": "The state UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a State",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Paraná\",\r\n    \"code\": \"PR\",\r\n    \"countryId\": \"cd2aafe9-a9ed-4a91-829d-de1fd97b0768\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/v1/states",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"states"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a State by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/states/:stateId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"states",
+								":stateId"
+							],
+							"variable": [
+								{
+									"key": "stateId",
+									"value": "",
+									"description": "The state UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cities",
+			"item": [
+				{
+					"name": "List all Cities",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/cities",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"cities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a City by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/cities/:cityId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"cities",
+								":cityId"
+							],
+							"variable": [
+								{
+									"key": "cityId",
+									"value": "",
+									"description": "The cIty UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a City",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Cascavel\",\r\n    \"code\": \"4104808\",\r\n    \"stateId\": \"8547fbb8-6bc0-4526-af61-6c3ea0b6ac08\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/v1/cities",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"cities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a City by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/cities/:cityId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"cities",
+								":cityId"
+							],
+							"variable": [
+								{
+									"key": "cityId",
+									"value": "",
+									"description": "The cIty UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Addresses",
+			"item": [
+				{
+					"name": "List all Addresses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/addresses",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"addresses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get an Address by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/addresses/:addressId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"addresses",
+								":addressId"
+							],
+							"variable": [
+								{
+									"key": "addressId",
+									"value": "",
+									"description": "The address UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create an Address",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"address\": \"Rua Pio XII\",\r\n    \"number\": \"1701\",\r\n    \"neighbourhood\": \"Neva\",\r\n    \"zipCode\": \"85802175\",\r\n    \"cityId\": \"4661fcb7-b3e5-4ddb-9995-585d3e91bbeb\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/v1/addresses",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"addresses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete an Address by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/addresses/:addressId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"addresses",
+								":addressId"
+							],
+							"variable": [
+								{
+									"key": "addressId",
+									"value": "",
+									"description": "The address UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Vehicles",
+			"item": [
+				{
+					"name": "Documents",
+					"item": [
+						{
+							"name": "List all Vehicles Documents",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/vehicles/document",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"vehicles",
+										"document"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get a Vehicle Document by Vehicle ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/vehicles/:vehicleId/document",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"vehicles",
+										":vehicleId",
+										"document"
+									],
+									"variable": [
+										{
+											"key": "vehicleId",
+											"value": "b87d1704-c957-4ee2-b378-f7be43c10b85",
+											"description": "The vehicle UUID"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Vehicle Document by Vehicle ID",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"chassisNumber\": \"KLATF08YIVB363636\",\r\n    \"exerciseYear\": 2022,\r\n    \"modelYear\": 2022,\r\n    \"manufactureYear\": 2022,\r\n    \"registrationNumber\": \"481014772\",\r\n    \"color\": \"White\",\r\n    \"make\": \"Volkswagen\",\r\n    \"model\": \"Gol\",\r\n    \"plate\": \"P688CC\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base}}/v1/vehicles/:vehicleId/document",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"vehicles",
+										":vehicleId",
+										"document"
+									],
+									"variable": [
+										{
+											"key": "vehicleId",
+											"value": "b87d1704-c957-4ee2-b378-f7be43c10b85",
+											"description": "The vehicle UUID"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete a Vehicle Document by Vehicle ID",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/vehicles/:vehicleId",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"vehicles",
+										":vehicleId"
+									],
+									"variable": [
+										{
+											"key": "vehicleId",
+											"value": "",
+											"description": "The vehicle UUID"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "List all Vehicles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/vehicles",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"vehicles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Vehicle by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/vehicles/:vehicleId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"vehicles",
+								":vehicleId"
+							],
+							"variable": [
+								{
+									"key": "vehicleId",
+									"value": "b87d1704-c957-4ee2-b378-f7be43c10b85",
+									"description": "The vehicle UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Vehicle",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Volkswagen Gol\",\r\n    \"initialMileage\": 85,\r\n    \"actualMileage\": 93\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/v1/vehicles",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"vehicles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Vehicle by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/vehicles/:vehicleId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"vehicles",
+								":vehicleId"
+							],
+							"variable": [
+								{
+									"key": "vehicleId",
+									"value": "",
+									"description": "The vehicle UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Routes",
+			"item": [
+				{
+					"name": "Status",
+					"item": [
+						{
+							"name": "List all Route Status",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/routes/status",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"routes",
+										"status"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get a Route Status by ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/routes/status/:statusId",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"routes",
+										"status",
+										":statusId"
+									],
+									"variable": [
+										{
+											"key": "statusId",
+											"value": "a8449322-e5c9-47d5-89f8-d767172476a8",
+											"description": "The route status UUID"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get a Route Status by Route ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/routes/:routeId/status",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"routes",
+										":routeId",
+										"status"
+									],
+									"variable": [
+										{
+											"key": "routeId",
+											"value": "229b492c-06a0-4590-8ef5-ab75cd0f9e75",
+											"description": "The route UUID"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Route Status",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"IN_PROGRESS\",\r\n    \"description\": \"In progress\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base}}/v1/routes/status",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"routes",
+										"status"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete a Route Status by ID",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/routes/status/:statusId",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"routes",
+										"status",
+										":statusId"
+									],
+									"variable": [
+										{
+											"key": "statusId",
+											"value": "",
+											"description": "The route status UUID"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "List all Routes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/routes",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"routes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Route by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/routes/:routeId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"routes",
+								":routeId"
+							],
+							"variable": [
+								{
+									"key": "routeId",
+									"value": "229b492c-06a0-4590-8ef5-ab75cd0f9e75",
+									"description": "The route UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Route",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"initialLat\": \"-24.9556467\",\r\n    \"initialLong\": \"-53.4662277\",\r\n    \"finalLat\": null,\r\n    \"finalLong\": null,\r\n    \"initialAddress_Id\": null,\r\n    \"finalAddressId\": null,\r\n    \"vehicleId\": \"b87d1704-c957-4ee2-b378-f7be43c10b85\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/v1/routes",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"routes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Route by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/routes/:routeId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"routes",
+								":routeId"
+							],
+							"variable": [
+								{
+									"key": "routeId",
+									"value": "b8e8a9b1-b22f-435c-8000-d4e326740076",
+									"description": "The route UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base",
+			"value": "localhost:8000/api",
+			"type": "string"
+		}
+	]
+}
