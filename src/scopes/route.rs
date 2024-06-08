@@ -256,6 +256,6 @@ pub async fn delete_route_status(
         Some(status) => {
             Ok(HttpResponse::Ok().json(FilterRouteStatusDTO::filter_route_status(&status)))
         }
-        None => Err(HttpError::from_error_message(ErrorMessage::RouteNotFound)),
+        None => Err(HttpError::from_error_message(ErrorMessage::RouteStatusNotFound)),
     }
 }
