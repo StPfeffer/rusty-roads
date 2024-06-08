@@ -156,13 +156,10 @@ pub async fn get_route_status_from_route(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    let status_id: uuid::Uuid;
-    match route {
-        Some(route) => {
-            status_id = route.status_id;
-        }
+    let status_id = match route {
+        Some(route) => route.status_id,
         None => return Err(HttpError::from_error_message(ErrorMessage::RouteNotFound)),
-    }
+    };        
 
     let status = app_state
         .db_client
