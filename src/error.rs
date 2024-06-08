@@ -46,6 +46,7 @@ pub enum ErrorMessage {
     VehicleDocumentExist,
     VehicleDocumentNotFound,
     RouteNotFound,
+    RouteStatusExist,
     RouteStatusNotFound,
 }
 
@@ -64,45 +65,47 @@ impl From<ErrorMessage> for String {
 impl ErrorMessage {
     fn to_str(&self) -> &str {
         match self {
-            ErrorMessage::ServerError => "Server Error. Please try again later",
-            ErrorMessage::CountryExist => "There is already a country with the provided data",
-            ErrorMessage::CountryNotFound => "The country with the provided ID does not exist in our records",
-            ErrorMessage::StateExist => "There is already a state with the provided code and countryId",
-            ErrorMessage::StateNotFound => "The state with the provided ID does not exist in our records",
-            ErrorMessage::CityExist => "There is already a city with the provided code",
-            ErrorMessage::CityNotFound => "The city with the provided ID does not exist in our records",
-            ErrorMessage::AddressExist => "There is already an address with the provided address, number and zipCode"   ,
-            ErrorMessage::AddressNotFound => "The address with the provided ID does not exist in our records",
-            ErrorMessage::CollaboratorExist => "There is already a collaborator with the provided email or cpf",
-            ErrorMessage::CollaboratorNotFound => "The collaborator with the provided ID, email or cpf does not exist in our ,records",
-            ErrorMessage::VehicleExist => "There is already a vehicle with the provided data",
-            ErrorMessage::VehicleNotFound => "The vehicle with the provided ID does not exist in our records",
-            ErrorMessage::VehicleDocumentExist => "There is already a document for the vehicle with the provided chassisNumber, registrationNumber or plate",
-            ErrorMessage::VehicleDocumentNotFound => "The document for the vehicle with the provided ID does not exist in our records",
-            ErrorMessage::RouteNotFound => "There route with the provided ID does not exist in our records",
-            ErrorMessage::RouteStatusNotFound => "The status for the route with the provided ID does not exist in our records"
+            ErrorMessage::ServerError => "A server error occurred. Please try again later",
+            ErrorMessage::CountryExist => "A country with the provided data already exists",
+            ErrorMessage::CountryNotFound => "The country with the provided ID does not exist in our records. Please verify and try again",
+            ErrorMessage::StateExist => "A state with the provided code and countryId already exists",
+            ErrorMessage::StateNotFound => "The state with the provided ID does not exist in our records. Please verify and try again",
+            ErrorMessage::CityExist => "A city with the provided code already exists",
+            ErrorMessage::CityNotFound => "The city with the provided ID does not exist in our records. Please verify and try again",
+            ErrorMessage::AddressExist => "An address with the provided details (address, number, zipCode) already exists",
+            ErrorMessage::AddressNotFound => "The address with the provided ID does not exist in our records. Please verify and try again",
+            ErrorMessage::CollaboratorExist => "A collaborator with the provided email or cpf already exists",
+            ErrorMessage::CollaboratorNotFound => "The collaborator with the provided ID, email, or cpf does not exist in our records. Please verify and try again",
+            ErrorMessage::VehicleExist => "A vehicle with the provided data already exists",
+            ErrorMessage::VehicleNotFound => "The vehicle with the provided ID does not exist in our records. Please verify and try again",
+            ErrorMessage::VehicleDocumentExist => "A document for the vehicle with the provided chassisNumber, registrationNumber, or plate already exists",
+            ErrorMessage::VehicleDocumentNotFound => "The document for the vehicle with the provided ID does not exist in our records. Please verify and try again",
+            ErrorMessage::RouteNotFound => "The route with the provided ID does not exist in our records. Please verify and try again",
+            ErrorMessage::RouteStatusExist => "A status with the provided data already exists for this route",
+            ErrorMessage::RouteStatusNotFound => "The status for the route with the provided ID does not exist in our records. Please verify and try again"
         }
     }
 
     fn hint(&self) -> &str {
         match self {
-            ErrorMessage::ServerError => "Check server logs for more details and ensure the server is running correctly.",
-            ErrorMessage::CountryExist => "Verify the country data you are trying to add is unique and does not already exist.",
-            ErrorMessage::CountryNotFound => "Ensure the countryId is correct and exists in the database. Use the 'GET /api/v1/countries' endpoint to retrieve available country IDs.",
-            ErrorMessage::StateExist => "Verify the state code and countryId are unique and do not already exist.",
-            ErrorMessage::StateNotFound => "Ensure the stateId is correct and exists in the database. Use the 'GET /api/v1/states' endpoint to retrieve available state IDs.",
-            ErrorMessage::CityExist => "Verify the city code is unique and does not already exist.",
-            ErrorMessage::CityNotFound => "Ensure the cityId is correct and exists in the database. Use the 'GET /api/v1/cities' endpoint to retrieve available city IDs.",
-            ErrorMessage::AddressExist => "Verify the address details (address, number and zipCode) are unique and do not already exist.",
-            ErrorMessage::AddressNotFound => "Ensure the addressId is correct and exists in the database. Use the 'GET /api/v1/addresses' endpoint to retrieve available address IDs.",
-            ErrorMessage::CollaboratorExist => "Verify the collaborator details (email, cpf) are unique and do not already exist.",
-            ErrorMessage::CollaboratorNotFound => "Ensure the collaboratorId, email or cpf is correct and exists in the database. Use the 'GET /api/v1/collaborators' endpoint to retrieve available collaborator IDs.",
-            ErrorMessage::VehicleExist => "Ensure the vehicle information are uique and do not already exist.",
-            ErrorMessage::VehicleNotFound => "Ensure the vehicleId is correct and exists in the database. Use the 'GET /api/v1/vehicles' endpoint to retrive available vehicle IDs",
-            ErrorMessage::VehicleDocumentExist => "Verify the vehicle document details (chassisNumber, registrationNumber or plate) are unique and do not already exist.",
-            ErrorMessage::VehicleDocumentNotFound => "Ensure the vehicleId, chassisNumber, registrationNumber or plate is correct and exists in the database. Use the 'GET /api/v1/vehicles' endpoint to retrieve available vehicle IDs and the 'GET /api/v1/vehicle{vehicleId}/documents' to retrieve the vehicle document.",
-            ErrorMessage::RouteNotFound => "Ensure the routeId is correct and exists in the database. Use the 'GET /api/v1/routes' endpoint to retrieve available route IDs.",
-            ErrorMessage::RouteStatusNotFound => "Ensure the routeId is correct and exists in the database. Use the 'GET /api/v1/routes' endpoint to retrieve available route IDs."
+            ErrorMessage::ServerError => "Check server logs for more details and ensure the server is running correctly",
+            ErrorMessage::CountryExist => "Verify the country data you are trying to add is unique and does not already exist",
+            ErrorMessage::CountryNotFound => "Ensure the countryId is correct and exists in the database. Use 'GET /api/v1/countries' to retrieve available country IDs",
+            ErrorMessage::StateExist => "Verify the state code and countryId are unique and do not already exist",
+            ErrorMessage::StateNotFound => "Ensure the stateId is correct and exists in the database. Use 'GET /api/v1/states' to retrieve available state IDs",
+            ErrorMessage::CityExist => "Verify the city code is unique and does not already exist",
+            ErrorMessage::CityNotFound => "Ensure the cityId is correct and exists in the database. Use 'GET /api/v1/cities' to retrieve available city IDs",
+            ErrorMessage::AddressExist => "Verify the address details (address, number, zipCode) are unique and do not already exist",
+            ErrorMessage::AddressNotFound => "Ensure the addressId is correct and exists in the database. Use 'GET /api/v1/addresses' to retrieve available address IDs",
+            ErrorMessage::CollaboratorExist => "Verify the collaborator details (email, cpf) are unique and do not already exist",
+            ErrorMessage::CollaboratorNotFound => "Ensure the collaboratorId, email, or cpf is correct and exists in the database. Use 'GET /api/v1/collaborators' to retrieve available collaborator IDs",
+            ErrorMessage::VehicleExist => "Ensure the vehicle information is unique and does not already exist",
+            ErrorMessage::VehicleNotFound => "Ensure the vehicleId is correct and exists in the database. Use 'GET /api/v1/vehicles' to retrieve available vehicle IDs",
+            ErrorMessage::VehicleDocumentExist => "Verify the vehicle document details (chassisNumber, registrationNumber, plate) are unique and do not already exist",
+            ErrorMessage::VehicleDocumentNotFound => "Ensure the vehicleId, chassisNumber, registrationNumber, or plate is correct and exists in the database. Use 'GET /api/v1/vehicles' and 'GET /api/v1/vehicles/{vehicleId}/documents' to retrieve available vehicle IDs and documents",
+            ErrorMessage::RouteNotFound => "Ensure the routeId is correct and exists in the database. Use 'GET /api/v1/routes' to retrieve available route IDs",
+            ErrorMessage::RouteStatusExist => "Verify the route status code is unique and does not already exist",
+            ErrorMessage::RouteStatusNotFound => "Ensure the routeId is correct and exists in the database. Use 'GET /api/v1/routes' to retrieve available route IDs"
         }
     }
 }
@@ -126,7 +129,7 @@ impl HttpError {
     pub fn bad_request(message: impl Into<String>) -> Self {
         HttpError {
             message: message.into(),
-            hint: "Check the request parameters and try again.".to_string(),
+            hint: "Check the request parameters and try again".to_string(),
             status: 400,
         }
     }
@@ -134,7 +137,7 @@ impl HttpError {
     pub fn unique_constraint_violation(message: impl Into<String>) -> Self {
         HttpError {
             message: message.into(),
-            hint: "Ensure the data you are trying to add is unique.".to_string(),
+            hint: "Ensure the data you are trying to add is unique".to_string(),
             status: 409,
         }
     }
@@ -175,7 +178,7 @@ impl HttpError {
             500 => HttpResponse::InternalServerError().json(response),
             _ => {
                 eprintln!(
-                    "Warning: Missing pattern match. Converted status code {} to 500.",
+                    "Warning: Missing pattern match. Converted status code {} to 500",
                     self.status
                 );
 
