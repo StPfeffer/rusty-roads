@@ -131,7 +131,11 @@ pub trait RouteStatusExt {
         code: Option<String>,
     ) -> Result<Option<RouteStatus>, sqlx::Error>;
 
-    async fn list_all(&self, page: u32, limit: usize) -> Result<Vec<RouteStatus>, sqlx::Error>;
+    async fn list_route_status(
+        &self,
+        page: u32,
+        limit: usize,
+    ) -> Result<Vec<RouteStatus>, sqlx::Error>;
 
     async fn save_route_status<T: Into<String> + Send>(
         &self,
@@ -175,7 +179,11 @@ impl RouteStatusExt for DBClient {
         Ok(status)
     }
 
-    async fn list_all(&self, page: u32, limit: usize) -> Result<Vec<RouteStatus>, sqlx::Error> {
+    async fn list_route_status(
+        &self,
+        page: u32,
+        limit: usize,
+    ) -> Result<Vec<RouteStatus>, sqlx::Error> {
         let offset = (page - 1) * limit as u32;
 
         let statuses = sqlx::query_as!(
