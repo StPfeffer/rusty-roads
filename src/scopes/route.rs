@@ -117,7 +117,7 @@ pub async fn delete_route(
 
 pub async fn get_route_status(
     id: web::Path<uuid::Uuid>,
-    app_state: web::Data<AppState>
+    app_state: web::Data<AppState>,
 ) -> Result<HttpResponse, HttpError> {
     let status = app_state
         .db_client
