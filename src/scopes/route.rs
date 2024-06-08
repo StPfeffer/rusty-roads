@@ -2,10 +2,10 @@ use actix_web::{web, HttpResponse, Scope};
 use validator::Validate;
 
 use crate::{
-    db::route::RouteExt,
+    db::route::{RouteExt, RouteStatusExt},
     dtos::{
         request::RequestQueryDTO,
-        route::{FilterRouteDTO, RegisterRouteDTO, RouteListResponseDTO},
+        route::{FilterRouteDTO, FilterRouteStatusDTO, RegisterRouteDTO, RouteListResponseDTO},
     },
     error::{ErrorMessage, HttpError},
     AppState,
@@ -17,6 +17,7 @@ pub fn route_scope() -> Scope {
         .route("/{id}", web::get().to(get_route))
         .route("", web::post().to(save_route))
         .route("/{id}", web::delete().to(delete_route))
+        .route("/{id}/status", web::get().to(get_route_status))
 }
 
 pub async fn get_route(
@@ -104,5 +105,38 @@ pub async fn delete_route(
     match route {
         Some(route) => Ok(HttpResponse::Ok().json(FilterRouteDTO::filter_route(&route))),
         None => Err(HttpError::from_error_message(ErrorMessage::RouteNotFound)),
+    }
+}
+
+pub async fn get_route_status(
+    id: web::Path<uuid::Uuid>,
+    code: Option<String>,
+    app_state: web::Data<AppState>,
+) -> Result<HttpResponse, HttpError> {
+    let route = app_state
+        .db_client
+        .get_route(Some(id.into_inner()))
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
+
+    let status_id: uuid::Uuid;
+    match route {
+        Some(route) => {
+            status_id = route.status_id;
+        }
+        None => return Err(HttpError::from_error_message(ErrorMessage::RouteStatusNotFound)),
+    }
+
+    let status = app_state
+        .db_client
+        .get_route_status(Some(status_id), None)
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
+
+    match status {
+        Some(status) => {
+            Ok(HttpResponse::Ok().json(FilterRouteStatusDTO::filter_route_status(&status)))
+        }
+        None => Err(HttpError::from_error_message(ErrorMessage::RouteStatusNotFound)),
     }
 }
