@@ -58,7 +58,7 @@ impl StateExt for DBClient {
 
         let states = sqlx::query_as!(
             State,
-            r#"SELECT id, name, code, country_id FROM states LIMIT $1 OFFSET $2"#,
+            r#"SELECT * FROM states LIMIT $1 OFFSET $2"#,
             limit as i64,
             offset as i64
         )

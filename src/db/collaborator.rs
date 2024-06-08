@@ -81,7 +81,7 @@ impl CollaboratorExt for DBClient {
 
         let collaborators = sqlx::query_as!(
             Collaborator,
-            r#"SELECT id, name, cpf, rg, email, created_at, updated_at FROM collaborators LIMIT $1 OFFSET $2"#,
+            r#"SELECT * FROM collaborators LIMIT $1 OFFSET $2"#,
             limit as i64,
             offset as i64
         )

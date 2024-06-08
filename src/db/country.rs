@@ -89,7 +89,7 @@ impl CountryExt for DBClient {
 
         let countries = sqlx::query_as!(
             Country,
-            r#"SELECT id, name, alpha_2, alpha_3, numeric_3 FROM countries LIMIT $1 OFFSET $2"#,
+            r#"SELECT * FROM countries LIMIT $1 OFFSET $2"#,
             limit as i64,
             offset as i64
         )
