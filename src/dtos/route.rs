@@ -3,7 +3,10 @@ use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-use crate::{models::route::Route, utils::uuid::is_valid_uuid};
+use crate::{
+    models::route::{Route, RouteStatus},
+    utils::uuid::is_valid_uuid,
+};
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -15,6 +18,13 @@ pub struct RegisterRouteDTO {
 
     // #[validate(custom(function = "is_valid_uuid", message = "Driver ID must be a valid UUID"))]
     // pub driver_id: String,
+    #[validate(length(
+        min = 1,
+        max = 20,
+        message = "Status must have a maximum of 20 characters"
+    ))]
+    pub status_id: String,
+
     #[validate(custom(
         function = "is_valid_uuid",
         message = "Initial address ID must be a valid UUID"
@@ -42,6 +52,7 @@ impl RegisterRouteDTO {
             final_lat: self.final_lat,
             final_long: self.final_long,
             // driver_id: self.driver_id,
+            status_id: self.status_id,
             initial_address_id: self.initial_address_id,
             final_address_id: self.final_address_id,
             vehicle_id: self.vehicle_id,
@@ -56,6 +67,7 @@ pub struct SaveRouteParamsDTO<B, S> {
     pub final_lat: Option<B>,
     pub final_long: Option<B>,
     // pub driver_id: S,
+    pub status_id: S,
     pub initial_address_id: Option<S>,
     pub final_address_id: Option<S>,
     pub vehicle_id: S,
@@ -75,6 +87,7 @@ pub struct FilterRouteDTO {
     pub final_lat: Option<BigDecimal>,
     pub final_long: Option<BigDecimal>,
     // pub driver_id: Uuid,
+    pub status_id: String,
     pub initial_address_id: Option<String>,
     pub final_address_id: Option<String>,
     pub vehicle_id: String,
@@ -102,6 +115,7 @@ impl FilterRouteDTO {
                 None
             },
             // driver_id: route.driver_id.to_string(),
+            status_id: route.status_id.to_string(),
             initial_address_id: route.initial_address_id.map(|id| id.to_string()),
             final_address_id: route.final_address_id.map(|id| id.to_string()),
             vehicle_id: route.vehicle_id.to_string(),
@@ -122,5 +136,47 @@ pub struct RouteResponseDTO {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RouteListResponseDTO {
     pub routes: Vec<FilterRouteDTO>,
+    pub results: usize,
+}
+
+#[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
+pub struct RegisterRouteStatusDTO {
+    pub code: Option<String>,
+    pub description: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct FilterRouteStatusDTO {
+    pub id: String,
+    pub code: String,
+    pub description: String,
+}
+
+impl FilterRouteStatusDTO {
+    pub fn filter_route_status(route: &RouteStatus) -> Self {
+        FilterRouteStatusDTO {
+            id: route.id.to_string(),
+            code: route.code.to_owned(),
+            description: route.description.to_owned(),
+        }
+    }
+
+    pub fn filter_route_statuses(states: &[RouteStatus]) -> Vec<FilterRouteStatusDTO> {
+        states
+            .iter()
+            .map(FilterRouteStatusDTO::filter_route_status)
+            .collect()
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct RouteStatusResponseDTO {
+    pub status: String,
+    pub data: FilterRouteStatusDTO,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct RouteStatusListResponseDTO {
+    pub status: Vec<FilterRouteStatusDTO>,
     pub results: usize,
 }
