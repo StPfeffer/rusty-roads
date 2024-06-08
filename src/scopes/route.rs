@@ -87,7 +87,7 @@ pub async fn save_route(
         Ok(route) => Ok(HttpResponse::Created().json(FilterRouteDTO::filter_route(&route))),
         Err(sqlx::Error::Database(db_err)) => {
             if db_err.is_foreign_key_violation() {
-                return match_foreign_key_violation(&db_err);
+                match_foreign_key_violation(&*db_err)
             } else {
                 Err(HttpError::server_error(db_err.to_string()))
             }
@@ -237,7 +237,7 @@ pub async fn delete_route_status(
     }
 }
 
-fn match_foreign_key_violation(db_err: &Box<dyn DatabaseError>) -> Result<HttpResponse, HttpError> {
+fn match_foreign_key_violation(db_err: &dyn DatabaseError) -> Result<HttpResponse, HttpError> {
     match db_err.constraint() {
         Some(constraint) => {
             if constraint == "fk_routes_initial_address_id"
