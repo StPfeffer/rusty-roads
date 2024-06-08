@@ -1,5 +1,3 @@
-use in_container::in_container;
-
 /// Represents the configuration settings for the application.
 #[derive(Debug, Clone)]
 pub struct Config {
@@ -35,13 +33,10 @@ impl Config {
     /// println!("{:?}", config);
     /// ```
     pub fn init() -> Config {
-        let mut database_url;
+        let mut database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
 
-        if (in_container()) {
-            database_url =
-                std::env::var("DATABASE_URL_DOCKER").expect("DATABASE_URL_DOCKER must be set");
-        } else {
-            database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+        if let Ok(docker_database_url) = std::env::var("DATABASE_URL_DOCKER") {
+            database_url = docker_database_url;
         }
 
         let jwt_secret = std::env::var("JWT_SECRET_KEY").expect("JWT_SECRET_KEY must be set");
