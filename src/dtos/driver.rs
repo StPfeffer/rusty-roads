@@ -2,7 +2,10 @@ use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-use crate::{models::driver::Driver, utils::uuid::is_valid_uuid};
+use crate::{
+    models::driver::{CnhType, Driver},
+    utils::uuid::is_valid_uuid,
+};
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -22,14 +25,16 @@ pub struct RegisterDriverDTO {
         function = "is_valid_uuid",
         message = "Collaborator ID must be a valid UUID"
     ))]
-    pub id_collaborattor: String,
+    pub collaborator_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct FilterDriverDTO {
     pub id: String,
-    #[serde(rename = "cnhNumber")]
     pub cnh_number: String,
+    pub cnh_expiration_date: NaiveDate,
+    pub cnh_type_id: String,
     pub collaborator_id: String,
 }
 
@@ -38,7 +43,9 @@ impl FilterDriverDTO {
         FilterDriverDTO {
             id: driver.id.to_string(),
             cnh_number: driver.cnh_number.to_owned(),
-            collaborator_id: driver.id_collaborattor.to_string(),
+            cnh_expiration_date: driver.cnh_expiration_date.to_owned(),
+            cnh_type_id: driver.cnh_type_id.to_string(),
+            collaborator_id: driver.collaborator_id.to_string(),
         }
     }
 
@@ -47,12 +54,50 @@ impl FilterDriverDTO {
     }
 }
 
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DriverResponseDTO {
     pub status: String,
     pub data: FilterDriverDTO,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DriverListResponseDTO {
     pub drivers: Vec<FilterDriverDTO>,
+    pub results: usize,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct FilterCnhTypeDTO {
+    pub id: String,
+    pub code: String,
+    pub description: String,
+}
+
+impl FilterCnhTypeDTO {
+    pub fn filter_cnh_type(cnh_type: &CnhType) -> Self {
+        FilterCnhTypeDTO {
+            id: cnh_type.id.to_string(),
+            code: cnh_type.code.to_owned(),
+            description: cnh_type.description.to_owned(),
+        }
+    }
+
+    pub fn filter_cnh_types(cnh_types: &[CnhType]) -> Vec<FilterCnhTypeDTO> {
+        cnh_types
+            .iter()
+            .map(FilterCnhTypeDTO::filter_cnh_type)
+            .collect()
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CnhTypeResponseDTO {
+    pub status: String,
+    pub data: FilterCnhTypeDTO,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CnhTypeListResponseDTO {
+    pub types: Vec<FilterCnhTypeDTO>,
     pub results: usize,
 }
