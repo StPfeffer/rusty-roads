@@ -19,11 +19,12 @@ pub fn route_scope() -> Scope {
         .route("", web::get().to(list_routes))
         .route("", web::post().to(save_route))
         .route("/status", web::post().to(save_route_status))
+        .route("/status/{id}", web::get().to(get_route_status))
         .route("/status/{id}", web::delete().to(delete_route_status))
         .route("/status", web::get().to(list_route_status))
         .route("/{id}", web::get().to(get_route))
         .route("/{id}", web::delete().to(delete_route))
-        .route("/{id}/status", web::get().to(get_route_status))
+        .route("/{id}/status", web::get().to(get_route_status_from_route))
 }
 
 pub async fn get_route(
@@ -115,6 +116,26 @@ pub async fn delete_route(
 }
 
 pub async fn get_route_status(
+    id: web::Path<uuid::Uuid>,
+    app_state: web::Data<AppState>
+) -> Result<HttpResponse, HttpError> {
+    let status = app_state
+        .db_client
+        .get_route_status(Some(id.into_inner()), None)
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
+
+    match status {
+        Some(status) => {
+            Ok(HttpResponse::Ok().json(FilterRouteStatusDTO::filter_route_status(&status)))
+        }
+        None => Err(HttpError::from_error_message(
+            ErrorMessage::RouteStatusNotFound,
+        )),
+    }
+}
+
+pub async fn get_route_status_from_route(
     id: web::Path<uuid::Uuid>,
     app_state: web::Data<AppState>,
 ) -> Result<HttpResponse, HttpError> {
