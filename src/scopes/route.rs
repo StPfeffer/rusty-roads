@@ -167,7 +167,7 @@ pub async fn get_route_status_from_route(
         }
         None => {
             return Err(HttpError::from_error_message(
-                ErrorMessage::RouteStatusNotFound,
+                ErrorMessage::RouteNotFound,
             ))
         }
     }
