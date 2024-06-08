@@ -17,7 +17,15 @@ pub struct Route {
     pub final_long: Option<BigDecimal>,
     // TODO: Waiting for the driver scope
     // pub driver_id: Uuid,
+    pub status_id: Uuid,
     pub initial_address_id: Option<Uuid>,
     pub final_address_id: Option<Uuid>,
     pub vehicle_id: Uuid,
+}
+
+#[derive(Debug, Deserialize, sqlx::FromRow, Serialize, Clone)]
+pub struct RouteStatus {
+    pub id: Uuid,
+    pub code: String,
+    pub description: String,
 }
