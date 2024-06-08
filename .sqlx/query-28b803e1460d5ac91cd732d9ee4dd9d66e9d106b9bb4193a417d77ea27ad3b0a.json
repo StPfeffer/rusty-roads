@@ -67,6 +67,11 @@
         "ordinal": 12,
         "name": "vehicle_id",
         "type_info": "Uuid"
+      },
+      {
+        "ordinal": 13,
+        "name": "status_id",
+        "type_info": "Uuid"
       }
     ],
     "parameters": {
@@ -84,10 +89,11 @@
       false,
       false,
       false,
-      false,
-      false,
       true,
       true,
+      true,
+      true,
+      false,
       false
     ]
   },
