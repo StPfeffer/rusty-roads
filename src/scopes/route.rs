@@ -159,7 +159,7 @@ pub async fn get_route_status_from_route(
     let status_id = match route {
         Some(route) => route.status_id,
         None => return Err(HttpError::from_error_message(ErrorMessage::RouteNotFound)),
-    };        
+    };
 
     let status = app_state
         .db_client
