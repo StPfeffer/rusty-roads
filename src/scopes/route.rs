@@ -1,4 +1,5 @@
 use actix_web::{web, HttpResponse, Scope};
+use sqlx::error::DatabaseError;
 use validator::Validate;
 
 use crate::{
@@ -85,12 +86,8 @@ pub async fn save_route(
     match result {
         Ok(route) => Ok(HttpResponse::Created().json(FilterRouteDTO::filter_route(&route))),
         Err(sqlx::Error::Database(db_err)) => {
-            if db_err.is_unique_violation() {
-                Err(HttpError::unique_constraint_violation(
-                    ErrorMessage::AddressExist,
-                ))
-            } else if db_err.is_foreign_key_violation() {
-                Err(HttpError::bad_request(ErrorMessage::CityNotFound))
+            if db_err.is_foreign_key_violation() {
+                match_foreign_key_violation(&*db_err)
             } else {
                 Err(HttpError::server_error(db_err.to_string()))
             }
@@ -145,17 +142,10 @@ pub async fn get_route_status_from_route(
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    let status_id: uuid::Uuid;
-    match route {
-        Some(route) => {
-            status_id = route.status_id;
-        }
-        None => {
-            return Err(HttpError::from_error_message(
-                ErrorMessage::RouteStatusNotFound,
-            ))
-        }
-    }
+    let status_id = match route {
+        Some(route) => route.status_id,
+        None => return Err(HttpError::from_error_message(ErrorMessage::RouteNotFound)),
+    };
 
     let status = app_state
         .db_client
@@ -217,10 +207,8 @@ pub async fn save_route_status(
         Err(sqlx::Error::Database(db_err)) => {
             if db_err.is_unique_violation() {
                 Err(HttpError::unique_constraint_violation(
-                    ErrorMessage::AddressExist,
+                    ErrorMessage::RouteStatusExist,
                 ))
-            } else if db_err.is_foreign_key_violation() {
-                Err(HttpError::bad_request(ErrorMessage::CityNotFound))
             } else {
                 Err(HttpError::server_error(db_err.to_string()))
             }
@@ -243,6 +231,27 @@ pub async fn delete_route_status(
         Some(status) => {
             Ok(HttpResponse::Ok().json(FilterRouteStatusDTO::filter_route_status(&status)))
         }
-        None => Err(HttpError::from_error_message(ErrorMessage::RouteNotFound)),
+        None => Err(HttpError::from_error_message(
+            ErrorMessage::RouteStatusNotFound,
+        )),
+    }
+}
+
+fn match_foreign_key_violation(db_err: &dyn DatabaseError) -> Result<HttpResponse, HttpError> {
+    match db_err.constraint() {
+        Some(constraint) => {
+            if constraint == "fk_routes_initial_address_id"
+                || constraint == "fk_routes_final_address_id"
+            {
+                Err(HttpError::bad_request(ErrorMessage::AddressNotFound))
+            } else if constraint == "fk_routes_vehicle_id" {
+                Err(HttpError::bad_request(ErrorMessage::VehicleNotFound))
+            } else if constraint == "fk_routes_route_status" {
+                Err(HttpError::bad_request(ErrorMessage::RouteStatusNotFound))
+            } else {
+                Err(HttpError::server_error(db_err.to_string()))
+            }
+        }
+        None => Err(HttpError::server_error(db_err.to_string())),
     }
 }

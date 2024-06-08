@@ -103,6 +103,7 @@ pub async fn delete_vehicle(
     id: web::Path<uuid::Uuid>,
     app_state: web::Data<AppState>,
 ) -> Result<HttpResponse, HttpError> {
+    // TODO: It needs to delete the vehicle document first
     let vehicle = app_state
         .db_client
         .delete_vehicle(Some(id.into_inner()))
@@ -185,6 +186,8 @@ pub async fn save_vehicle_document(
                 Err(HttpError::unique_constraint_violation(
                     ErrorMessage::VehicleDocumentExist,
                 ))
+            } else if db_err.is_foreign_key_violation() {
+                Err(HttpError::bad_request(ErrorMessage::VehicleNotFound))
             } else {
                 Err(HttpError::server_error(db_err.to_string()))
             }
