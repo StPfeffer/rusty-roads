@@ -47,6 +47,9 @@ pub enum ErrorMessage {
     VehicleDocumentNotFound,
     RouteNotFound,
     RouteStatusNotFound,
+    DriverExist,
+    DriverNotFound,
+    CnhTypeNotFound,
 }
 
 impl fmt::Display for ErrorMessage {
@@ -74,35 +77,41 @@ impl ErrorMessage {
             ErrorMessage::AddressExist => "There is already an address with the provided address, number and zipCode"   ,
             ErrorMessage::AddressNotFound => "The address with the provided ID does not exist in our records",
             ErrorMessage::CollaboratorExist => "There is already a collaborator with the provided email or cpf",
-            ErrorMessage::CollaboratorNotFound => "The collaborator with the provided ID, email or cpf does not exist in our ,records",
+            ErrorMessage::CollaboratorNotFound => "The collaborator with the provided ID, email or cpf does not exist in our records",
             ErrorMessage::VehicleExist => "There is already a vehicle with the provided data",
             ErrorMessage::VehicleNotFound => "The vehicle with the provided ID does not exist in our records",
             ErrorMessage::VehicleDocumentExist => "There is already a document for the vehicle with the provided chassisNumber, registrationNumber or plate",
             ErrorMessage::VehicleDocumentNotFound => "The document for the vehicle with the provided ID does not exist in our records",
             ErrorMessage::RouteNotFound => "There route with the provided ID does not exist in our records",
-            ErrorMessage::RouteStatusNotFound => "The status for the route with the provided ID does not exist in our records"
+            ErrorMessage::RouteStatusNotFound => "The status for the route with the provided ID does not exist in our records",
+            ErrorMessage::DriverNotFound => "The driver with the provided ID does not exist in our records",
+            ErrorMessage::DriverExist => "There is already a driver with the provided data",
+            ErrorMessage::CnhTypeNotFound => "The cnh type with the provided ID does not exist in our records"
         }
     }
 
     fn hint(&self) -> &str {
         match self {
-            ErrorMessage::ServerError => "Check server logs for more details and ensure the server is running correctly.",
-            ErrorMessage::CountryExist => "Verify the country data you are trying to add is unique and does not already exist.",
-            ErrorMessage::CountryNotFound => "Ensure the countryId is correct and exists in the database. Use the 'GET /api/v1/countries' endpoint to retrieve available country IDs.",
-            ErrorMessage::StateExist => "Verify the state code and countryId are unique and do not already exist.",
-            ErrorMessage::StateNotFound => "Ensure the stateId is correct and exists in the database. Use the 'GET /api/v1/states' endpoint to retrieve available state IDs.",
-            ErrorMessage::CityExist => "Verify the city code is unique and does not already exist.",
-            ErrorMessage::CityNotFound => "Ensure the cityId is correct and exists in the database. Use the 'GET /api/v1/cities' endpoint to retrieve available city IDs.",
-            ErrorMessage::AddressExist => "Verify the address details (address, number and zipCode) are unique and do not already exist.",
-            ErrorMessage::AddressNotFound => "Ensure the addressId is correct and exists in the database. Use the 'GET /api/v1/addresses' endpoint to retrieve available address IDs.",
-            ErrorMessage::CollaboratorExist => "Verify the collaborator details (email, cpf) are unique and do not already exist.",
-            ErrorMessage::CollaboratorNotFound => "Ensure the collaboratorId, email or cpf is correct and exists in the database. Use the 'GET /api/v1/collaborators' endpoint to retrieve available collaborator IDs.",
-            ErrorMessage::VehicleExist => "Ensure the vehicle information are uique and do not already exist.",
+            ErrorMessage::ServerError => "Check server logs for more details and ensure the server is running correctly",
+            ErrorMessage::CountryExist => "Verify the country data you are trying to add is unique and does not already exist",
+            ErrorMessage::CountryNotFound => "Ensure the countryId is correct and exists in the database. Use the 'GET /api/v1/countries' endpoint to retrieve available country IDs",
+            ErrorMessage::StateExist => "Verify the state code and countryId are unique and do not already exist",
+            ErrorMessage::StateNotFound => "Ensure the stateId is correct and exists in the database. Use the 'GET /api/v1/states' endpoint to retrieve available state IDs",
+            ErrorMessage::CityExist => "Verify the city code is unique and does not already exist",
+            ErrorMessage::CityNotFound => "Ensure the cityId is correct and exists in the database. Use the 'GET /api/v1/cities' endpoint to retrieve available city IDs",
+            ErrorMessage::AddressExist => "Verify the address details (address, number and zipCode) are unique and do not already exist",
+            ErrorMessage::AddressNotFound => "Ensure the addressId is correct and exists in the database. Use the 'GET /api/v1/addresses' endpoint to retrieve available address IDs",
+            ErrorMessage::CollaboratorExist => "Verify the collaborator details (email, cpf) are unique and do not already exist",
+            ErrorMessage::CollaboratorNotFound => "Ensure the collaboratorId, email or cpf is correct and exists in the database. Use the 'GET /api/v1/collaborators' endpoint to retrieve available collaborator IDs",
+            ErrorMessage::VehicleExist => "Ensure the vehicle information are uique and do not already exist",
             ErrorMessage::VehicleNotFound => "Ensure the vehicleId is correct and exists in the database. Use the 'GET /api/v1/vehicles' endpoint to retrive available vehicle IDs",
-            ErrorMessage::VehicleDocumentExist => "Verify the vehicle document details (chassisNumber, registrationNumber or plate) are unique and do not already exist.",
-            ErrorMessage::VehicleDocumentNotFound => "Ensure the vehicleId, chassisNumber, registrationNumber or plate is correct and exists in the database. Use the 'GET /api/v1/vehicles' endpoint to retrieve available vehicle IDs and the 'GET /api/v1/vehicle{vehicleId}/documents' to retrieve the vehicle document.",
-            ErrorMessage::RouteNotFound => "Ensure the routeId is correct and exists in the database. Use the 'GET /api/v1/routes' endpoint to retrieve available route IDs.",
-            ErrorMessage::RouteStatusNotFound => "Ensure the routeId is correct and exists in the database. Use the 'GET /api/v1/routes' endpoint to retrieve available route IDs."
+            ErrorMessage::VehicleDocumentExist => "Verify the vehicle document details (chassisNumber, registrationNumber or plate) are unique and do not already exist",
+            ErrorMessage::VehicleDocumentNotFound => "Ensure the vehicleId, chassisNumber, registrationNumber or plate is correct and exists in the database. Use the 'GET /api/v1/vehicles' endpoint to retrieve available vehicle IDs and the 'GET /api/v1/vehicle{vehicleId}/documents' to retrieve the vehicle document",
+            ErrorMessage::RouteNotFound => "Ensure the routeId is correct and exists in the database. Use the 'GET /api/v1/routes' endpoint to retrieve available route IDs",
+            ErrorMessage::RouteStatusNotFound => "Ensure the routeId is correct and exists in the database. Use the 'GET /api/v1/routes' endpoint to retrieve available route IDs",
+            ErrorMessage::DriverExist => "Ensure the cnhNumber and collaboratorId information are uique and do not already exist",
+            ErrorMessage::DriverNotFound => "Ensure the driverId, cnhNumber or collaboratorId are correct and exists in the database. Use the 'GET /api/v1/collaborators' endpoint to retrieve available collaborator IDs and the 'GET /api/v1/collaborators/drivers' to retrieve available driver IDs",
+            ErrorMessage::CnhTypeNotFound => "Something"
         }
     }
 }
@@ -175,7 +184,7 @@ impl HttpError {
             500 => HttpResponse::InternalServerError().json(response),
             _ => {
                 eprintln!(
-                    "Warning: Missing pattern match. Converted status code {} to 500.",
+                    "Warning: Missing pattern match. Converted status code {} to 500",
                     self.status
                 );
 
