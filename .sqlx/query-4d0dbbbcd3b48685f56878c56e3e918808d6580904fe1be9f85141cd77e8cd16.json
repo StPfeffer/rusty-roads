@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT id, name, alpha_2, alpha_3, numeric_3 FROM countries LIMIT $1 OFFSET $2",
+  "query": "SELECT * FROM cities LIMIT $1 OFFSET $2",
   "describe": {
     "columns": [
       {
@@ -15,18 +15,13 @@
       },
       {
         "ordinal": 2,
-        "name": "alpha_2",
+        "name": "code",
         "type_info": "Varchar"
       },
       {
         "ordinal": 3,
-        "name": "alpha_3",
-        "type_info": "Varchar"
-      },
-      {
-        "ordinal": 4,
-        "name": "numeric_3",
-        "type_info": "Varchar"
+        "name": "state_id",
+        "type_info": "Uuid"
       }
     ],
     "parameters": {
@@ -39,9 +34,8 @@
       false,
       false,
       false,
-      false,
       false
     ]
   },
-  "hash": "622831da2a920a2a4c4402fa2726896decd66e9bab5f9a32c620050077d86fe4"
+  "hash": "4d0dbbbcd3b48685f56878c56e3e918808d6580904fe1be9f85141cd77e8cd16"
 }

@@ -1,0 +1,61 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO drivers (cnh_number, cnh_expiration_date, cnh_type_id, collaborator_id) VALUES ($1, $2, $3, $4) RETURNING *",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "cnh_number",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "cnh_expiration_date",
+        "type_info": "Date"
+      },
+      {
+        "ordinal": 3,
+        "name": "created_at",
+        "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 4,
+        "name": "updated_at",
+        "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 5,
+        "name": "cnh_type_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 6,
+        "name": "collaborator_id",
+        "type_info": "Uuid"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Date",
+        "Uuid",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "62619f63a247204fd75a24d8b7a70e974fa2b19f112e178771cfaf7dd8517f91"
+}

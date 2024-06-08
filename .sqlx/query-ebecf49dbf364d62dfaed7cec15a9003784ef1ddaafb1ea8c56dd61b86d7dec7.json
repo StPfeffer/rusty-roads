@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT id, name, code, country_id FROM states LIMIT $1 OFFSET $2",
+  "query": "SELECT * FROM cnh_types WHERE id = $1",
   "describe": {
     "columns": [
       {
@@ -10,32 +10,25 @@
       },
       {
         "ordinal": 1,
-        "name": "name",
-        "type_info": "Varchar"
-      },
-      {
-        "ordinal": 2,
         "name": "code",
         "type_info": "Varchar"
       },
       {
-        "ordinal": 3,
-        "name": "country_id",
-        "type_info": "Uuid"
+        "ordinal": 2,
+        "name": "description",
+        "type_info": "Varchar"
       }
     ],
     "parameters": {
       "Left": [
-        "Int8",
-        "Int8"
+        "Uuid"
       ]
     },
     "nullable": [
       false,
       false,
-      false,
       false
     ]
   },
-  "hash": "41a499324703ac597d08f198aace0ff382212c038b92d116abeda56096dfce33"
+  "hash": "ebecf49dbf364d62dfaed7cec15a9003784ef1ddaafb1ea8c56dd61b86d7dec7"
 }
