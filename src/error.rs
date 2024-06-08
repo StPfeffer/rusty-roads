@@ -85,10 +85,10 @@ impl ErrorMessage {
             ErrorMessage::VehicleDocumentNotFound => "The document for the vehicle with the provided ID does not exist in our records. Please verify and try again",
             ErrorMessage::RouteNotFound => "The route with the provided ID does not exist in our records. Please verify and try again",
             ErrorMessage::RouteStatusExist => "A status with the provided data already exists for this route",
-            ErrorMessage::RouteStatusNotFound => "The status for the route with the provided ID does not exist in our records. Please verify and try again"
-                        ErrorMessage::DriverNotFound => "The driver with the provided ID does not exist in our records",
-                        ErrorMessage::DriverExist => "There is already a driver with the provided data",
-                        ErrorMessage::CnhTypeNotFound => "The cnh type with the provided ID does not exist in our records"
+            ErrorMessage::RouteStatusNotFound => "The status for the route with the provided ID does not exist in our records. Please verify and try again",
+            ErrorMessage::DriverNotFound => "The driver with the provided ID does not exist in our records",
+            ErrorMessage::DriverExist => "There is already a driver with the provided data",
+            ErrorMessage::CnhTypeNotFound => "The cnh type with the provided ID does not exist in our records"
         }
     }
 
@@ -111,7 +111,7 @@ impl ErrorMessage {
             ErrorMessage::VehicleDocumentNotFound => "Ensure the vehicleId, chassisNumber, registrationNumber, or plate is correct and exists in the database. Use 'GET /api/v1/vehicles' and 'GET /api/v1/vehicles/{vehicleId}/documents' to retrieve available vehicle IDs and documents",
             ErrorMessage::RouteNotFound => "Ensure the routeId is correct and exists in the database. Use 'GET /api/v1/routes' to retrieve available route IDs",
             ErrorMessage::RouteStatusExist => "Verify the route status code is unique and does not already exist",
-            ErrorMessage::RouteStatusNotFound => "Ensure the routeId is correct and exists in the database. Use 'GET /api/v1/routes' to retrieve available route IDs"
+            ErrorMessage::RouteStatusNotFound => "Ensure the routeId is correct and exists in the database. Use 'GET /api/v1/routes' to retrieve available route IDs",
             ErrorMessage::DriverExist => "Ensure the cnhNumber and collaboratorId information are uique and do not already exist",
             ErrorMessage::DriverNotFound => "Ensure the driverId, cnhNumber or collaboratorId are correct and exists in the database. Use the 'GET /api/v1/collaborators' endpoint to retrieve available collaborator IDs and the 'GET /api/v1/collaborators/drivers' to retrieve available driver IDs",
             ErrorMessage::CnhTypeNotFound => "Something"
