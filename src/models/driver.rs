@@ -9,6 +9,13 @@ pub struct Driver {
     pub cnh_expiration_date: NaiveDate,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
-    pub id_cnh_type: Uuid,
-    pub id_collaborattor: Uuid,
+    pub cnh_type_id: Uuid,
+    pub collaborator_id: Uuid,
+}
+
+#[derive(Debug, Deserialize, sqlx::FromRow, Serialize, Clone)]
+pub struct CnhType {
+    pub id: Uuid,
+    pub code: String,
+    pub description: String,
 }
