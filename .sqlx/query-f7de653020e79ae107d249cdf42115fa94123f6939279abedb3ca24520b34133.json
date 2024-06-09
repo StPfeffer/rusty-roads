@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT * FROM countries WHERE alpha_2 = $1",
+  "query": "SELECT * FROM countries WHERE UPPER(alpha_2) = $1",
   "describe": {
     "columns": [
       {
@@ -42,5 +42,5 @@
       false
     ]
   },
-  "hash": "144988ab19661323441d5ce7c943599634f1820e023a1d9a51b23af1340526eb"
+  "hash": "f7de653020e79ae107d249cdf42115fa94123f6939279abedb3ca24520b34133"
 }
