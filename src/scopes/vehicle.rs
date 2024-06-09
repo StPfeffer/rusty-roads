@@ -17,22 +17,22 @@ use crate::{
 pub fn vehicle_scope() -> Scope {
     web::scope("/api/v1/vehicles")
         .route("", web::get().to(list_vehicles))
-        .route("/document", web::get().to(list_vehicles_documents))
-        .route("/document/{id}", web::get().to(get_vehicle_document))
-        .route("/document/{id}", web::delete().to(delete_vehicle_document))
+        .route("/documents", web::get().to(list_vehicles_documents))
+        .route("/documents/{id}", web::get().to(get_vehicle_document))
+        .route("/documents/{id}", web::delete().to(delete_vehicle_document))
         .route("/{id}", web::get().to(get_vehicle))
         .route("", web::post().to(save_vehicle))
         .route("/{id}", web::delete().to(delete_vehicle))
         .route(
-            "/{id}/document",
+            "/{id}/documents",
             web::get().to(get_vehicle_document_from_vehicle),
         )
         .route(
-            "/{id}/document",
+            "/{id}/documents",
             web::post().to(save_vehicle_document_from_vehicle),
         )
         .route(
-            "/{id}/document",
+            "/{id}/documents",
             web::delete().to(delete_vehicle_document_from_vehicle),
         )
 }
