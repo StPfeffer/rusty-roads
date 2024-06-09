@@ -28,11 +28,12 @@ pub trait CountryExt {
 
     async fn update_country(
         &self,
+        id: Option<Uuid>,
         name: &str,
         alpha_2: &str,
         alpha_3: &str,
         numeric_3: &str,
-    ) -> Result<Country, sqlx::Error>;
+    ) -> Result<Option<Country>, sqlx::Error>;
 
     async fn delete_country(
         &self,
@@ -135,51 +136,33 @@ impl CountryExt for DBClient {
 
     async fn update_country(
         &self,
+        id: Option<Uuid>,
         name: &str,
         alpha_2: &str,
         alpha_3: &str,
         numeric_3: &str,
-    ) -> Result<Country, sqlx::Error> {
-        let country = self
-            .get_country(
-                None,
-                Some(name),
-                Some(alpha_2),
-                Some(alpha_3),
-                Some(numeric_3),
-            )
-            .await
-            .unwrap();
-
-        if let Some(mut existing_country) = country {
-            existing_country.name = name.to_string();
-            existing_country.alpha_2 = alpha_2.to_string();
-            existing_country.alpha_3 = alpha_3.to_string();
-            existing_country.numeric_3 = numeric_3.to_string();
-
-            info!("Updating the country: {}", &existing_country.name);
+    ) -> Result<Option<Country>, sqlx::Error> {
+        if let Some(country_id) = id {
+            info!("Updating the country: {}", name);
 
             let updated_country = sqlx::query_as!(
                 Country,
-                r#"UPDATE countries SET name = $2, alpha_2 = $3, alpha_3 = $4, numeric_3 = $5 WHERE id = $1 RETURNING *;"#,
-                existing_country.id,
-                existing_country.name,
-                existing_country.alpha_2,
-                existing_country.alpha_3,
-                existing_country.numeric_3
+                r#"UPDATE countries 
+                   SET name = $2, alpha_2 = $3, alpha_3 = $4, numeric_3 = $5 
+                   WHERE id = $1 
+                   RETURNING *;"#,
+                country_id,
+                name,
+                alpha_2,
+                alpha_3,
+                numeric_3
             )
-                .fetch_one(&self.pool)
-                .await?;
+            .fetch_one(&self.pool)
+            .await?;
 
-            Ok(updated_country)
+            Ok(Some(updated_country))
         } else {
-            self.save_country(
-                name.to_string(),
-                alpha_2.to_string(),
-                alpha_3.to_string(),
-                numeric_3.to_string(),
-            )
-            .await
+            Ok(None)
         }
     }
 
