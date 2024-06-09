@@ -1,4 +1,5 @@
 use async_trait::async_trait;
+use log::info;
 use uuid::Uuid;
 
 use super::client::DBClient;
@@ -23,6 +24,14 @@ pub trait CountryExt {
         alpha_2: T,
         alpha_3: T,
         numeric_3: T,
+    ) -> Result<Country, sqlx::Error>;
+
+    async fn update_country(
+        &self,
+        name: &str,
+        alpha_2: &str,
+        alpha_3: &str,
+        numeric_3: &str,
     ) -> Result<Country, sqlx::Error>;
 
     async fn delete_country(
@@ -106,10 +115,14 @@ impl CountryExt for DBClient {
         alpha_3: T,
         numeric_3: T,
     ) -> Result<Country, sqlx::Error> {
+        let name = &name.into();
+
+        info!("Creating the country: {}", &name);
+
         let country = sqlx::query_as!(
             Country,
             r#"INSERT INTO countries (name, alpha_2, alpha_3, numeric_3) VALUES ($1, $2, $3, $4) RETURNING *"#,
-            &name.into(),
+            &name,
             &alpha_2.into(),
             &alpha_3.into(),
             &numeric_3.into(),
@@ -120,22 +133,76 @@ impl CountryExt for DBClient {
         Ok(country)
     }
 
+    async fn update_country(
+        &self,
+        name: &str,
+        alpha_2: &str,
+        alpha_3: &str,
+        numeric_3: &str,
+    ) -> Result<Country, sqlx::Error> {
+        let country = self
+            .get_country(
+                None,
+                Some(name),
+                Some(alpha_2),
+                Some(alpha_3),
+                Some(numeric_3),
+            )
+            .await
+            .unwrap();
+
+        if let Some(mut existing_country) = country {
+            existing_country.name = name.to_string();
+            existing_country.alpha_2 = alpha_2.to_string();
+            existing_country.alpha_3 = alpha_3.to_string();
+            existing_country.numeric_3 = numeric_3.to_string();
+
+            info!("Updating the country: {}", &existing_country.name);
+
+            let updated_country = sqlx::query_as!(
+                Country,
+                r#"UPDATE countries SET name = $2, alpha_2 = $3, alpha_3 = $4, numeric_3 = $5 WHERE id = $1 RETURNING *;"#,
+                existing_country.id,
+                existing_country.name,
+                existing_country.alpha_2,
+                existing_country.alpha_3,
+                existing_country.numeric_3
+            )
+                .fetch_one(&self.pool)
+                .await?;
+
+            Ok(updated_country)
+        } else {
+            self.save_country(
+                name.to_string(),
+                alpha_2.to_string(),
+                alpha_3.to_string(),
+                numeric_3.to_string(),
+            )
+            .await
+        }
+    }
+
     async fn delete_country(
         &self,
         country_id: Option<Uuid>,
     ) -> Result<Option<Country>, sqlx::Error> {
-        let mut country = None;
-
         if let Some(country_id) = country_id {
-            country = sqlx::query_as!(
+            let country = sqlx::query_as!(
                 Country,
                 r#"DELETE FROM countries WHERE id = $1 RETURNING *"#,
                 country_id
             )
             .fetch_optional(&self.pool)
             .await?;
-        }
 
-        Ok(country)
+            if let Some(ref country) = country {
+                info!("Deleted the country: {}", country.name);
+            }
+
+            Ok(country)
+        } else {
+            Ok(None)
+        }
     }
 }
