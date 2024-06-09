@@ -5,7 +5,7 @@ use validator::Validate;
 
 use crate::{
     models::route::{Route, RouteStatus},
-    utils::uuid::is_valid_uuid,
+    utils::utils::is_valid_uuid,
 };
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
@@ -128,12 +128,6 @@ impl FilterRouteDTO {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct RouteResponseDTO {
-    pub status: String,
-    pub data: FilterRouteDTO,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
 pub struct RouteListResponseDTO {
     pub routes: Vec<FilterRouteDTO>,
     pub results: usize,
@@ -167,12 +161,6 @@ impl FilterRouteStatusDTO {
             .map(FilterRouteStatusDTO::filter_route_status)
             .collect()
     }
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct RouteStatusResponseDTO {
-    pub status: String,
-    pub data: FilterRouteStatusDTO,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

@@ -2,7 +2,7 @@ use bigdecimal::BigDecimal;
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-use crate::{models::address::Address, utils::uuid::is_valid_uuid};
+use crate::{models::address::Address, utils::utils::is_valid_uuid};
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -122,12 +122,6 @@ impl FilterAddressDTO {
             .map(FilterAddressDTO::filter_address)
             .collect()
     }
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct AddressResponseDTO {
-    pub status: String,
-    pub data: FilterAddressDTO,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
