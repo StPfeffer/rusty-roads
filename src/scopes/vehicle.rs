@@ -18,12 +18,23 @@ pub fn vehicle_scope() -> Scope {
     web::scope("/api/v1/vehicles")
         .route("", web::get().to(list_vehicles))
         .route("/document", web::get().to(list_vehicles_documents))
+        .route("/document/{id}", web::get().to(get_vehicle_document))
+        .route("/document/{id}", web::delete().to(delete_vehicle_document))
         .route("/{id}", web::get().to(get_vehicle))
         .route("", web::post().to(save_vehicle))
         .route("/{id}", web::delete().to(delete_vehicle))
-        .route("/{id}/document", web::get().to(get_vehicle_document))
-        .route("/{id}/document", web::post().to(save_vehicle_document))
-        .route("/{id}/document", web::delete().to(delete_vehicle_document))
+        .route(
+            "/{id}/document",
+            web::get().to(get_vehicle_document_from_vehicle),
+        )
+        .route(
+            "/{id}/document",
+            web::post().to(save_vehicle_document_from_vehicle),
+        )
+        .route(
+            "/{id}/document",
+            web::delete().to(delete_vehicle_document_from_vehicle),
+        )
 }
 
 pub async fn get_vehicle(
@@ -103,10 +114,17 @@ pub async fn delete_vehicle(
     id: web::Path<uuid::Uuid>,
     app_state: web::Data<AppState>,
 ) -> Result<HttpResponse, HttpError> {
-    // TODO: It needs to delete the vehicle document first
+    let vehicle_id = Some(id.into_inner());
+
+    app_state
+        .db_client
+        .delete_vehicle_document(None, vehicle_id)
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
+
     let vehicle = app_state
         .db_client
-        .delete_vehicle(Some(id.into_inner()))
+        .delete_vehicle(vehicle_id)
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 
@@ -117,6 +135,26 @@ pub async fn delete_vehicle(
 }
 
 pub async fn get_vehicle_document(
+    id: web::Path<uuid::Uuid>,
+    app_state: web::Data<AppState>,
+) -> Result<HttpResponse, HttpError> {
+    let document = app_state
+        .db_client
+        .get_vehicle_document(Some(id.into_inner()), None, None, None, None)
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
+
+    match document {
+        Some(document) => {
+            Ok(HttpResponse::Ok().json(FilterVehicleDocumentDTO::filter_document(&document)))
+        }
+        None => Err(HttpError::from_error_message(
+            ErrorMessage::VehicleDocumentNotFound,
+        )),
+    }
+}
+
+pub async fn get_vehicle_document_from_vehicle(
     id: web::Path<uuid::Uuid>,
     app_state: web::Data<AppState>,
 ) -> Result<HttpResponse, HttpError> {
@@ -161,7 +199,7 @@ pub async fn list_vehicles_documents(
     }))
 }
 
-pub async fn save_vehicle_document(
+pub async fn save_vehicle_document_from_vehicle(
     id: web::Path<uuid::Uuid>,
     app_state: web::Data<AppState>,
     body: web::Json<RegisterVehicleDocumentDTO>,
@@ -202,7 +240,27 @@ pub async fn delete_vehicle_document(
 ) -> Result<HttpResponse, HttpError> {
     let document = app_state
         .db_client
-        .delete_vehicle_document(Some(id.into_inner()))
+        .delete_vehicle_document(Some(id.into_inner()), None)
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
+
+    match document {
+        Some(document) => {
+            Ok(HttpResponse::Ok().json(FilterVehicleDocumentDTO::filter_document(&document)))
+        }
+        None => Err(HttpError::from_error_message(
+            ErrorMessage::VehicleDocumentNotFound,
+        )),
+    }
+}
+
+pub async fn delete_vehicle_document_from_vehicle(
+    id: web::Path<uuid::Uuid>,
+    app_state: web::Data<AppState>,
+) -> Result<HttpResponse, HttpError> {
+    let document = app_state
+        .db_client
+        .delete_vehicle_document(None, Some(id.into_inner()))
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
 

@@ -123,6 +123,7 @@ pub trait VehicleDocumentExt {
     async fn delete_vehicle_document(
         &self,
         document_id: Option<Uuid>,
+        vehicle_id: Option<Uuid>,
     ) -> Result<Option<VehicleDocument>, sqlx::Error>;
 }
 
@@ -242,6 +243,7 @@ impl VehicleDocumentExt for DBClient {
     async fn delete_vehicle_document(
         &self,
         document_id: Option<Uuid>,
+        vehicle_id: Option<Uuid>,
     ) -> Result<Option<VehicleDocument>, sqlx::Error> {
         let mut document = None;
 
@@ -250,6 +252,14 @@ impl VehicleDocumentExt for DBClient {
                 VehicleDocument,
                 r#"DELETE FROM vehicles_documents WHERE id = $1 RETURNING *"#,
                 document_id
+            )
+            .fetch_optional(&self.pool)
+            .await?;
+        } else if let Some(vehicle_id) = vehicle_id {
+            document = sqlx::query_as!(
+                VehicleDocument,
+                r#"DELETE FROM vehicles_documents WHERE vehicle_id = $1 RETURNING *"#,
+                vehicle_id
             )
             .fetch_optional(&self.pool)
             .await?;
