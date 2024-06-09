@@ -26,14 +26,14 @@ pub trait CountryExt {
         numeric_3: T,
     ) -> Result<Country, sqlx::Error>;
 
-    async fn update_country(
+    async fn update_country<T: Into<String> + Send>(
         &self,
-        id: Option<Uuid>,
-        name: &str,
-        alpha_2: &str,
-        alpha_3: &str,
-        numeric_3: &str,
-    ) -> Result<Option<Country>, sqlx::Error>;
+        country_id: Uuid,
+        name: T,
+        alpha_2: T,
+        alpha_3: T,
+        numeric_3: T,
+    ) -> Result<Country, sqlx::Error>;
 
     async fn delete_country(
         &self,
@@ -68,16 +68,16 @@ impl CountryExt for DBClient {
         } else if let Some(alpha_2) = alpha_2 {
             country = sqlx::query_as!(
                 Country,
-                r#"SELECT * FROM countries WHERE alpha_2 = $1"#,
-                alpha_2
+                r#"SELECT * FROM countries WHERE UPPER(alpha_2) = $1"#,
+                alpha_2.to_uppercase()
             )
             .fetch_optional(&self.pool)
             .await?;
         } else if let Some(alpha_3) = alpha_3 {
             country = sqlx::query_as!(
                 Country,
-                r#"SELECT * FROM countries WHERE alpha_3 = $1"#,
-                alpha_3
+                r#"SELECT * FROM countries WHERE UPPER(alpha_3) = $1"#,
+                alpha_3.to_uppercase()
             )
             .fetch_optional(&self.pool)
             .await?;
@@ -134,36 +134,34 @@ impl CountryExt for DBClient {
         Ok(country)
     }
 
-    async fn update_country(
+    async fn update_country<T: Into<String> + Send>(
         &self,
-        id: Option<Uuid>,
-        name: &str,
-        alpha_2: &str,
-        alpha_3: &str,
-        numeric_3: &str,
-    ) -> Result<Option<Country>, sqlx::Error> {
-        if let Some(country_id) = id {
-            info!("Updating the country: {}", name);
+        country_id: Uuid,
+        name: T,
+        alpha_2: T,
+        alpha_3: T,
+        numeric_3: T,
+    ) -> Result<Country, sqlx::Error> {
+        let name = name.into();
 
-            let updated_country = sqlx::query_as!(
-                Country,
-                r#"UPDATE countries 
-                   SET name = $2, alpha_2 = $3, alpha_3 = $4, numeric_3 = $5 
-                   WHERE id = $1 
+        info!("Updating the country: {}", &name);
+
+        let country = sqlx::query_as!(
+            Country,
+            r#"UPDATE countries
+                   SET name = $2, alpha_2 = $3, alpha_3 = $4, numeric_3 = $5
+                   WHERE id = $1
                    RETURNING *;"#,
-                country_id,
-                name,
-                alpha_2,
-                alpha_3,
-                numeric_3
-            )
-            .fetch_one(&self.pool)
-            .await?;
+            &country_id,
+            &name,
+            &alpha_2.into(),
+            &alpha_3.into(),
+            &numeric_3.into()
+        )
+        .fetch_one(&self.pool)
+        .await?;
 
-            Ok(Some(updated_country))
-        } else {
-            Ok(None)
-        }
+        Ok(country)
     }
 
     async fn delete_country(
