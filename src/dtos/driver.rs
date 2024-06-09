@@ -4,7 +4,7 @@ use validator::Validate;
 
 use crate::{
     models::driver::{CnhType, Driver},
-    utils::utils::is_valid_uuid,
+    utils::string::is_valid_uuid,
 };
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]

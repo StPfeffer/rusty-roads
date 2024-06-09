@@ -1,2 +1,2 @@
 pub mod fetch;
-pub mod utils;
+pub mod string;

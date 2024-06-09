@@ -2,7 +2,7 @@ use bigdecimal::BigDecimal;
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-use crate::{models::address::Address, utils::utils::is_valid_uuid};
+use crate::{models::address::Address, utils::string::is_valid_uuid};
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

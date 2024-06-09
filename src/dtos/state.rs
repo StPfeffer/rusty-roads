@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-use crate::{models::state::State, utils::utils::is_valid_uuid};
+use crate::{models::state::State, utils::string::is_valid_uuid};
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
