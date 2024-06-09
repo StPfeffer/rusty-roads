@@ -1,4 +1,4 @@
-use actix_web::{web, HttpResponse, Scope};
+use actix_web::{web, HttpRequest, HttpResponse, Scope};
 use validator::Validate;
 
 use crate::{
@@ -8,6 +8,7 @@ use crate::{
         request::RequestQueryDTO,
     },
     error::{ErrorMessage, HttpError},
+    utils::utils::extract_endpoint_from_path,
     AppState,
 };
 
@@ -18,6 +19,9 @@ pub fn country_scope() -> Scope {
         .route("", web::post().to(save_country))
         .route("/{id}", web::put().to(update_country))
         .route("/{id}", web::delete().to(delete_country))
+        .route("/alpha2/{code}", web::get().to(get_country_by_code))
+        .route("/alpha3/{code}", web::get().to(get_country_by_code))
+        .route("/numeric3/{code}", web::get().to(get_country_by_code))
 }
 
 pub async fn get_country(
@@ -29,6 +33,37 @@ pub async fn get_country(
         .get_country(Some(id.into_inner()), None, None, None, None)
         .await
         .map_err(|e| HttpError::server_error(e.to_string()))?;
+
+    match country {
+        Some(country) => Ok(HttpResponse::Ok().json(FilterCountryDTO::filter_country(&country))),
+        None => Err(HttpError::from_error_message(ErrorMessage::CountryNotFound)),
+    }
+}
+
+pub async fn get_country_by_code(
+    code: web::Path<String>,
+    app_state: web::Data<AppState>,
+    request: HttpRequest,
+) -> Result<HttpResponse, HttpError> {
+    let endpoint = extract_endpoint_from_path(r"/countries/([^/]+)/", &request)?;
+
+    let country = match &endpoint[..] {
+        "alpha2" => app_state
+            .db_client
+            .get_country(None, None, Some(&code), None, None)
+            .await
+            .map_err(|e| HttpError::server_error(e.to_string()))?,
+        "alpha3" => app_state
+            .db_client
+            .get_country(None, None, None, Some(&code), None)
+            .await
+            .map_err(|e| HttpError::server_error(e.to_string()))?,
+        _ => app_state
+            .db_client
+            .get_country(None, None, None, None, Some(&code))
+            .await
+            .map_err(|e| HttpError::server_error(e.to_string()))?,
+    };
 
     match country {
         Some(country) => Ok(HttpResponse::Ok().json(FilterCountryDTO::filter_country(&country))),
@@ -95,18 +130,26 @@ pub async fn update_country(
 ) -> Result<HttpResponse, HttpError> {
     let country = app_state
         .db_client
-        .update_country(
-            Some(id.into_inner()),
-            &body.name,
-            &body.alpha_2,
-            &body.alpha_3,
-            &body.numeric_3,
-        )
+        .get_country(Some(id.into_inner()), None, None, None, None)
         .await
         .map_err(|_| HttpError::from_error_message(ErrorMessage::ServerError))?;
 
     match country {
-        Some(country) => Ok(HttpResponse::Ok().json(FilterCountryDTO::filter_country(&country))),
+        Some(country) => {
+            let country = app_state
+                .db_client
+                .update_country(
+                    country.id,
+                    &body.name,
+                    &body.alpha_2,
+                    &body.alpha_3,
+                    &body.numeric_3,
+                )
+                .await
+                .map_err(|_| HttpError::from_error_message(ErrorMessage::ServerError))?;
+
+            Ok(HttpResponse::Ok().json(FilterCountryDTO::filter_country(&country)))
+        }
         None => Err(HttpError::from_error_message(ErrorMessage::CountryNotFound)),
     }
 }
