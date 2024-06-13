@@ -21,6 +21,7 @@ pub fn vehicle_scope() -> Scope {
         .route("/documents/{id}", web::get().to(get_vehicle_document))
         .route("/documents/{id}", web::delete().to(delete_vehicle_document))
         .route("/{id}", web::get().to(get_vehicle))
+        .route("/{id}", web::put().to(update_vehicle))
         .route("", web::post().to(save_vehicle))
         .route("/{id}", web::delete().to(delete_vehicle))
         .route(
@@ -107,6 +108,54 @@ pub async fn save_vehicle(
             }
         }
         Err(e) => Err(HttpError::server_error(e.to_string())),
+    }
+}
+
+pub async fn update_vehicle(
+    id: web::Path<uuid::Uuid>,
+    body: web::Json<RegisterVehicleDTO>,
+    app_state: web::Data<AppState>,
+) -> Result<HttpResponse, HttpError> {
+    body.validate()
+        .map_err(|e| HttpError::bad_request(e.to_string()))?;
+
+    let vehicle_id = Some(id.into_inner());
+
+    let vehicle = app_state
+        .db_client
+        .get_vehicle(vehicle_id)
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
+
+    match vehicle {
+        Some(_) => {
+            let result = app_state
+                .db_client
+                .update_vehicle(
+                    vehicle_id,
+                    &body.name,
+                    Some(body.initial_mileage),
+                    body.actual_mileage.unwrap(),
+                )
+                .await;
+
+            return match result {
+                Ok(vehicle) => {
+                    Ok(HttpResponse::Created().json(FilterVehicleDTO::filter_vehicle(&vehicle)))
+                }
+                Err(sqlx::Error::Database(db_err)) => {
+                    if db_err.is_unique_violation() {
+                        Err(HttpError::unique_constraint_violation(
+                            ErrorMessage::VehicleExist,
+                        ))
+                    } else {
+                        Err(HttpError::server_error(db_err.to_string()))
+                    }
+                }
+                Err(e) => Err(HttpError::server_error(e.to_string())),
+            };
+        }
+        None => Err(HttpError::from_error_message(ErrorMessage::VehicleNotFound)),
     }
 }
 
