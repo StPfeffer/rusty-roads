@@ -1,4 +1,5 @@
 use async_trait::async_trait;
+use log::info;
 use uuid::Uuid;
 
 use crate::{
@@ -18,6 +19,14 @@ pub trait VehicleExt {
         &self,
         name: T,
         initial_mileage: i32,
+        actual_mileage: i32,
+    ) -> Result<Vehicle, sqlx::Error>;
+
+    async fn update_vehicle<T: Into<String> + Send>(
+        &self,
+        vehicle_id: Option<Uuid>,
+        name: T,
+        initial_mileage: Option<i32>,
         actual_mileage: i32,
     ) -> Result<Vehicle, sqlx::Error>;
 
@@ -70,6 +79,31 @@ impl VehicleExt for DBClient {
             r#"INSERT INTO vehicles (name, initial_mileage, actual_mileage) VALUES ($1, $2, $3) RETURNING *"#,
             &name.into(),
             &initial_mileage,
+            &actual_mileage
+        )
+        .fetch_one(&self.pool)
+        .await?;
+
+        Ok(vehicle)
+    }
+
+    async fn update_vehicle<T: Into<String> + Send>(
+        &self,
+        vehicle_id: Option<Uuid>,
+        name: T,
+        initial_mileage: Option<i32>,
+        actual_mileage: i32,
+    ) -> Result<Vehicle, sqlx::Error> {
+        let name = name.into();
+
+        info!("Updating the vehicle: {}", &name);
+
+        let vehicle = sqlx::query_as!(
+            Vehicle,
+            r#"UPDATE vehicles SET name = $2, initial_mileage = $3, actual_mileage = $4 WHERE id = $1 RETURNING *;"#,
+            &vehicle_id.unwrap(),
+            &name,
+            &initial_mileage.unwrap(),
             &actual_mileage
         )
         .fetch_one(&self.pool)
