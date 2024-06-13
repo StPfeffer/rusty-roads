@@ -1,0 +1,50 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE countries \n                   SET name = $2, alpha_2 = $3, alpha_3 = $4, numeric_3 = $5 \n                   WHERE id = $1 \n                   RETURNING *;",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "alpha_2",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "alpha_3",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "numeric_3",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "2c3d082fe5d7989e9f1ef999e6081d5c84d1370d66c934c78b5078c2acfaf440"
+}

@@ -1,4 +1,5 @@
 use async_trait::async_trait;
+use log::info;
 use uuid::Uuid;
 
 use super::client::DBClient;
@@ -24,6 +25,15 @@ pub trait CountryExt {
         alpha_3: T,
         numeric_3: T,
     ) -> Result<Country, sqlx::Error>;
+
+    async fn update_country(
+        &self,
+        id: Option<Uuid>,
+        name: &str,
+        alpha_2: &str,
+        alpha_3: &str,
+        numeric_3: &str,
+    ) -> Result<Option<Country>, sqlx::Error>;
 
     async fn delete_country(
         &self,
@@ -106,10 +116,14 @@ impl CountryExt for DBClient {
         alpha_3: T,
         numeric_3: T,
     ) -> Result<Country, sqlx::Error> {
+        let name = &name.into();
+
+        info!("Creating the country: {}", &name);
+
         let country = sqlx::query_as!(
             Country,
             r#"INSERT INTO countries (name, alpha_2, alpha_3, numeric_3) VALUES ($1, $2, $3, $4) RETURNING *"#,
-            &name.into(),
+            &name,
             &alpha_2.into(),
             &alpha_3.into(),
             &numeric_3.into(),
@@ -120,22 +134,58 @@ impl CountryExt for DBClient {
         Ok(country)
     }
 
+    async fn update_country(
+        &self,
+        id: Option<Uuid>,
+        name: &str,
+        alpha_2: &str,
+        alpha_3: &str,
+        numeric_3: &str,
+    ) -> Result<Option<Country>, sqlx::Error> {
+        if let Some(country_id) = id {
+            info!("Updating the country: {}", name);
+
+            let updated_country = sqlx::query_as!(
+                Country,
+                r#"UPDATE countries 
+                   SET name = $2, alpha_2 = $3, alpha_3 = $4, numeric_3 = $5 
+                   WHERE id = $1 
+                   RETURNING *;"#,
+                country_id,
+                name,
+                alpha_2,
+                alpha_3,
+                numeric_3
+            )
+            .fetch_one(&self.pool)
+            .await?;
+
+            Ok(Some(updated_country))
+        } else {
+            Ok(None)
+        }
+    }
+
     async fn delete_country(
         &self,
         country_id: Option<Uuid>,
     ) -> Result<Option<Country>, sqlx::Error> {
-        let mut country = None;
-
         if let Some(country_id) = country_id {
-            country = sqlx::query_as!(
+            let country = sqlx::query_as!(
                 Country,
                 r#"DELETE FROM countries WHERE id = $1 RETURNING *"#,
                 country_id
             )
             .fetch_optional(&self.pool)
             .await?;
-        }
 
-        Ok(country)
+            if let Some(ref country) = country {
+                info!("Deleted the country: {}", country.name);
+            }
+
+            Ok(country)
+        } else {
+            Ok(None)
+        }
     }
 }

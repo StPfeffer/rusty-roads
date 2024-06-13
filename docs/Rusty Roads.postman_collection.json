@@ -714,14 +714,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{base}}/v1/vehicles/document",
+									"raw": "{{base}}/v1/vehicles/documents",
 									"host": [
 										"{{base}}"
 									],
 									"path": [
 										"v1",
 										"vehicles",
-										"document"
+										"documents"
 									]
 								}
 							},
@@ -733,7 +733,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{base}}/v1/vehicles/:vehicleId/document",
+									"raw": "{{base}}/v1/vehicles/:vehicleId/documents",
 									"host": [
 										"{{base}}"
 									],
@@ -741,13 +741,40 @@
 										"v1",
 										"vehicles",
 										":vehicleId",
-										"document"
+										"documents"
 									],
 									"variable": [
 										{
 											"key": "vehicleId",
 											"value": "b87d1704-c957-4ee2-b378-f7be43c10b85",
 											"description": "The vehicle UUID"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get a Vehicle Document by ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/vehicles/documents/:documentId",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"vehicles",
+										"documents",
+										":documentId"
+									],
+									"variable": [
+										{
+											"key": "documentId",
+											"value": "ebd428a5-3f29-4bd2-a337-6bfeadbe187c",
+											"description": "The vehicle document UUID"
 										}
 									]
 								}
@@ -769,7 +796,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{base}}/v1/vehicles/:vehicleId/document",
+									"raw": "{{base}}/v1/vehicles/:vehicleId/documents",
 									"host": [
 										"{{base}}"
 									],
@@ -777,7 +804,7 @@
 										"v1",
 										"vehicles",
 										":vehicleId",
-										"document"
+										"documents"
 									],
 									"variable": [
 										{
@@ -796,20 +823,48 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{base}}/v1/vehicles/:vehicleId",
+									"raw": "{{base}}/v1/vehicles/:vehicleId/documents",
 									"host": [
 										"{{base}}"
 									],
 									"path": [
 										"v1",
 										"vehicles",
-										":vehicleId"
+										":vehicleId",
+										"documents"
 									],
 									"variable": [
 										{
 											"key": "vehicleId",
 											"value": "",
 											"description": "The vehicle UUID"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete a Vehicle Document by ID",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/vehicles/documents/:documentId",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"vehicles",
+										"documents",
+										":documentId"
+									],
+									"variable": [
+										{
+											"key": "documentId",
+											"value": "",
+											"description": "The vehicle document UUID"
 										}
 									]
 								}

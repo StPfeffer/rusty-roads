@@ -16,6 +16,7 @@ pub fn country_scope() -> Scope {
         .route("", web::get().to(list_countries))
         .route("/{id}", web::get().to(get_country))
         .route("", web::post().to(save_country))
+        .route("/{id}", web::put().to(update_country))
         .route("/{id}", web::delete().to(delete_country))
 }
 
@@ -84,6 +85,29 @@ pub async fn save_country(
             }
         }
         Err(e) => Err(HttpError::server_error(e.to_string())),
+    }
+}
+
+pub async fn update_country(
+    id: web::Path<uuid::Uuid>,
+    app_state: web::Data<AppState>,
+    body: web::Json<RegisterCountryDTO>,
+) -> Result<HttpResponse, HttpError> {
+    let country = app_state
+        .db_client
+        .update_country(
+            Some(id.into_inner()),
+            &body.name,
+            &body.alpha_2,
+            &body.alpha_3,
+            &body.numeric_3,
+        )
+        .await
+        .map_err(|_| HttpError::from_error_message(ErrorMessage::ServerError))?;
+
+    match country {
+        Some(country) => Ok(HttpResponse::Ok().json(FilterCountryDTO::filter_country(&country))),
+        None => Err(HttpError::from_error_message(ErrorMessage::CountryNotFound)),
     }
 }
 
