@@ -4,7 +4,7 @@ use validator::Validate;
 
 use crate::{
     models::driver::{CnhType, Driver},
-    utils::uuid::is_valid_uuid,
+    utils::string::is_valid_uuid,
 };
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
@@ -55,12 +55,6 @@ impl FilterDriverDTO {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct DriverResponseDTO {
-    pub status: String,
-    pub data: FilterDriverDTO,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
 pub struct DriverListResponseDTO {
     pub drivers: Vec<FilterDriverDTO>,
     pub results: usize,
@@ -88,12 +82,6 @@ impl FilterCnhTypeDTO {
             .map(FilterCnhTypeDTO::filter_cnh_type)
             .collect()
     }
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct CnhTypeResponseDTO {
-    pub status: String,
-    pub data: FilterCnhTypeDTO,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

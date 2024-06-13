@@ -16,6 +16,13 @@ pub trait StateExt {
 
     async fn list_states(&self, page: u32, limit: usize) -> Result<Vec<State>, sqlx::Error>;
 
+    async fn list_states_by_country(
+        &self,
+        country_id: Option<Uuid>,
+        page: u32,
+        limit: usize,
+    ) -> Result<Vec<State>, sqlx::Error>;
+
     async fn save_state<T: Into<String> + Send>(
         &self,
         name: T,
@@ -66,6 +73,31 @@ impl StateExt for DBClient {
         .await?;
 
         Ok(states)
+    }
+
+    async fn list_states_by_country(
+        &self,
+        country_id: Option<Uuid>,
+        page: u32,
+        limit: usize,
+    ) -> Result<Vec<State>, sqlx::Error> {
+        let offset = (page - 1) * limit as u32;
+
+        if let Some(country_id) = country_id {
+            let states = sqlx::query_as!(
+                State,
+                r#"SELECT * FROM states WHERE country_id = $1 LIMIT $2 OFFSET $3"#,
+                country_id,
+                limit as i64,
+                offset as i64
+            )
+            .fetch_all(&self.pool)
+            .await?;
+
+            return Ok(states);
+        }
+
+        Ok(vec![])
     }
 
     async fn save_state<T: Into<String> + Send>(

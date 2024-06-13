@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-use crate::{models::city::City, utils::uuid::is_valid_uuid};
+use crate::{models::city::City, utils::string::is_valid_uuid};
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -42,12 +42,6 @@ impl FilterCityDTO {
     pub fn filter_cities(cities: &[City]) -> Vec<FilterCityDTO> {
         cities.iter().map(FilterCityDTO::filter_city).collect()
     }
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct CityResponseDTO {
-    pub status: String,
-    pub data: FilterCityDTO,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

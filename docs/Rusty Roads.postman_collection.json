@@ -298,6 +298,122 @@
 			"name": "Countries",
 			"item": [
 				{
+					"name": "States",
+					"item": [
+						{
+							"name": "List all Country States by Country ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/countries/:countryId/states",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"countries",
+										":countryId",
+										"states"
+									],
+									"variable": [
+										{
+											"key": "countryId",
+											"value": "cd2aafe9-a9ed-4a91-829d-de1fd97b0768",
+											"description": "The contry UUID"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List all Country States by Country Alpha2 Code",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/countries/alpha2/:code/states",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"countries",
+										"alpha2",
+										":code",
+										"states"
+									],
+									"variable": [
+										{
+											"key": "code",
+											"value": "br",
+											"description": "The country alpha 2 code"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List all Country States by Country Alpha3 Code",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/countries/alpha3/:code/states",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"countries",
+										"alpha3",
+										":code",
+										"states"
+									],
+									"variable": [
+										{
+											"key": "code",
+											"value": "bra",
+											"description": "The country alpha 3 code"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List all Country States by Country Numeric3 Code",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/countries/numeric3/:code/states",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"countries",
+										"numeric3",
+										":code",
+										"states"
+									],
+									"variable": [
+										{
+											"key": "code",
+											"value": "076",
+											"description": "The country numeric 3 code"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "List all Countries",
 					"request": {
 						"method": "GET",
@@ -333,8 +449,89 @@
 							"variable": [
 								{
 									"key": "countryId",
-									"value": "e591b9e7-b3b6-400b-b440-f9944dbf963d",
+									"value": "8ad405dc-14f0-45a6-9795-6ba2446e03ba",
 									"description": "The country UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Country by Alpha2 Code",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/countries/alpha2/:code",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"countries",
+								"alpha2",
+								":code"
+							],
+							"variable": [
+								{
+									"key": "code",
+									"value": "br",
+									"description": "The country alpha 2 code"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Country by Alpha3 Code",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/countries/alpha3/:code",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"countries",
+								"alpha3",
+								":code"
+							],
+							"variable": [
+								{
+									"key": "code",
+									"value": "ggy",
+									"description": "The country alpha 3 code"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Country by Numeric3 Code",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/countries/numeric3/:code",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"countries",
+								"numeric3",
+								":code"
+							],
+							"variable": [
+								{
+									"key": "code",
+									"value": "831",
+									"description": "The country numeric 3 code"
 								}
 							]
 						}
@@ -363,6 +560,41 @@
 							"path": [
 								"v1",
 								"countries"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Updates a Country by ID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Brasil\",\r\n    \"alpha2\": \"BR\",\r\n    \"alpha3\": \"BRA\",\r\n    \"numeric3\": \"076\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/v1/countries/:countryId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"countries",
+								":countryId"
+							],
+							"variable": [
+								{
+									"key": "countryId",
+									"value": "cd2aafe9-a9ed-4a91-829d-de1fd97b0768",
+									"description": "The country UUID"
+								}
 							]
 						}
 					},
@@ -399,6 +631,38 @@
 		{
 			"name": "States",
 			"item": [
+				{
+					"name": "Cities",
+					"item": [
+						{
+							"name": "List all State Cities",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/states/:stateId/cities",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"states",
+										":stateId",
+										"cities"
+									],
+									"variable": [
+										{
+											"key": "stateId",
+											"value": "",
+											"description": "The state UUID"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
 				{
 					"name": "List all States",
 					"request": {
@@ -1199,6 +1463,165 @@
 									"key": "routeId",
 									"value": "b8e8a9b1-b22f-435c-8000-d4e326740076",
 									"description": "The route UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Region",
+			"item": [
+				{
+					"name": "Countries",
+					"item": [
+						{
+							"name": "List all Region Countries",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/regions/:regionId/states",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"regions",
+										":regionId",
+										"states"
+									],
+									"variable": [
+										{
+											"key": "regionId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "List all Regions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/regions",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"regions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Region by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/regions/:regionId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"regions",
+								":regionId"
+							],
+							"variable": [
+								{
+									"key": "regionId",
+									"value": "",
+									"description": "The region UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Region",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/countries",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"countries"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Updates a Region by ID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Brasil\",\r\n    \"alpha2\": \"BR\",\r\n    \"alpha3\": \"BRA\",\r\n    \"numeric3\": \"076\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/v1/regions/:regionId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"regions",
+								":regionId"
+							],
+							"variable": [
+								{
+									"key": "regionId",
+									"value": "",
+									"description": "The region UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Region by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/v1/regions/:regionId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"regions",
+								":regionId"
+							],
+							"variable": [
+								{
+									"key": "regionId",
+									"value": "",
+									"description": "The region UUID"
 								}
 							]
 						}

@@ -49,6 +49,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         db_client,
     };
 
+    let _ = utils::fetch::fetch_countries(&app_state).await;
+
     println!("Server is running on http://localhost:{}", config.port);
 
     HttpServer::new(move || {

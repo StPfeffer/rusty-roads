@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use validator::Validate;
 
 use crate::models::vehicle::Vehicle;
-use crate::{models::vehicle::VehicleDocument, utils::uuid::is_valid_uuid};
+use crate::{models::vehicle::VehicleDocument, utils::string::is_valid_uuid};
 
 #[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -48,12 +48,6 @@ impl FilterVehicleDTO {
             .map(FilterVehicleDTO::filter_vehicle)
             .collect()
     }
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct VehicleResponseDTO {
-    pub status: String,
-    pub data: FilterVehicleDTO,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -190,12 +184,6 @@ impl FilterVehicleDocumentDTO {
             .map(FilterVehicleDocumentDTO::filter_document)
             .collect()
     }
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct VehicleDocumentResponseDTO {
-    pub status: String,
-    pub data: FilterVehicleDocumentDTO,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

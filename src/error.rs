@@ -70,7 +70,7 @@ impl ErrorMessage {
         match self {
             ErrorMessage::ServerError => "A server error occurred. Please try again later",
             ErrorMessage::CountryExist => "A country with the provided data already exists",
-            ErrorMessage::CountryNotFound => "The country with the provided ID does not exist in our records. Please verify and try again",
+            ErrorMessage::CountryNotFound => "The country with the provided ID, alpha2, alpha3 or numeric3 does not exist in our records. Please verify and try again",
             ErrorMessage::StateExist => "A state with the provided code and countryId already exists",
             ErrorMessage::StateNotFound => "The state with the provided ID does not exist in our records. Please verify and try again",
             ErrorMessage::CityExist => "A city with the provided code already exists",
@@ -96,7 +96,7 @@ impl ErrorMessage {
         match self {
             ErrorMessage::ServerError => "Check server logs for more details and ensure the server is running correctly",
             ErrorMessage::CountryExist => "Verify the country data you are trying to add is unique and does not already exist",
-            ErrorMessage::CountryNotFound => "Ensure the countryId is correct and exists in the database. Use 'GET /api/v1/countries' to retrieve available country IDs",
+            ErrorMessage::CountryNotFound => "Ensure the countryId, alpha2, alpha3 or numeric3 is correct and exists in the database. Use 'GET /api/v1/countries' to retrieve available country IDs and ISO 3166 codes",
             ErrorMessage::StateExist => "Verify the state code and countryId are unique and do not already exist",
             ErrorMessage::StateNotFound => "Ensure the stateId is correct and exists in the database. Use 'GET /api/v1/states' to retrieve available state IDs",
             ErrorMessage::CityExist => "Verify the city code is unique and does not already exist",
