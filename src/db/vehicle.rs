@@ -154,6 +154,12 @@ pub trait VehicleDocumentExt {
         params: SaveVehicleDocumentParamsDTO<T>,
     ) -> Result<VehicleDocument, sqlx::Error>;
 
+    async fn update_vehicle_document<T: Into<String> + Send>(
+        &self,
+        document_id: Option<Uuid>,
+        params: SaveVehicleDocumentParamsDTO<T>,
+    ) -> Result<VehicleDocument, sqlx::Error>;
+
     async fn delete_vehicle_document(
         &self,
         document_id: Option<Uuid>,
@@ -270,6 +276,97 @@ impl VehicleDocumentExt for DBClient {
         )
         .fetch_one(&self.pool)
         .await?;
+
+        Ok(document)
+    }
+
+    async fn update_vehicle_document<T: Into<String> + Send>(
+        &self,
+        document_id: Option<Uuid>,
+        params: SaveVehicleDocumentParamsDTO<T>,
+    ) -> Result<VehicleDocument, sqlx::Error> {
+        let SaveVehicleDocumentParamsDTO {
+            chassis_number,
+            exercise_year,
+            model_year,
+            manufacture_year,
+            registration_number,
+            color,
+            make,
+            model,
+            plate,
+            vehicle_id,
+        } = params;
+
+        let document: VehicleDocument;
+
+        match (vehicle_id, document_id) {
+            (Some(vehicle_id), _) => {
+                document = sqlx::query_as!(
+                    VehicleDocument,
+                    r#"
+                    UPDATE vehicles_documents 
+                    SET chassis_number = $2, 
+                        exercise_year = $3, 
+                        model_year = $4, 
+                        manufacture_year = $5, 
+                        registration_number = $6, 
+                        color = $7, 
+                        make = $8, 
+                        model = $9, 
+                        plate = $10 
+                    WHERE vehicle_id = $1 
+                    RETURNING *;
+                    "#,
+                    Uuid::parse_str(&vehicle_id.into()).unwrap(),
+                    &chassis_number.into(),
+                    &exercise_year,
+                    &model_year,
+                    &manufacture_year,
+                    &registration_number.into(),
+                    &color.into(),
+                    &make.into(),
+                    &model.into(),
+                    &plate.into()
+                )
+                .fetch_one(&self.pool)
+                .await?;
+            }
+            (None, Some(document_id)) => {
+                document = sqlx::query_as!(
+                    VehicleDocument,
+                    r#"
+                    UPDATE vehicles_documents 
+                    SET chassis_number = $2, 
+                        exercise_year = $3, 
+                        model_year = $4, 
+                        manufacture_year = $5, 
+                        registration_number = $6, 
+                        color = $7, 
+                        make = $8, 
+                        model = $9, 
+                        plate = $10 
+                    WHERE id = $1 
+                    RETURNING *;
+                    "#,
+                    &document_id,
+                    &chassis_number.into(),
+                    &exercise_year,
+                    &model_year,
+                    &manufacture_year,
+                    &registration_number.into(),
+                    &color.into(),
+                    &make.into(),
+                    &model.into(),
+                    &plate.into()
+                )
+                .fetch_one(&self.pool)
+                .await?;
+            }
+            _ => {
+                return Err(sqlx::Error::RowNotFound);
+            }
+        }
 
         Ok(document)
     }
