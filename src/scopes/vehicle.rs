@@ -35,6 +35,10 @@ pub fn vehicle_scope() -> Scope {
         )
         .route(
             "/{id}/documents",
+            web::put().to(update_vehicle_document_from_vehicle),
+        )
+        .route(
+            "/{id}/documents",
             web::delete().to(delete_vehicle_document_from_vehicle),
         )
 }
@@ -306,7 +310,11 @@ pub async fn update_vehicle_document(
         Some(_) => {
             let result = app_state
                 .db_client
-                .update_vehicle_document(document_id, dto.into_save_vehicle_document_params_dto())
+                .update_vehicle_document(
+                    document_id,
+                    None,
+                    dto.into_save_vehicle_document_params_dto(),
+                )
                 .await;
 
             return match result {
@@ -343,6 +351,56 @@ pub async fn delete_vehicle_document(
     match document {
         Some(document) => {
             Ok(HttpResponse::Ok().json(FilterVehicleDocumentDTO::filter_document(&document)))
+        }
+        None => Err(HttpError::from_error_message(
+            ErrorMessage::VehicleDocumentNotFound,
+        )),
+    }
+}
+
+pub async fn update_vehicle_document_from_vehicle(
+    id: web::Path<uuid::Uuid>,
+    body: web::Json<RegisterVehicleDocumentDTO>,
+    app_state: web::Data<AppState>,
+) -> Result<HttpResponse, HttpError> {
+    body.validate()
+        .map_err(|e| HttpError::bad_request(e.to_string()))?;
+
+    let vehicle_id = Some(id.into_inner());
+
+    let dto = body.into_inner();
+
+    let document = app_state
+        .db_client
+        .get_vehicle_document(None, vehicle_id, None, None, None)
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
+
+    match document {
+        Some(_) => {
+            let result = app_state
+                .db_client
+                .update_vehicle_document(
+                    None,
+                    vehicle_id,
+                    dto.into_save_vehicle_document_params_dto(),
+                )
+                .await;
+
+            return match result {
+                Ok(document) => Ok(HttpResponse::Created()
+                    .json(FilterVehicleDocumentDTO::filter_document(&document))),
+                Err(sqlx::Error::Database(db_err)) => {
+                    if db_err.is_unique_violation() {
+                        Err(HttpError::unique_constraint_violation(
+                            ErrorMessage::VehicleDocumentExist,
+                        ))
+                    } else {
+                        Err(HttpError::server_error(db_err.to_string()))
+                    }
+                }
+                Err(e) => Err(HttpError::server_error(e.to_string())),
+            };
         }
         None => Err(HttpError::from_error_message(
             ErrorMessage::VehicleDocumentNotFound,

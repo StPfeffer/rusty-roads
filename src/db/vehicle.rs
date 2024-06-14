@@ -157,6 +157,7 @@ pub trait VehicleDocumentExt {
     async fn update_vehicle_document<T: Into<String> + Send>(
         &self,
         document_id: Option<Uuid>,
+        vehicle_id_path: Option<Uuid>,
         params: SaveVehicleDocumentParamsDTO<T>,
     ) -> Result<VehicleDocument, sqlx::Error>;
 
@@ -283,6 +284,7 @@ impl VehicleDocumentExt for DBClient {
     async fn update_vehicle_document<T: Into<String> + Send>(
         &self,
         document_id: Option<Uuid>,
+        vehicle_id_path: Option<Uuid>,
         params: SaveVehicleDocumentParamsDTO<T>,
     ) -> Result<VehicleDocument, sqlx::Error> {
         let SaveVehicleDocumentParamsDTO {
@@ -295,13 +297,13 @@ impl VehicleDocumentExt for DBClient {
             make,
             model,
             plate,
-            vehicle_id,
+            vehicle_id: _,
         } = params;
 
         let document: VehicleDocument;
 
-        match (vehicle_id, document_id) {
-            (Some(vehicle_id), _) => {
+        match (vehicle_id_path, document_id) {
+            (Some(vehicle_id_path), _) => {
                 document = sqlx::query_as!(
                     VehicleDocument,
                     r#"
@@ -318,7 +320,7 @@ impl VehicleDocumentExt for DBClient {
                     WHERE vehicle_id = $1 
                     RETURNING *;
                     "#,
-                    Uuid::parse_str(&vehicle_id.into()).unwrap(),
+                    &vehicle_id_path,
                     &chassis_number.into(),
                     &exercise_year,
                     &model_year,
