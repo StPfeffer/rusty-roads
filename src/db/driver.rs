@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use async_trait::async_trait;
 use chrono::NaiveDate;
 use sqlx::Error;
@@ -23,6 +25,15 @@ pub trait DriverExt {
         cnh_expiration_date: NaiveDate,
         cnh_type_id: T,
         collaborator_id: T,
+    ) -> Result<Driver, sqlx::Error>;
+
+    async fn update_driver<T: Into<String> + Send>(
+        &self,
+        driver_id: Option<Uuid>,
+        collaborator_id: Option<Uuid>,
+        cnh_number: T,
+        cnh_expiration_date: NaiveDate,
+        cnh_type_id: T,
     ) -> Result<Driver, sqlx::Error>;
 
     async fn delete_driver(
@@ -105,6 +116,49 @@ impl DriverExt for DBClient {
         )
         .fetch_one(&self.pool)
         .await?;
+
+        Ok(driver)
+    }
+
+    async fn update_driver<T: Into<String> + Send>(
+        &self,
+        driver_id: Option<Uuid>,
+        collaborator_id: Option<Uuid>,
+        cnh_number: T,
+        cnh_expiration_date: NaiveDate,
+        cnh_type_id: T,
+    ) -> Result<Driver, sqlx::Error> {
+        let driver: Driver;
+
+        match (driver_id, collaborator_id) {
+            (Some(driver_id), _) => {
+                driver = sqlx::query_as!(
+                    Driver,
+                    r#"UPDATE drivers SET cnh_number = $2, cnh_expiration_date = $3, cnh_type_id = $4 WHERE id = $1 RETURNING *;"#,
+                    &driver_id,
+                    &cnh_number.into(),
+                    &cnh_expiration_date,
+                    Uuid::parse_str(&cnh_type_id.into()).unwrap()
+                )
+                .fetch_one(&self.pool)
+                .await?;
+            }
+            (None, Some(collaborator_id)) => {
+                driver = sqlx::query_as!(
+                    Driver,
+                    r#"UPDATE drivers SET cnh_number = $2, cnh_expiration_date = $3, cnh_type_id = $4 WHERE collaborator_id = $1 RETURNING *;"#,
+                    &collaborator_id,
+                    &cnh_number.into(),
+                    &cnh_expiration_date,
+                    Uuid::parse_str(&cnh_type_id.into()).unwrap()
+                )
+                .fetch_one(&self.pool)
+                .await?;
+            }
+            _ => {
+                return Err(sqlx::Error::RowNotFound);
+            }
+        }
 
         Ok(driver)
     }
