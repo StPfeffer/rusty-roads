@@ -28,8 +28,10 @@ pub fn collaborator_scope() -> Scope {
         .route("/drivers/cnh", web::get().to(list_cnh_types))
         .route("/drivers/cnh/{id}", web::get().to(get_cnh_type))
         .route("/drivers/{id}", web::get().to(get_driver))
+        .route("/drivers/{id}", web::put().to(update_driver))
         .route("/{id}", web::get().to(get_collaborator))
         .route("/{id}/drivers", web::get().to(get_driver_from_collaborator))
+        .route("/{id}/drivers", web::put().to(update_driver_from_collaborator))
         .route("", web::post().to(save_collaborator))
         .route("/{id}", web::put().to(update_collaborator))
         .route("/{id}", web::delete().to(delete_collaborator))
@@ -297,6 +299,14 @@ pub async fn save_driver(
         }
         Err(e) => Err(HttpError::server_error(e.to_string())),
     }
+}
+
+pub async fn update_driver(
+    id: web::Path<uuid::Uuid>,
+    body: web::Json<RegisterDriverDTO>,
+    app_state: web::Data<AppState>,
+) -> Result<HttpResponse, HttpError> {
+
 }
 
 pub async fn get_cnh_type(
