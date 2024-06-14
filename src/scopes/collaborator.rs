@@ -31,6 +31,7 @@ pub fn collaborator_scope() -> Scope {
         .route("/{id}", web::get().to(get_collaborator))
         .route("/{id}/drivers", web::get().to(get_driver_from_collaborator))
         .route("", web::post().to(save_collaborator))
+        .route("/{id}", web::put().to(update_collaborator))
         .route("/{id}", web::delete().to(delete_collaborator))
 }
 
@@ -106,6 +107,56 @@ pub async fn save_collaborator(
             }
         }
         Err(e) => Err(HttpError::server_error(e.to_string())),
+    }
+}
+
+pub async fn update_collaborator(
+    id: web::Path<uuid::Uuid>,
+    body: web::Json<RegisterCollaboratorDTO>,
+    app_state: web::Data<AppState>,
+) -> Result<HttpResponse, HttpError> {
+    body.validate()
+        .map_err(|e| HttpError::bad_request(e.to_string()))?;
+
+    let collaborator_id = Some(id.into_inner());
+
+    let collaborator = app_state
+        .db_client
+        .get_collaborator(collaborator_id, None, None)
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
+
+    match collaborator {
+        Some(_) => {
+            let result = app_state
+                .db_client
+                .update_collaborator(
+                    collaborator_id,
+                    &body.name,
+                    &body.cpf,
+                    &body.rg,
+                    &body.email,
+                )
+                .await;
+
+            return match result {
+                Ok(collaborator) => Ok(HttpResponse::Created()
+                    .json(FilterCollaboratorDTO::filter_collaborator(&collaborator))),
+                Err(sqlx::Error::Database(db_err)) => {
+                    if db_err.is_unique_violation() {
+                        Err(HttpError::unique_constraint_violation(
+                            ErrorMessage::CollaboratorExist,
+                        ))
+                    } else {
+                        Err(HttpError::server_error(db_err.to_string()))
+                    }
+                }
+                Err(e) => Err(HttpError::server_error(e.to_string())),
+            };
+        }
+        None => Err(HttpError::from_error_message(
+            ErrorMessage::CollaboratorNotFound,
+        )),
     }
 }
 
