@@ -1,4 +1,4 @@
-use actix_web::{web, HttpResponse, Scope};
+use actix_web::{web, Error, HttpResponse, Scope};
 use validator::Validate;
 
 use crate::{
@@ -31,7 +31,10 @@ pub fn collaborator_scope() -> Scope {
         .route("/drivers/{id}", web::put().to(update_driver))
         .route("/{id}", web::get().to(get_collaborator))
         .route("/{id}/drivers", web::get().to(get_driver_from_collaborator))
-        .route("/{id}/drivers", web::put().to(update_driver_from_collaborator))
+        .route(
+            "/{id}/drivers",
+            web::put().to(update_driver_from_collaborator),
+        )
         .route("", web::post().to(save_collaborator))
         .route("/{id}", web::put().to(update_collaborator))
         .route("/{id}", web::delete().to(delete_collaborator))
@@ -306,7 +309,97 @@ pub async fn update_driver(
     body: web::Json<RegisterDriverDTO>,
     app_state: web::Data<AppState>,
 ) -> Result<HttpResponse, HttpError> {
+    body.validate()
+        .map_err(|e| HttpError::bad_request(e.to_string()))?;
 
+    let driver_id = Some(id.into_inner());
+
+    let driver = app_state
+        .db_client
+        .get_driver(driver_id, None, None)
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
+
+    match driver {
+        Some(_) => {
+            let result = app_state
+                .db_client
+                .update_driver(
+                    driver_id,
+                    None,
+                    &body.cnh_number,
+                    body.cnh_expiration_date,
+                    &body.id_cnh_type,
+                )
+                .await;
+
+            return match result {
+                Ok(driver) => {
+                    Ok(HttpResponse::Accepted().json(FilterDriverDTO::filter_driver(&driver)))
+                }
+                Err(sqlx::Error::Database(db_err)) => {
+                    if db_err.is_unique_violation() {
+                        Err(HttpError::unique_constraint_violation(
+                            ErrorMessage::DriverExist,
+                        ))
+                    } else {
+                        Err(HttpError::server_error(db_err.to_string()))
+                    }
+                }
+                Err(e) => Err(HttpError::server_error(e.to_string())),
+            };
+        }
+        None => Err(HttpError::from_error_message(ErrorMessage::DriverNotFound)),
+    }
+}
+
+pub async fn update_driver_from_collaborator(
+    id: web::Path<uuid::Uuid>,
+    body: web::Json<RegisterDriverDTO>,
+    app_state: web::Data<AppState>,
+) -> Result<HttpResponse, HttpError> {
+    body.validate()
+        .map_err(|e| HttpError::bad_request(e.to_string()))?;
+
+    let collaborator_id = Some(id.into_inner());
+
+    let driver = app_state
+        .db_client
+        .get_driver(None, None, collaborator_id)
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
+
+    match driver {
+        Some(_) => {
+            let result = app_state
+                .db_client
+                .update_driver(
+                    None,
+                    collaborator_id,
+                    &body.cnh_number,
+                    body.cnh_expiration_date,
+                    &body.id_cnh_type,
+                )
+                .await;
+
+            return match result {
+                Ok(driver) => {
+                    Ok(HttpResponse::Accepted().json(FilterDriverDTO::filter_driver(&driver)))
+                }
+                Err(sqlx::Error::Database(db_err)) => {
+                    if db_err.is_unique_violation() {
+                        Err(HttpError::unique_constraint_violation(
+                            ErrorMessage::DriverExist,
+                        ))
+                    } else {
+                        Err(HttpError::server_error(db_err.to_string()))
+                    }
+                }
+                Err(e) => Err(HttpError::server_error(e.to_string())),
+            };
+        }
+        None => Err(HttpError::from_error_message(ErrorMessage::DriverNotFound)),
+    }
 }
 
 pub async fn get_cnh_type(
