@@ -21,4 +21,13 @@ CREATE TABLE IF NOT EXISTS drivers
             REFERENCES collaborators (id)
 );
 
-ALTER TABLE drivers ADD CONSTRAINT unq_drivers_cnh_number UNIQUE (cnh_number);
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM pg_constraint 
+        WHERE conname = 'unq_drivers_cnh_number'
+    ) THEN
+        ALTER TABLE drivers ADD CONSTRAINT unq_drivers_cnh_number UNIQUE (cnh_number);
+    END IF;
+END $$;
