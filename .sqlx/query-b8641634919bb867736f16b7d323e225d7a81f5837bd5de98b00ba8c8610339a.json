@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n            INSERT INTO routes (initial_lat, initial_long, final_lat, final_long, initial_address_id, final_address_id, vehicle_id, status_id) \n            VALUES ($1, $2, $3, $4, $5, $6, $7, $8) \n            RETURNING *",
+  "query": "\n            UPDATE routes SET initial_lat = $2, initial_long = $3, final_lat = $4, final_long = $5, initial_address_id = $6, final_address_id = $7, vehicle_id = $8, status_id = $9, driver_id = $10 WHERE id = $1 RETURNING *",
   "describe": {
     "columns": [
       {
@@ -72,14 +72,21 @@
         "ordinal": 13,
         "name": "status_id",
         "type_info": "Uuid"
+      },
+      {
+        "ordinal": 14,
+        "name": "driver_id",
+        "type_info": "Uuid"
       }
     ],
     "parameters": {
       "Left": [
+        "Uuid",
         "Numeric",
         "Numeric",
         "Numeric",
         "Numeric",
+        "Uuid",
         "Uuid",
         "Uuid",
         "Uuid",
@@ -100,8 +107,9 @@
       true,
       true,
       false,
-      false
+      false,
+      true
     ]
   },
-  "hash": "12be4a48094c476f5f78b55914ae524edafc8134a97c5d12092db67b4af8b2d9"
+  "hash": "b8641634919bb867736f16b7d323e225d7a81f5837bd5de98b00ba8c8610339a"
 }

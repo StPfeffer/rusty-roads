@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT * FROM routes LIMIT $1 OFFSET $2",
+  "query": "\n            INSERT INTO routes (initial_lat, initial_long, final_lat, final_long, initial_address_id, final_address_id, vehicle_id, status_id, driver_id) \n            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) \n            RETURNING *",
   "describe": {
     "columns": [
       {
@@ -81,8 +81,15 @@
     ],
     "parameters": {
       "Left": [
-        "Int8",
-        "Int8"
+        "Numeric",
+        "Numeric",
+        "Numeric",
+        "Numeric",
+        "Uuid",
+        "Uuid",
+        "Uuid",
+        "Uuid",
+        "Uuid"
       ]
     },
     "nullable": [
@@ -103,5 +110,5 @@
       true
     ]
   },
-  "hash": "28b803e1460d5ac91cd732d9ee4dd9d66e9d106b9bb4193a417d77ea27ad3b0a"
+  "hash": "a6afccecbf11c2b532db3a6b9688fbd70a14819e6277224e929f9a02e3e8a777"
 }
