@@ -126,11 +126,9 @@ impl DriverExt for DBClient {
         cnh_expiration_date: NaiveDate,
         cnh_type_id: T,
     ) -> Result<Driver, sqlx::Error> {
-        let driver: Driver;
-
-        match (driver_id, collaborator_id) {
+        let driver: Driver = match (driver_id, collaborator_id) {
             (Some(driver_id), _) => {
-                driver = sqlx::query_as!(
+                sqlx::query_as!(
                     Driver,
                     r#"UPDATE drivers SET cnh_number = $2, cnh_expiration_date = $3, cnh_type_id = $4 WHERE id = $1 RETURNING *;"#,
                     &driver_id,
@@ -139,10 +137,10 @@ impl DriverExt for DBClient {
                     Uuid::parse_str(&cnh_type_id.into()).unwrap()
                 )
                 .fetch_one(&self.pool)
-                .await?;
+                .await?
             }
             (None, Some(collaborator_id)) => {
-                driver = sqlx::query_as!(
+                sqlx::query_as!(
                     Driver,
                     r#"UPDATE drivers SET cnh_number = $2, cnh_expiration_date = $3, cnh_type_id = $4 WHERE collaborator_id = $1 RETURNING *;"#,
                     &collaborator_id,
@@ -151,12 +149,12 @@ impl DriverExt for DBClient {
                     Uuid::parse_str(&cnh_type_id.into()).unwrap()
                 )
                 .fetch_one(&self.pool)
-                .await?;
+                .await?
             }
             _ => {
                 return Err(sqlx::Error::RowNotFound);
             }
-        }
+        };
 
         Ok(driver)
     }

@@ -144,7 +144,7 @@ pub async fn update_collaborator(
                 )
                 .await;
 
-            return match result {
+            match result {
                 Ok(collaborator) => Ok(HttpResponse::Created()
                     .json(FilterCollaboratorDTO::filter_collaborator(&collaborator))),
                 Err(sqlx::Error::Database(db_err)) => {
@@ -157,7 +157,7 @@ pub async fn update_collaborator(
                     }
                 }
                 Err(e) => Err(HttpError::server_error(e.to_string())),
-            };
+            }
         }
         None => Err(HttpError::from_error_message(
             ErrorMessage::CollaboratorNotFound,
@@ -333,7 +333,7 @@ pub async fn update_driver(
                 )
                 .await;
 
-            return match result {
+            match result {
                 Ok(driver) => {
                     Ok(HttpResponse::Accepted().json(FilterDriverDTO::filter_driver(&driver)))
                 }
@@ -347,7 +347,7 @@ pub async fn update_driver(
                     }
                 }
                 Err(e) => Err(HttpError::server_error(e.to_string())),
-            };
+            }
         }
         None => Err(HttpError::from_error_message(ErrorMessage::DriverNotFound)),
     }
@@ -382,7 +382,7 @@ pub async fn update_driver_from_collaborator(
                 )
                 .await;
 
-            return match result {
+            match result {
                 Ok(driver) => {
                     Ok(HttpResponse::Accepted().json(FilterDriverDTO::filter_driver(&driver)))
                 }
@@ -396,7 +396,7 @@ pub async fn update_driver_from_collaborator(
                     }
                 }
                 Err(e) => Err(HttpError::server_error(e.to_string())),
-            };
+            }
         }
         None => Err(HttpError::from_error_message(ErrorMessage::DriverNotFound)),
     }

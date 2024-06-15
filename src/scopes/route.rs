@@ -122,7 +122,7 @@ pub async fn update_route(
                 .update_route(route_id, dto.into_save_route_params_dto())
                 .await;
 
-            return match result {
+            match result {
                 Ok(driver) => {
                     Ok(HttpResponse::Accepted().json(FilterRouteDTO::filter_route(&driver)))
                 }
@@ -137,7 +137,7 @@ pub async fn update_route(
                     }
                 }
                 Err(e) => Err(HttpError::server_error(e.to_string())),
-            };
+            }
         }
         None => Err(HttpError::from_error_message(ErrorMessage::RouteNotFound)),
     }

@@ -300,11 +300,9 @@ impl VehicleDocumentExt for DBClient {
             vehicle_id: _,
         } = params;
 
-        let document: VehicleDocument;
-
-        match (vehicle_id_path, document_id) {
+        let document: VehicleDocument = match (vehicle_id_path, document_id) {
             (Some(vehicle_id_path), _) => {
-                document = sqlx::query_as!(
+                sqlx::query_as!(
                     VehicleDocument,
                     r#"
                     UPDATE vehicles_documents 
@@ -332,10 +330,10 @@ impl VehicleDocumentExt for DBClient {
                     &plate.into()
                 )
                 .fetch_one(&self.pool)
-                .await?;
+                .await?
             }
             (None, Some(document_id)) => {
-                document = sqlx::query_as!(
+                sqlx::query_as!(
                     VehicleDocument,
                     r#"
                     UPDATE vehicles_documents 
@@ -363,12 +361,12 @@ impl VehicleDocumentExt for DBClient {
                     &plate.into()
                 )
                 .fetch_one(&self.pool)
-                .await?;
+                .await?
             }
             _ => {
                 return Err(sqlx::Error::RowNotFound);
             }
-        }
+        };
 
         Ok(document)
     }

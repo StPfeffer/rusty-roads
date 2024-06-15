@@ -144,7 +144,7 @@ pub async fn update_vehicle(
                 )
                 .await;
 
-            return match result {
+            match result {
                 Ok(vehicle) => {
                     Ok(HttpResponse::Created().json(FilterVehicleDTO::filter_vehicle(&vehicle)))
                 }
@@ -158,7 +158,7 @@ pub async fn update_vehicle(
                     }
                 }
                 Err(e) => Err(HttpError::server_error(e.to_string())),
-            };
+            }
         }
         None => Err(HttpError::from_error_message(ErrorMessage::VehicleNotFound)),
     }
@@ -317,7 +317,7 @@ pub async fn update_vehicle_document(
                 )
                 .await;
 
-            return match result {
+            match result {
                 Ok(document) => Ok(HttpResponse::Created()
                     .json(FilterVehicleDocumentDTO::filter_document(&document))),
                 Err(sqlx::Error::Database(db_err)) => {
@@ -330,7 +330,7 @@ pub async fn update_vehicle_document(
                     }
                 }
                 Err(e) => Err(HttpError::server_error(e.to_string())),
-            };
+            }
         }
         None => Err(HttpError::from_error_message(
             ErrorMessage::VehicleDocumentNotFound,
@@ -387,7 +387,7 @@ pub async fn update_vehicle_document_from_vehicle(
                 )
                 .await;
 
-            return match result {
+            match result {
                 Ok(document) => Ok(HttpResponse::Created()
                     .json(FilterVehicleDocumentDTO::filter_document(&document))),
                 Err(sqlx::Error::Database(db_err)) => {
@@ -400,7 +400,7 @@ pub async fn update_vehicle_document_from_vehicle(
                     }
                 }
                 Err(e) => Err(HttpError::server_error(e.to_string())),
-            };
+            }
         }
         None => Err(HttpError::from_error_message(
             ErrorMessage::VehicleDocumentNotFound,
