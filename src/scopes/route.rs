@@ -24,6 +24,7 @@ pub fn route_scope() -> Scope {
         .route("/status/{id}", web::delete().to(delete_route_status))
         .route("/status", web::get().to(list_route_status))
         .route("/{id}", web::get().to(get_route))
+        .route("/{id}", web::put().to(update_route))
         .route("/{id}", web::delete().to(delete_route))
         .route("/{id}/status", web::get().to(get_route_status_from_route))
 }
@@ -93,6 +94,52 @@ pub async fn save_route(
             }
         }
         Err(e) => Err(HttpError::server_error(e.to_string())),
+    }
+}
+
+pub async fn update_route(
+    id: web::Path<uuid::Uuid>,
+    body: web::Json<RegisterRouteDTO>,
+    app_state: web::Data<AppState>,
+) -> Result<HttpResponse, HttpError> {
+    body.validate()
+        .map_err(|e| HttpError::bad_request(e.to_string()))?;
+
+    let route_id = Some(id.into_inner());
+
+    let route = app_state
+        .db_client
+        .get_route(route_id)
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
+
+    let dto = body.into_inner();
+
+    match route {
+        Some(_) => {
+            let result = app_state
+                .db_client
+                .update_route(route_id, dto.into_save_route_params_dto())
+                .await;
+
+            return match result {
+                Ok(driver) => {
+                    Ok(HttpResponse::Accepted().json(FilterRouteDTO::filter_route(&driver)))
+                }
+                Err(sqlx::Error::Database(db_err)) => {
+                    if db_err.is_unique_violation() {
+                        // Will never happen
+                        Err(HttpError::unique_constraint_violation(
+                            ErrorMessage::DriverExist,
+                        ))
+                    } else {
+                        Err(HttpError::server_error(db_err.to_string()))
+                    }
+                }
+                Err(e) => Err(HttpError::server_error(e.to_string())),
+            };
+        }
+        None => Err(HttpError::from_error_message(ErrorMessage::RouteNotFound)),
     }
 }
 
