@@ -641,14 +641,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{base}}/v1/collaborators//drivers/:driverId",
+									"raw": "{{base}}/v1/collaborators/drivers/:driverId",
 									"host": [
 										"{{base}}"
 									],
 									"path": [
 										"v1",
 										"collaborators",
-										"",
 										"drivers",
 										":driverId"
 									],
@@ -685,6 +684,34 @@
 											"key": "collaboratorId",
 											"value": "",
 											"description": "The collaborator UUID"
+										}
+									]
+								},
+								"description": "Delete a specific driver by it's collaborator ID."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete a Driver by ID",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/collaborators/drivers/:driverId",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"collaborators",
+										"drivers",
+										":driverId"
+									],
+									"variable": [
+										{
+											"key": "driverId",
+											"value": "",
+											"description": "The driver UUID"
 										}
 									]
 								},
@@ -2036,7 +2063,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"chassisNumber\": \"KLATF08YIVB363636\",\r\n    \"exerciseYear\": 2022,\r\n    \"modelYear\": 2022,\r\n    \"manufactureYear\": 2022,\r\n    \"registrationNumber\": \"481014772\",\r\n    \"color\": \"White\",\r\n    \"make\": \"Volkswagen\",\r\n    \"model\": \"Gol\",\r\n    \"plate\": \"P688CC\"\r\n}",
+									"raw": "{\r\n    \"chassisNumber\": \"KLATF08YIVB363637\",\r\n    \"exerciseYear\": 2022,\r\n    \"modelYear\": 2022,\r\n    \"manufactureYear\": 2022,\r\n    \"registrationNumber\": \"481014773\",\r\n    \"color\": \"White\",\r\n    \"make\": \"Volkswagen\",\r\n    \"model\": \"Gol\",\r\n    \"plate\": \"P688CD\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2057,7 +2084,7 @@
 									"variable": [
 										{
 											"key": "vehicleId",
-											"value": "b87d1704-c957-4ee2-b378-f7be43c10b85",
+											"value": "0167e22d-aebb-4c8a-9f9f-73789e185ee0",
 											"description": "The vehicle UUID"
 										}
 									]
