@@ -29,8 +29,13 @@ pub fn collaborator_scope() -> Scope {
         .route("/drivers/cnh/{id}", web::get().to(get_cnh_type))
         .route("/drivers/{id}", web::get().to(get_driver))
         .route("/drivers/{id}", web::put().to(update_driver))
+        .route("/drivers/{id}", web::delete().to(delete_driver))
         .route("/{id}", web::get().to(get_collaborator))
         .route("/{id}/drivers", web::get().to(get_driver_from_collaborator))
+        .route(
+            "/{id}/drivers",
+            web::delete().to(delete_driver_from_collaborator),
+        )
         .route(
             "/{id}/drivers",
             web::put().to(update_driver_from_collaborator),
@@ -170,12 +175,6 @@ pub async fn delete_collaborator(
     app_state: web::Data<AppState>,
 ) -> Result<HttpResponse, HttpError> {
     let collaborator_id = Some(id.into_inner());
-
-    app_state
-        .db_client
-        .delete_driver(None, collaborator_id)
-        .await
-        .map_err(|e| HttpError::server_error(e.to_string()))?;
 
     let collaborator = app_state
         .db_client
@@ -441,4 +440,44 @@ pub async fn list_cnh_types(
         types: FilterCnhTypeDTO::filter_cnh_types(&cnh_types),
         results: cnh_types.len(),
     }))
+}
+
+pub async fn delete_driver(
+    id: web::Path<uuid::Uuid>,
+    app_state: web::Data<AppState>,
+) -> Result<HttpResponse, HttpError> {
+    let driver_id = Some(id.into_inner());
+
+    let driver = app_state
+        .db_client
+        .delete_driver(driver_id, None)
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
+
+    match driver {
+        Some(driver) => Ok(HttpResponse::Ok().json(FilterDriverDTO::filter_driver(&driver))),
+        None => Err(HttpError::from_error_message(
+            ErrorMessage::CollaboratorNotFound,
+        )),
+    }
+}
+
+pub async fn delete_driver_from_collaborator(
+    id: web::Path<uuid::Uuid>,
+    app_state: web::Data<AppState>,
+) -> Result<HttpResponse, HttpError> {
+    let collaborator_id = Some(id.into_inner());
+
+    let driver = app_state
+        .db_client
+        .delete_driver(None, collaborator_id)
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
+
+    match driver {
+        Some(driver) => Ok(HttpResponse::Ok().json(FilterDriverDTO::filter_driver(&driver))),
+        None => Err(HttpError::from_error_message(
+            ErrorMessage::CollaboratorNotFound,
+        )),
+    }
 }
