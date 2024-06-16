@@ -170,12 +170,6 @@ pub async fn delete_vehicle(
 ) -> Result<HttpResponse, HttpError> {
     let vehicle_id = Some(id.into_inner());
 
-    app_state
-        .db_client
-        .delete_vehicle_document(None, vehicle_id)
-        .await
-        .map_err(|e| HttpError::server_error(e.to_string()))?;
-
     let vehicle = app_state
         .db_client
         .delete_vehicle(vehicle_id)
