@@ -1,0 +1,97 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n                    UPDATE vehicles_documents \n                    SET chassis_number = $2, \n                        exercise_year = $3, \n                        model_year = $4, \n                        manufacture_year = $5, \n                        registration_number = $6, \n                        color = $7, \n                        make = $8, \n                        model = $9, \n                        plate = $10 \n                    WHERE id = $1 \n                    RETURNING *;\n                    ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "chassis_number",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "exercise_year",
+        "type_info": "Int2"
+      },
+      {
+        "ordinal": 3,
+        "name": "model_year",
+        "type_info": "Int2"
+      },
+      {
+        "ordinal": 4,
+        "name": "manufacture_year",
+        "type_info": "Int2"
+      },
+      {
+        "ordinal": 5,
+        "name": "registration_number",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 6,
+        "name": "color",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 7,
+        "name": "make",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 8,
+        "name": "model",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 9,
+        "name": "plate",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 10,
+        "name": "updated_at",
+        "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 11,
+        "name": "vehicle_id",
+        "type_info": "Uuid"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Varchar",
+        "Int2",
+        "Int2",
+        "Int2",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "be0037121715ee9982e99a0ca7d2b89e87f5e8b96a1334f81b09fcc3622b367f"
+}

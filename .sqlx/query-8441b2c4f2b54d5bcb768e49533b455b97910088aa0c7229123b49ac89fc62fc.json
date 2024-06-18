@@ -1,0 +1,61 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE drivers SET cnh_number = $2, cnh_expiration_date = $3, cnh_type_id = $4 WHERE collaborator_id = $1 RETURNING *;",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "cnh_number",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "cnh_expiration_date",
+        "type_info": "Date"
+      },
+      {
+        "ordinal": 3,
+        "name": "created_at",
+        "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 4,
+        "name": "updated_at",
+        "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 5,
+        "name": "cnh_type_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 6,
+        "name": "collaborator_id",
+        "type_info": "Uuid"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Varchar",
+        "Date",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "8441b2c4f2b54d5bcb768e49533b455b97910088aa0c7229123b49ac89fc62fc"
+}

@@ -2,6 +2,7 @@
 	"info": {
 		"_postman_id": "9183eaca-4461-4d51-baea-1722d331637f",
 		"name": "Rusty Roads",
+		"description": "A simple route manager application written in Rust",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "25630504"
 	},
@@ -31,9 +32,57 @@
 												"drivers",
 												"cnh"
 											]
-										}
+										},
+										"description": "List all the available CNH types."
 									},
-									"response": []
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base}}/v1/collaborators/drivers/cnh",
+													"host": [
+														"{{base}}"
+													],
+													"path": [
+														"v1",
+														"collaborators",
+														"drivers",
+														"cnh"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "content-length",
+													"value": "103"
+												},
+												{
+													"key": "access-control-allow-credentials",
+													"value": "true"
+												},
+												{
+													"key": "vary",
+													"value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+												},
+												{
+													"key": "content-type",
+													"value": "application/json"
+												},
+												{
+													"key": "date",
+													"value": "Sun, 09 Jun 2024 19:37:03 GMT"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"types\": [\n        {\n            \"id\": \"75b0ed36-4c4b-4b54-b256-11f017281f6e\",\n            \"code\": \"A\",\n            \"description\": \"Tipo A\"\n        }\n    ],\n    \"results\": 1\n}"
+										}
+									]
 								},
 								{
 									"name": "Get a CNH Type by ID",
@@ -59,9 +108,119 @@
 													"description": "The CNH UUID"
 												}
 											]
-										}
+										},
+										"description": "Get a CNH type by it's ID."
 									},
-									"response": []
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base}}/v1/collaborators/drivers/cnh/:cnhId",
+													"host": [
+														"{{base}}"
+													],
+													"path": [
+														"v1",
+														"collaborators",
+														"drivers",
+														"cnh",
+														":cnhId"
+													],
+													"variable": [
+														{
+															"key": "cnhId",
+															"value": "75b0ed36-4c4b-4b54-b256-11f017281f6e",
+															"description": "The CNH UUID"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "content-length",
+													"value": "79"
+												},
+												{
+													"key": "access-control-allow-credentials",
+													"value": "true"
+												},
+												{
+													"key": "vary",
+													"value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+												},
+												{
+													"key": "content-type",
+													"value": "application/json"
+												},
+												{
+													"key": "date",
+													"value": "Sun, 09 Jun 2024 19:37:40 GMT"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"id\": \"75b0ed36-4c4b-4b54-b256-11f017281f6e\",\n    \"code\": \"A\",\n    \"description\": \"Tipo A\"\n}"
+										},
+										{
+											"name": "Not Found",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{base}}/v1/collaborators/drivers/cnh/:cnhId",
+													"host": [
+														"{{base}}"
+													],
+													"path": [
+														"v1",
+														"collaborators",
+														"drivers",
+														"cnh",
+														":cnhId"
+													],
+													"variable": [
+														{
+															"key": "cnhId",
+															"value": "75b0ed36-4c4b-4b54-b256-11f017281f6f",
+															"description": "The CNH UUID"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "content-length",
+													"value": "374"
+												},
+												{
+													"key": "access-control-allow-credentials",
+													"value": "true"
+												},
+												{
+													"key": "vary",
+													"value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+												},
+												{
+													"key": "content-type",
+													"value": "application/json"
+												},
+												{
+													"key": "date",
+													"value": "Sun, 09 Jun 2024 19:39:17 GMT"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"error\": {\n        \"status\": \"error\",\n        \"code\": \"404\",\n        \"message\": \"The driver with the provided ID does not exist in our records\",\n        \"hint\": \"Ensure the driverId, cnhNumber or collaboratorId are correct and exists in the database. Use the 'GET /api/v1/collaborators' endpoint to retrieve available collaborator IDs and the 'GET /api/v1/collaborators/drivers' to retrieve available driver IDs\"\n    }\n}"
+										}
+									]
 								}
 							]
 						},
@@ -80,9 +239,56 @@
 										"collaborators",
 										"drivers"
 									]
-								}
+								},
+								"description": "List all the drivers."
 							},
-							"response": []
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base}}/v1/collaborators/drivers",
+											"host": [
+												"{{base}}"
+											],
+											"path": [
+												"v1",
+												"collaborators",
+												"drivers"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "content-length",
+											"value": "237"
+										},
+										{
+											"key": "vary",
+											"value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+										},
+										{
+											"key": "access-control-allow-credentials",
+											"value": "true"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										},
+										{
+											"key": "date",
+											"value": "Sun, 09 Jun 2024 19:37:57 GMT"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"drivers\": [\n        {\n            \"id\": \"5ad393c8-fd4d-44ff-982e-26662f8d8e71\",\n            \"cnhNumber\": \"12345678910\",\n            \"cnhExpirationDate\": \"2024-06-08\",\n            \"cnhTypeId\": \"75b0ed36-4c4b-4b54-b256-11f017281f6e\",\n            \"collaboratorId\": \"23ea4a3a-6b2b-47ce-bf53-2475282fe002\"\n        }\n    ],\n    \"results\": 1\n}"
+								}
+							]
 						},
 						{
 							"name": "Get a Driver by Collaborator ID",
@@ -103,13 +309,121 @@
 									"variable": [
 										{
 											"key": "collaboratorId",
-											"value": "7d9e8496-a704-4f77-a988-b13c83c21b0c",
+											"value": "23ea4a3a-6b2b-47ce-bf53-2475282fe002",
 											"description": "The collaborator UUID"
 										}
 									]
-								}
+								},
+								"description": "Get a specific driver by it's collaborator ID."
 							},
-							"response": []
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base}}/v1/collaborators/:collaboratorId/drivers",
+											"host": [
+												"{{base}}"
+											],
+											"path": [
+												"v1",
+												"collaborators",
+												":collaboratorId",
+												"drivers"
+											],
+											"variable": [
+												{
+													"key": "collaboratorId",
+													"value": "23ea4a3a-6b2b-47ce-bf53-2475282fe002",
+													"description": "The collaborator UUID"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "content-length",
+											"value": "211"
+										},
+										{
+											"key": "vary",
+											"value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										},
+										{
+											"key": "access-control-allow-credentials",
+											"value": "true"
+										},
+										{
+											"key": "date",
+											"value": "Sun, 09 Jun 2024 19:38:23 GMT"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": \"5ad393c8-fd4d-44ff-982e-26662f8d8e71\",\n    \"cnhNumber\": \"12345678910\",\n    \"cnhExpirationDate\": \"2024-06-08\",\n    \"cnhTypeId\": \"75b0ed36-4c4b-4b54-b256-11f017281f6e\",\n    \"collaboratorId\": \"23ea4a3a-6b2b-47ce-bf53-2475282fe002\"\n}"
+								},
+								{
+									"name": "Not Found",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base}}/v1/collaborators/:collaboratorId/drivers",
+											"host": [
+												"{{base}}"
+											],
+											"path": [
+												"v1",
+												"collaborators",
+												":collaboratorId",
+												"drivers"
+											],
+											"variable": [
+												{
+													"key": "collaboratorId",
+													"value": "23ea4a3a-6b2b-47ce-bf53-2475282fe00f",
+													"description": "The collaborator UUID"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "content-length",
+											"value": "374"
+										},
+										{
+											"key": "vary",
+											"value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+										},
+										{
+											"key": "access-control-allow-credentials",
+											"value": "true"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										},
+										{
+											"key": "date",
+											"value": "Sun, 09 Jun 2024 19:40:02 GMT"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"error\": {\n        \"status\": \"error\",\n        \"code\": \"404\",\n        \"message\": \"The driver with the provided ID does not exist in our records\",\n        \"hint\": \"Ensure the driverId, cnhNumber or collaboratorId are correct and exists in the database. Use the 'GET /api/v1/collaborators' endpoint to retrieve available collaborator IDs and the 'GET /api/v1/collaborators/drivers' to retrieve available driver IDs\"\n    }\n}"
+								}
+							]
 						},
 						{
 							"name": "Get a Driver by ID",
@@ -130,13 +444,121 @@
 									"variable": [
 										{
 											"key": "driverId",
-											"value": "b7e699c3-4c5a-4946-8294-d69584c424d9",
+											"value": "5ad393c8-fd4d-44ff-982e-26662f8d8e71",
 											"description": "The driver UUID"
 										}
 									]
-								}
+								},
+								"description": "Get a specific driver by it's ID."
 							},
-							"response": []
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base}}/v1/collaborators/drivers/:driverId",
+											"host": [
+												"{{base}}"
+											],
+											"path": [
+												"v1",
+												"collaborators",
+												"drivers",
+												":driverId"
+											],
+											"variable": [
+												{
+													"key": "driverId",
+													"value": "5ad393c8-fd4d-44ff-982e-26662f8d8e71",
+													"description": "The driver UUID"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "content-length",
+											"value": "211"
+										},
+										{
+											"key": "vary",
+											"value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										},
+										{
+											"key": "access-control-allow-credentials",
+											"value": "true"
+										},
+										{
+											"key": "date",
+											"value": "Sun, 09 Jun 2024 19:38:38 GMT"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": \"5ad393c8-fd4d-44ff-982e-26662f8d8e71\",\n    \"cnhNumber\": \"12345678910\",\n    \"cnhExpirationDate\": \"2024-06-08\",\n    \"cnhTypeId\": \"75b0ed36-4c4b-4b54-b256-11f017281f6e\",\n    \"collaboratorId\": \"23ea4a3a-6b2b-47ce-bf53-2475282fe002\"\n}"
+								},
+								{
+									"name": "Not Found",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base}}/v1/collaborators/drivers/:driverId",
+											"host": [
+												"{{base}}"
+											],
+											"path": [
+												"v1",
+												"collaborators",
+												"drivers",
+												":driverId"
+											],
+											"variable": [
+												{
+													"key": "driverId",
+													"value": "5ad393c8-fd4d-44ff-982e-26662f8d8e7f",
+													"description": "The driver UUID"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "content-length",
+											"value": "374"
+										},
+										{
+											"key": "vary",
+											"value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+										},
+										{
+											"key": "access-control-allow-credentials",
+											"value": "true"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										},
+										{
+											"key": "date",
+											"value": "Sun, 09 Jun 2024 19:40:14 GMT"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"error\": {\n        \"status\": \"error\",\n        \"code\": \"404\",\n        \"message\": \"The driver with the provided ID does not exist in our records\",\n        \"hint\": \"Ensure the driverId, cnhNumber or collaboratorId are correct and exists in the database. Use the 'GET /api/v1/collaborators' endpoint to retrieve available collaborator IDs and the 'GET /api/v1/collaborators/drivers' to retrieve available driver IDs\"\n    }\n}"
+								}
+							]
 						},
 						{
 							"name": "Create a Driver",
@@ -162,7 +584,82 @@
 										"collaborators",
 										"drivers"
 									]
-								}
+								},
+								"description": "Creates a new driver based on the collaborator ID."
+							},
+							"response": []
+						},
+						{
+							"name": "Update a Driver by Collaborator ID",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cnhNumber\": \"12345678910\",\r\n    \"cnhExpirationDate\": \"2024-06-08\",\r\n    \"idCnhType\": \"75b0ed36-4c4b-4b54-b256-11f017281f6e\",\r\n    \"collaboratorId\": \"23ea4a3a-6b2b-47ce-bf53-2475282fe002\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base}}/v1/collaborators/:collaboratorId/drivers",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"collaborators",
+										":collaboratorId",
+										"drivers"
+									],
+									"variable": [
+										{
+											"key": "collaboratorId",
+											"value": "23ea4a3a-6b2b-47ce-bf53-2475282fe002",
+											"description": "The collaborator UUID"
+										}
+									]
+								},
+								"description": "Creates a new driver based on the collaborator ID."
+							},
+							"response": []
+						},
+						{
+							"name": "Update a Driver by ID",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cnhNumber\": \"12345678910\",\r\n    \"cnhExpirationDate\": \"2024-06-08\",\r\n    \"idCnhType\": \"75b0ed36-4c4b-4b54-b256-11f017281f6e\",\r\n    \"collaboratorId\": \"23ea4a3a-6b2b-47ce-bf53-2475282fe002\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base}}/v1/collaborators/drivers/:driverId",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"collaborators",
+										"drivers",
+										":driverId"
+									],
+									"variable": [
+										{
+											"key": "driverId",
+											"value": "5ad393c8-fd4d-44ff-982e-26662f8d8e71",
+											"description": "The driver UUID"
+										}
+									]
+								},
+								"description": "Creates a new driver based on the collaborator ID."
 							},
 							"response": []
 						},
@@ -189,7 +686,36 @@
 											"description": "The collaborator UUID"
 										}
 									]
-								}
+								},
+								"description": "Delete a specific driver by it's collaborator ID."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete a Driver by ID",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/collaborators/drivers/:driverId",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"collaborators",
+										"drivers",
+										":driverId"
+									],
+									"variable": [
+										{
+											"key": "driverId",
+											"value": "",
+											"description": "The driver UUID"
+										}
+									]
+								},
+								"description": "Delete a specific driver by it's collaborator ID."
 							},
 							"response": []
 						}
@@ -209,7 +735,8 @@
 								"v1",
 								"collaborators"
 							]
-						}
+						},
+						"description": "List all the collaborators."
 					},
 					"response": []
 				},
@@ -231,13 +758,118 @@
 							"variable": [
 								{
 									"key": "collaboratorId",
-									"value": "7d9e8496-a704-4f77-a988-b13c83c21b0c",
+									"value": "23ea4a3a-6b2b-47ce-bf53-2475282fe002",
 									"description": "The collaborator UUID"
 								}
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/collaborators/:collaboratorId",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"collaborators",
+										":collaboratorId"
+									],
+									"variable": [
+										{
+											"key": "collaboratorId",
+											"value": "23ea4a3a-6b2b-47ce-bf53-2475282fe002",
+											"description": "The collaborator UUID"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-length",
+									"value": "223"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "vary",
+									"value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+								},
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "date",
+									"value": "Sat, 15 Jun 2024 00:23:00 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"23ea4a3a-6b2b-47ce-bf53-2475282fe002\",\n    \"name\": \"Mateus Pfeffer\",\n    \"cpf\": \"08647692745\",\n    \"rg\": \"185732951\",\n    \"email\": \"mpfeffer@minha.fag.edu.br\",\n    \"updatedAt\": \"2024-06-08T22:11:11.387260\",\n    \"cratedAt\": \"2024-06-08T22:11:11.387260\"\n}"
+						},
+						{
+							"name": "Not Found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/v1/collaborators/:collaboratorId",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"collaborators",
+										":collaboratorId"
+									],
+									"variable": [
+										{
+											"key": "collaboratorId",
+											"value": "23ea4a3a-6b2b-47ce-bf53-2475282fe003",
+											"description": "The collaborator UUID"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-length",
+									"value": "325"
+								},
+								{
+									"key": "vary",
+									"value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+								},
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "date",
+									"value": "Sat, 15 Jun 2024 00:23:23 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"status\": \"error\",\n        \"code\": \"404\",\n        \"message\": \"The collaborator with the provided ID, email, or cpf does not exist in our records. Please verify and try again\",\n        \"hint\": \"Ensure the collaboratorId, email, or cpf is correct and exists in the database. Use 'GET /api/v1/collaborators' to retrieve available collaborator IDs\"\n    }\n}"
+						}
+					]
 				},
 				{
 					"name": "Create a Collaborator",
@@ -246,7 +878,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Mateus Pfeffer\",\r\n    \"cpf\": \"08647692745\",\r\n    \"rg\": \"185732951\",\r\n    \"email\": \"mpfeffer@minha.fag.edu.br\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Mateus Pfeffer\",\r\n    \"rg\": \"185732951\",\r\n    \"email\": \"mpfeffe23r@minha.fag.edu.br\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -264,7 +896,386 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Created",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Mateus Pfeffer\",\r\n    \"cpf\": \"08647692735\",\r\n    \"rg\": \"185732951\",\r\n    \"email\": \"mpfeffe23r@minha.fag.edu.br\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base}}/v1/collaborators",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"collaborators"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-length",
+									"value": "225"
+								},
+								{
+									"key": "vary",
+									"value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "date",
+									"value": "Sat, 15 Jun 2024 00:23:45 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"626b698a-997d-404a-ac56-e39eb56e3b25\",\n    \"name\": \"Mateus Pfeffer\",\n    \"cpf\": \"08647692735\",\n    \"rg\": \"185732951\",\n    \"email\": \"mpfeffe23r@minha.fag.edu.br\",\n    \"updatedAt\": \"2024-06-15T00:23:46.341999\",\n    \"cratedAt\": \"2024-06-15T00:23:46.341999\"\n}"
+						},
+						{
+							"name": "Conflict",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Mateus Pfeffer\",\r\n    \"cpf\": \"08647692745\",\r\n    \"rg\": \"185732951\",\r\n    \"email\": \"mpfeffer@minha.fag.edu.br\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base}}/v1/collaborators",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"collaborators"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-length",
+									"value": "170"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "vary",
+									"value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+								},
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "date",
+									"value": "Sat, 15 Jun 2024 00:23:36 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"status\": \"fail\",\n        \"code\": \"409\",\n        \"message\": \"A collaborator with the provided email or cpf already exists\",\n        \"hint\": \"Ensure the data you are trying to add is unique\"\n    }\n}"
+						},
+						{
+							"name": "Bad Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Mateus Pfeffer\",\r\n    \"rg\": \"185732951\",\r\n    \"email\": \"mpfeffe23r@minha.fag.edu.br\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base}}/v1/collaborators",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"collaborators"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "content-length",
+									"value": "62"
+								},
+								{
+									"key": "content-type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "vary",
+									"value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+								},
+								{
+									"key": "date",
+									"value": "Sat, 15 Jun 2024 00:23:58 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "Json deserialize error: missing field `cpf` at line 5 column 1"
+						}
+					]
+				},
+				{
+					"name": "Update a Collaborator by ID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Mateus Pfeffer\",\r\n    \"cpf\": \"08647692735\",\r\n    \"rg\": \"185732951\",\r\n    \"email\": \"mpfeffer@minha.fag.edu.br\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/v1/collaborators/:collaboratorId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"collaborators",
+								":collaboratorId"
+							],
+							"variable": [
+								{
+									"key": "collaboratorId",
+									"value": "626b698a-997d-404a-ac56-e39eb56e3b25",
+									"description": "The collaborator UUID"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Created",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Mateus Pfeffer\",\r\n    \"cpf\": \"08647692745\",\r\n    \"rg\": \"185732951\",\r\n    \"email\": \"mpfeffer@minha.fag.edu.br\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base}}/v1/collaborators/:collaboratorId",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"collaborators",
+										":collaboratorId"
+									],
+									"variable": [
+										{
+											"key": "collaboratorId",
+											"value": "23ea4a3a-6b2b-47ce-bf53-2475282fe002",
+											"description": "The collaborator UUID"
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-length",
+									"value": "223"
+								},
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "vary",
+									"value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+								},
+								{
+									"key": "date",
+									"value": "Sat, 15 Jun 2024 00:24:19 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"23ea4a3a-6b2b-47ce-bf53-2475282fe002\",\n    \"name\": \"Mateus Pfeffer\",\n    \"cpf\": \"08647692745\",\n    \"rg\": \"185732951\",\n    \"email\": \"mpfeffer@minha.fag.edu.br\",\n    \"updatedAt\": \"2024-06-08T22:11:11.387260\",\n    \"cratedAt\": \"2024-06-08T22:11:11.387260\"\n}"
+						},
+						{
+							"name": "Bad Request",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Mateus Pfeffer\",\r\n    \"rg\": \"185732951\",\r\n    \"email\": \"mpfeffer@minha.fag.edu.br\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base}}/v1/collaborators/:collaboratorId",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"collaborators",
+										":collaboratorId"
+									],
+									"variable": [
+										{
+											"key": "collaboratorId",
+											"value": "23ea4a3a-6b2b-47ce-bf53-2475282fe002",
+											"description": "The collaborator UUID"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "content-length",
+									"value": "62"
+								},
+								{
+									"key": "vary",
+									"value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+								},
+								{
+									"key": "content-type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "date",
+									"value": "Sat, 15 Jun 2024 00:24:30 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "Json deserialize error: missing field `cpf` at line 5 column 1"
+						},
+						{
+							"name": "Conflict",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Mateus Pfeffer\",\r\n    \"cpf\": \"08647692735\",\r\n    \"rg\": \"185732951\",\r\n    \"email\": \"mpfeffer@minha.fag.edu.br\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base}}/v1/collaborators/:collaboratorId",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"collaborators",
+										":collaboratorId"
+									],
+									"variable": [
+										{
+											"key": "collaboratorId",
+											"value": "626b698a-997d-404a-ac56-e39eb56e3b25",
+											"description": "The collaborator UUID"
+										}
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-length",
+									"value": "170"
+								},
+								{
+									"key": "vary",
+									"value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "date",
+									"value": "Sat, 15 Jun 2024 00:25:01 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"status\": \"fail\",\n        \"code\": \"409\",\n        \"message\": \"A collaborator with the provided email or cpf already exists\",\n        \"hint\": \"Ensure the data you are trying to add is unique\"\n    }\n}"
+						}
+					]
 				},
 				{
 					"name": "Delete a Collaborator by ID",
@@ -1052,6 +2063,42 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
+									"raw": "{\r\n    \"chassisNumber\": \"KLATF08YIVB363637\",\r\n    \"exerciseYear\": 2022,\r\n    \"modelYear\": 2022,\r\n    \"manufactureYear\": 2022,\r\n    \"registrationNumber\": \"481014773\",\r\n    \"color\": \"White\",\r\n    \"make\": \"Volkswagen\",\r\n    \"model\": \"Gol\",\r\n    \"plate\": \"P688CD\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base}}/v1/vehicles/:vehicleId/documents",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"vehicles",
+										":vehicleId",
+										"documents"
+									],
+									"variable": [
+										{
+											"key": "vehicleId",
+											"value": "0167e22d-aebb-4c8a-9f9f-73789e185ee0",
+											"description": "The vehicle UUID"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update a Vehicle Document by Vehicle ID",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
 									"raw": "{\r\n    \"chassisNumber\": \"KLATF08YIVB363636\",\r\n    \"exerciseYear\": 2022,\r\n    \"modelYear\": 2022,\r\n    \"manufactureYear\": 2022,\r\n    \"registrationNumber\": \"481014772\",\r\n    \"color\": \"White\",\r\n    \"make\": \"Volkswagen\",\r\n    \"model\": \"Gol\",\r\n    \"plate\": \"P688CC\"\r\n}",
 									"options": {
 										"raw": {
@@ -1075,6 +2122,42 @@
 											"key": "vehicleId",
 											"value": "b87d1704-c957-4ee2-b378-f7be43c10b85",
 											"description": "The vehicle UUID"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update a Vehicle Document by ID",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"chassisNumber\": \"KLATF08YIVB363636\",\r\n    \"exerciseYear\": 2022,\r\n    \"modelYear\": 2022,\r\n    \"manufactureYear\": 2022,\r\n    \"registrationNumber\": \"481014772\",\r\n    \"color\": \"White\",\r\n    \"make\": \"Volkswagen\",\r\n    \"model\": \"Gol\",\r\n    \"plate\": \"P688CC\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base}}/v1/vehicles/documents/:documentId",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"v1",
+										"vehicles",
+										"documents",
+										":documentId"
+									],
+									"variable": [
+										{
+											"key": "documentId",
+											"value": "",
+											"description": "The vehicle document UUID"
 										}
 									]
 								}
@@ -1203,6 +2286,41 @@
 							"path": [
 								"v1",
 								"vehicles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Vehicle by ID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Volkswagen Gol\",\r\n    \"initialMileage\": 85,\r\n    \"actualMileage\": 93\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/v1/vehicles/:vehicleId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"vehicles",
+								":vehicleId"
+							],
+							"variable": [
+								{
+									"key": "vehicleId",
+									"value": "",
+									"description": "The vehicle UUID"
+								}
 							]
 						}
 					},
@@ -1423,7 +2541,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"initialLat\": \"-24.9556467\",\r\n    \"initialLong\": \"-53.4662277\",\r\n    \"finalLat\": null,\r\n    \"finalLong\": null,\r\n    \"initialAddress_Id\": null,\r\n    \"finalAddressId\": null,\r\n    \"vehicleId\": \"b87d1704-c957-4ee2-b378-f7be43c10b85\"\r\n}",
+							"raw": "{\r\n    \"initialLat\": \"-24.9556467\",\r\n    \"initialLong\": \"-53.4662277\",\r\n    \"finalLat\": null,\r\n    \"finalLong\": null,\r\n    \"initialAddress_Id\": null,\r\n    \"finalAddressId\": null,\r\n    \"vehicleId\": \"b87d1704-c957-4ee2-b378-f7be43c10b85\",\r\n    \"driverId\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1438,6 +2556,41 @@
 							"path": [
 								"v1",
 								"routes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Route by ID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"initialLat\": \"-24.9556467\",\r\n    \"initialLong\": \"-53.4662277\",\r\n    \"finalLat\": null,\r\n    \"finalLong\": null,\r\n    \"initialAddress_Id\": null,\r\n    \"finalAddressId\": null,\r\n    \"vehicleId\": \"b87d1704-c957-4ee2-b378-f7be43c10b85\",\r\n    \"driverId\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/v1/routes/:routeId",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"v1",
+								"routes",
+								":routeId"
+							],
+							"variable": [
+								{
+									"key": "routeId",
+									"value": "",
+									"description": "The route UUID"
+								}
 							]
 						}
 					},

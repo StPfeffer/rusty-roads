@@ -1,4 +1,5 @@
 use async_trait::async_trait;
+use log::info;
 use uuid::Uuid;
 
 use super::client::DBClient;
@@ -21,6 +22,15 @@ pub trait CollaboratorExt {
 
     async fn save_collaborator<T: Into<String> + Send>(
         &self,
+        name: T,
+        cpf: T,
+        rg: T,
+        email: T,
+    ) -> Result<Collaborator, sqlx::Error>;
+
+    async fn update_collaborator<T: Into<String> + Send>(
+        &self,
+        collaborator_id: Option<Uuid>,
         name: T,
         cpf: T,
         rg: T,
@@ -105,6 +115,33 @@ impl CollaboratorExt for DBClient {
             &cpf.into(),
             &rg.into(),
             &email.into(),
+        )
+        .fetch_one(&self.pool)
+        .await?;
+
+        Ok(collaborator)
+    }
+
+    async fn update_collaborator<T: Into<String> + Send>(
+        &self,
+        collaborator_id: Option<Uuid>,
+        name: T,
+        cpf: T,
+        rg: T,
+        email: T,
+    ) -> Result<Collaborator, sqlx::Error> {
+        let name = name.into();
+
+        info!("Updating the collaborator: {}", &name);
+
+        let collaborator = sqlx::query_as!(
+            Collaborator,
+            r#"UPDATE collaborators SET name = $2, cpf = $3, rg = $4, email = $5 WHERE id = $1 RETURNING *;"#,
+            &collaborator_id.unwrap(),
+            &name,
+            &cpf.into(),
+            &rg.into(),
+            &email.into()
         )
         .fetch_one(&self.pool)
         .await?;

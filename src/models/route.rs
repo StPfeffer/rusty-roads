@@ -15,8 +15,7 @@ pub struct Route {
     pub initial_long: BigDecimal,
     pub final_lat: Option<BigDecimal>,
     pub final_long: Option<BigDecimal>,
-    // TODO: Waiting for the driver scope
-    // pub driver_id: Uuid,
+    pub driver_id: Option<Uuid>,
     pub status_id: Uuid,
     pub initial_address_id: Option<Uuid>,
     pub final_address_id: Option<Uuid>,

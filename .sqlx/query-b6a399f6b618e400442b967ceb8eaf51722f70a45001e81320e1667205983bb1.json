@@ -72,6 +72,11 @@
         "ordinal": 13,
         "name": "status_id",
         "type_info": "Uuid"
+      },
+      {
+        "ordinal": 14,
+        "name": "driver_id",
+        "type_info": "Uuid"
       }
     ],
     "parameters": {
@@ -93,7 +98,8 @@
       true,
       true,
       false,
-      false
+      false,
+      true
     ]
   },
   "hash": "b6a399f6b618e400442b967ceb8eaf51722f70a45001e81320e1667205983bb1"

@@ -42,6 +42,9 @@ pub struct RegisterRouteDTO {
         message = "Vehicle ID must be a valid UUID"
     ))]
     pub vehicle_id: String,
+
+    #[validate(custom(function = "is_valid_uuid", message = "Driver ID must be a valid UUID"))]
+    pub driver_id: Option<String>,
 }
 
 impl RegisterRouteDTO {
@@ -51,7 +54,7 @@ impl RegisterRouteDTO {
             initial_long: self.initial_long,
             final_lat: self.final_lat,
             final_long: self.final_long,
-            // driver_id: self.driver_id,
+            driver_id: self.driver_id,
             status_id: self.status_id,
             initial_address_id: self.initial_address_id,
             final_address_id: self.final_address_id,
@@ -66,7 +69,7 @@ pub struct SaveRouteParamsDTO<B, S> {
     pub initial_long: B,
     pub final_lat: Option<B>,
     pub final_long: Option<B>,
-    // pub driver_id: S,
+    pub driver_id: Option<S>,
     pub status_id: S,
     pub initial_address_id: Option<S>,
     pub final_address_id: Option<S>,
@@ -86,7 +89,7 @@ pub struct FilterRouteDTO {
     pub initial_long: BigDecimal,
     pub final_lat: Option<BigDecimal>,
     pub final_long: Option<BigDecimal>,
-    // pub driver_id: Uuid,
+    pub driver_id: Option<String>,
     pub status_id: String,
     pub initial_address_id: Option<String>,
     pub final_address_id: Option<String>,
@@ -114,7 +117,7 @@ impl FilterRouteDTO {
             } else {
                 None
             },
-            // driver_id: route.driver_id.to_string(),
+            driver_id: route.driver_id.map(|id| id.to_string()),
             status_id: route.status_id.to_string(),
             initial_address_id: route.initial_address_id.map(|id| id.to_string()),
             final_address_id: route.final_address_id.map(|id| id.to_string()),

@@ -21,6 +21,12 @@ pub trait RouteExt {
         params: SaveRouteParamsDTO<B, S>,
     ) -> Result<Route, sqlx::Error>;
 
+    async fn update_route<B: Into<BigDecimal> + Send, S: Into<String> + Send>(
+        &self,
+        route_id: Option<Uuid>,
+        params: SaveRouteParamsDTO<B, S>,
+    ) -> Result<Route, sqlx::Error>;
+
     async fn delete_route(&self, route_id: Option<Uuid>) -> Result<Option<Route>, sqlx::Error>;
 }
 
@@ -61,7 +67,7 @@ impl RouteExt for DBClient {
             initial_long,
             final_lat,
             final_long,
-            // driver_id,
+            driver_id,
             status_id,
             initial_address_id,
             final_address_id,
@@ -84,11 +90,16 @@ impl RouteExt for DBClient {
         let status_id = Uuid::parse_str(&status_id.into())
             .map_err(|e| Error::Protocol(format!("Failed to parse status_id: {}", e)))?;
 
+        let driver_id = driver_id
+            .map(|id| Uuid::parse_str(&id.into()))
+            .transpose()
+            .map_err(|e| Error::Protocol(format!("Failed to parse driver_id: {}", e)))?;
+
         let route = sqlx::query_as!(
             Route,
             r#"
-            INSERT INTO routes (initial_lat, initial_long, final_lat, final_long, initial_address_id, final_address_id, vehicle_id, status_id) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
+            INSERT INTO routes (initial_lat, initial_long, final_lat, final_long, initial_address_id, final_address_id, vehicle_id, status_id, driver_id) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
             RETURNING *"#,
             &initial_lat.into(),
             &initial_long.into(),
@@ -98,7 +109,66 @@ impl RouteExt for DBClient {
             final_address_id,
             &vehicle_id,
             &status_id,
-            // Uuid::parse_str(&driver_id.into()).unwrap(),
+            driver_id,
+        )
+        .fetch_one(&self.pool)
+        .await?;
+
+        Ok(route)
+    }
+
+    async fn update_route<B: Into<BigDecimal> + Send, S: Into<String> + Send>(
+        &self,
+        route_id: Option<Uuid>,
+        params: SaveRouteParamsDTO<B, S>,
+    ) -> Result<Route, sqlx::Error> {
+        let SaveRouteParamsDTO {
+            initial_lat,
+            initial_long,
+            final_lat,
+            final_long,
+            driver_id,
+            status_id,
+            initial_address_id,
+            final_address_id,
+            vehicle_id,
+        } = params;
+
+        let initial_address_id = initial_address_id
+            .map(|id| Uuid::parse_str(&id.into()))
+            .transpose()
+            .map_err(|e| Error::Protocol(format!("Failed to parse initial_address_id: {}", e)))?;
+
+        let final_address_id = final_address_id
+            .map(|id| Uuid::parse_str(&id.into()))
+            .transpose()
+            .map_err(|e| Error::Protocol(format!("Failed to parse final_address_id: {}", e)))?;
+
+        let vehicle_id = Uuid::parse_str(&vehicle_id.into())
+            .map_err(|e| Error::Protocol(format!("Failed to parse vehicle_id: {}", e)))?;
+
+        let status_id = Uuid::parse_str(&status_id.into())
+            .map_err(|e| Error::Protocol(format!("Failed to parse status_id: {}", e)))?;
+
+        let driver_id = driver_id
+            .map(|id| Uuid::parse_str(&id.into()))
+            .transpose()
+            .map_err(|e| Error::Protocol(format!("Failed to parse driver_id: {}", e)))?;
+
+        let route = sqlx::query_as!(
+            Route,
+            r#"
+            UPDATE routes SET initial_lat = $2, initial_long = $3, final_lat = $4, final_long = $5, initial_address_id = $6, final_address_id = $7, vehicle_id = $8, status_id = $9, driver_id = $10 WHERE id = $1 RETURNING *"#,
+            &route_id.unwrap(),
+            &initial_lat.into(),
+            &initial_long.into(),
+            &final_lat.map(Into::into).unwrap_or_default(),
+            &final_long.map(Into::into).unwrap_or_default(),
+            initial_address_id,
+            final_address_id,
+            &vehicle_id,
+            &status_id,
+            driver_id,
         )
         .fetch_one(&self.pool)
         .await?;
