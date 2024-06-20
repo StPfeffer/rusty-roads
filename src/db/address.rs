@@ -15,6 +15,8 @@ pub trait AddressExt {
         longitude: Option<BigDecimal>,
     ) -> Result<Option<Address>, sqlx::Error>;
 
+    async fn get_address_random(&self) -> Result<Option<Address>, sqlx::Error>;
+
     async fn list_addresses(&self, page: u32, limit: usize) -> Result<Vec<Address>, sqlx::Error>;
 
     async fn save_address<T: Into<String> + Send, B: Into<BigDecimal> + Send>(
@@ -58,6 +60,17 @@ impl AddressExt for DBClient {
                 .await?;
             }
         }
+
+        Ok(address)
+    }
+
+    async fn get_address_random(&self) -> Result<Option<Address>, sqlx::Error> {
+        let address = sqlx::query_as!(
+            Address,
+            r#"SELECT * FROM addresses ORDER BY RANDOM() LIMIT 1"#,
+        )
+        .fetch_optional(&self.pool)
+        .await?;
 
         Ok(address)
     }
