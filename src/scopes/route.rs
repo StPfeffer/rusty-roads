@@ -3,7 +3,10 @@ use sqlx::error::DatabaseError;
 use validator::Validate;
 
 use crate::{
-    db::{address::AddressExt, route::{RouteExt, RouteStatusExt}},
+    db::{
+        address::AddressExt,
+        route::{RouteExt, RouteStatusExt},
+    },
     dtos::{
         request::RequestQueryDTO,
         route::{
@@ -313,10 +316,22 @@ pub async fn create_random_route(
 
     let request_dto = body.into_inner();
 
-    let initial_address = app_state.db_client.get_address_random().await.map_err(|e| HttpError::server_error(e.to_string()))?;
-    let final_address = app_state.db_client.get_address_random().await.map_err(|e| HttpError::server_error(e.to_string()))?;
+    let initial_address = app_state
+        .db_client
+        .get_address_random()
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
+    let final_address = app_state
+        .db_client
+        .get_address_random()
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
 
-    let route_status = app_state.db_client.get_route_status(None, Some("CREATED".to_owned())).await.map_err(|e| HttpError::server_error(e.to_string()))?;
+    let route_status = app_state
+        .db_client
+        .get_route_status(None, Some("CREATED".to_owned()))
+        .await
+        .map_err(|e| HttpError::server_error(e.to_string()))?;
 
     let initial_address_2 = initial_address.unwrap();
     let final_address_2 = final_address.unwrap();
