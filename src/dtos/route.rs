@@ -16,13 +16,7 @@ pub struct RegisterRouteDTO {
     pub final_lat: Option<BigDecimal>,
     pub final_long: Option<BigDecimal>,
 
-    // #[validate(custom(function = "is_valid_uuid", message = "Driver ID must be a valid UUID"))]
-    // pub driver_id: String,
-    #[validate(length(
-        min = 1,
-        max = 20,
-        message = "Status must have a maximum of 20 characters"
-    ))]
+    #[validate(custom(function = "is_valid_uuid", message = "Status ID must be a valid UUID"))]
     pub status_id: String,
 
     #[validate(custom(
@@ -170,4 +164,17 @@ impl FilterRouteStatusDTO {
 pub struct RouteStatusListResponseDTO {
     pub status: Vec<FilterRouteStatusDTO>,
     pub results: usize,
+}
+
+#[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RegisterRandomRouteDTO {
+    #[validate(custom(
+        function = "is_valid_uuid",
+        message = "Vehicle ID must be a valid UUID"
+    ))]
+    pub vehicle_id: String,
+
+    #[validate(custom(function = "is_valid_uuid", message = "Driver ID must be a valid UUID"))]
+    pub driver_id: String,
 }

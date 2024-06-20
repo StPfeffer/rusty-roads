@@ -1,5 +1,6 @@
 use async_trait::async_trait;
-use bigdecimal::BigDecimal;
+use bigdecimal::{BigDecimal, FromPrimitive};
+use geoutils::Location;
 use sqlx::Error;
 use uuid::Uuid;
 
@@ -95,21 +96,64 @@ impl RouteExt for DBClient {
             .transpose()
             .map_err(|e| Error::Protocol(format!("Failed to parse driver_id: {}", e)))?;
 
+        let a: BigDecimal = initial_lat.into();
+
+        let float_value_a: f32 = match a.to_string().parse() {
+            Ok(value) => value,
+            Err(e) => {
+                println!("Error parsing string to f32: {}", e);
+                0.0
+            }
+        };
+
+        let b: BigDecimal = initial_long.into();
+
+        let float_value_b: f32 = match b.to_string().parse() {
+            Ok(value) => value,
+            Err(e) => {
+                println!("Error parsing string to f32: {}", e);
+                0.0
+            }
+        };
+
+        let c: BigDecimal = final_lat.unwrap().into();
+
+        let float_value_c: f32 = match c.to_string().parse() {
+            Ok(value) => value,
+            Err(e) => {
+                println!("Error parsing string to f32: {}", e);
+                0.0
+            }
+        };
+
+        let d: BigDecimal = final_long.unwrap().into();
+
+        let float_value_d: f32 = match d.to_string().parse() {
+            Ok(value) => value,
+            Err(e) => {
+                println!("Error parsing string to f32: {}", e);
+                0.0
+            }
+        };
+
+        let l1 = Location::new(float_value_a, float_value_b);
+        let l2 = Location::new(float_value_c, float_value_d);
+
+        let distance = l1.haversine_distance_to(&l2);
+
         let route = sqlx::query_as!(
             Route,
             r#"
-            INSERT INTO routes (initial_lat, initial_long, final_lat, final_long, initial_address_id, final_address_id, vehicle_id, status_id, driver_id) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
+            INSERT INTO routes (initial_lat, initial_long, final_lat, final_long, initial_address_id, final_address_id, vehicle_id, status_id, driver_id, total_distance) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) 
             RETURNING *"#,
-            &initial_lat.into(),
-            &initial_long.into(),
-            &final_lat.map(Into::into).unwrap_or_default(),
-            &final_long.map(Into::into).unwrap_or_default(),
+            a, b, c, d,
             initial_address_id,
             final_address_id,
             &vehicle_id,
             &status_id,
             driver_id,
+            BigDecimal::from_f64(distance.meters())
         )
         .fetch_one(&self.pool)
         .await?;

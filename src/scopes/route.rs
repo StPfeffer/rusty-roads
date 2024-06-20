@@ -3,12 +3,12 @@ use sqlx::error::DatabaseError;
 use validator::Validate;
 
 use crate::{
-    db::route::{RouteExt, RouteStatusExt},
+    db::{address::AddressExt, route::{RouteExt, RouteStatusExt}},
     dtos::{
         request::RequestQueryDTO,
         route::{
-            FilterRouteDTO, FilterRouteStatusDTO, RegisterRouteDTO, RegisterRouteStatusDTO,
-            RouteListResponseDTO, RouteStatusListResponseDTO,
+            FilterRouteDTO, FilterRouteStatusDTO, RegisterRandomRouteDTO, RegisterRouteDTO,
+            RegisterRouteStatusDTO, RouteListResponseDTO, RouteStatusListResponseDTO,
         },
     },
     error::{ErrorMessage, HttpError},
@@ -27,6 +27,7 @@ pub fn route_scope() -> Scope {
         .route("/{id}", web::put().to(update_route))
         .route("/{id}", web::delete().to(delete_route))
         .route("/{id}/status", web::get().to(get_route_status_from_route))
+        .route("/random", web::post().to(create_random_route))
 }
 
 pub async fn get_route(
@@ -300,5 +301,52 @@ fn match_foreign_key_violation(db_err: &dyn DatabaseError) -> Result<HttpRespons
             }
         }
         None => Err(HttpError::server_error(db_err.to_string())),
+    }
+}
+
+pub async fn create_random_route(
+    app_state: web::Data<AppState>,
+    body: web::Json<RegisterRandomRouteDTO>,
+) -> Result<HttpResponse, HttpError> {
+    body.validate()
+        .map_err(|e| HttpError::bad_request(e.to_string()))?;
+
+    let request_dto = body.into_inner();
+
+    let initial_address = app_state.db_client.get_address_random().await.map_err(|e| HttpError::server_error(e.to_string()))?;
+    let final_address = app_state.db_client.get_address_random().await.map_err(|e| HttpError::server_error(e.to_string()))?;
+
+    let route_status = app_state.db_client.get_route_status(None, Some("CREATED".to_owned())).await.map_err(|e| HttpError::server_error(e.to_string()))?;
+
+    let initial_address_2 = initial_address.unwrap();
+    let final_address_2 = final_address.unwrap();
+
+    let dto = RegisterRouteDTO {
+        initial_lat: initial_address_2.latitude.unwrap(),
+        initial_long: initial_address_2.longitude.unwrap(),
+        final_lat: final_address_2.latitude,
+        final_long: final_address_2.longitude,
+        status_id: route_status.unwrap().id.to_string(),
+        initial_address_id: Some(initial_address_2.id.to_string()),
+        final_address_id: Some(final_address_2.id.to_string()),
+        vehicle_id: request_dto.vehicle_id,
+        driver_id: Some(request_dto.driver_id),
+    };
+
+    let result = app_state
+        .db_client
+        .save_route(dto.into_save_route_params_dto())
+        .await;
+
+    match result {
+        Ok(route) => Ok(HttpResponse::Created().json(FilterRouteDTO::filter_route(&route))),
+        Err(sqlx::Error::Database(db_err)) => {
+            if db_err.is_foreign_key_violation() {
+                match_foreign_key_violation(&*db_err)
+            } else {
+                Err(HttpError::server_error(db_err.to_string()))
+            }
+        }
+        Err(e) => Err(HttpError::server_error(e.to_string())),
     }
 }

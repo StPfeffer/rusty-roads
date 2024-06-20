@@ -1,0 +1,74 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT * FROM addresses ORDER BY RANDOM() LIMIT 1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "address",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "number",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "neighbourhood",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "reference",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "complement",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 6,
+        "name": "zip_code",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 7,
+        "name": "latitude",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 8,
+        "name": "longitude",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 9,
+        "name": "city_id",
+        "type_info": "Uuid"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false
+    ]
+  },
+  "hash": "54116680aedb5680cb66c9c6a6bb703935b9ccbf9a2a9d5d8dd0c1462880f170"
+}

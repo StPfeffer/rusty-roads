@@ -19,6 +19,7 @@ uuid = { version = "1.8.0", features = ["serde", "v4"] }
 validator = { version = "0.18.1", features = ["derive"] }
 log = "0.4.21"
 regex = "1.10.4"
+geoutils = "0.5.1"
 
 [[bin]]
 name = "rusty_roads"
