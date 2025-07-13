@@ -40,7 +40,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match sqlx::migrate!("./migrations").run(&pool).await {
         Ok(_) => println!("Migrations executed successfully."),
-        Err(e) => eprintln!("Error executing migrations: {}", e),
+        Err(e) => eprintln!("Error executing migrations: {e}"),
     };
 
     let db_client = DBClient::new(pool);
@@ -118,7 +118,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ///         // Further database operations using the pool
 ///     }
 ///     Err(err) => {
-///         eprintln!("Failed to establish database connection: {}", err);
+///         eprintln!("Failed to establish database connection: {err}");
 ///         // Handle the error appropriately
 ///     }
 /// }
@@ -155,7 +155,7 @@ async fn establish_database_connection(
         {
             Ok(pool) => return Ok(pool),
             Err(err) => {
-                eprintln!("Error connecting to the database: {}", err);
+                eprintln!("Error connecting to the database: {err}");
                 retries += 1;
 
                 if retries >= max_retries {
