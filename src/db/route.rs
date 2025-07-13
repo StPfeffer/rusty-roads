@@ -78,30 +78,30 @@ impl RouteExt for DBClient {
         let initial_address_id = initial_address_id
             .map(|id| Uuid::parse_str(&id.into()))
             .transpose()
-            .map_err(|e| Error::Protocol(format!("Failed to parse initial_address_id: {}", e)))?;
+            .map_err(|e| Error::Protocol(format!("Failed to parse initial_address_id: {e}")))?;
 
         let final_address_id = final_address_id
             .map(|id| Uuid::parse_str(&id.into()))
             .transpose()
-            .map_err(|e| Error::Protocol(format!("Failed to parse final_address_id: {}", e)))?;
+            .map_err(|e| Error::Protocol(format!("Failed to parse final_address_id: {e}")))?;
 
         let vehicle_id = Uuid::parse_str(&vehicle_id.into())
-            .map_err(|e| Error::Protocol(format!("Failed to parse vehicle_id: {}", e)))?;
+            .map_err(|e| Error::Protocol(format!("Failed to parse vehicle_id: {e}")))?;
 
         let status_id = Uuid::parse_str(&status_id.into())
-            .map_err(|e| Error::Protocol(format!("Failed to parse status_id: {}", e)))?;
+            .map_err(|e| Error::Protocol(format!("Failed to parse status_id: {e}")))?;
 
         let driver_id = driver_id
             .map(|id| Uuid::parse_str(&id.into()))
             .transpose()
-            .map_err(|e| Error::Protocol(format!("Failed to parse driver_id: {}", e)))?;
+            .map_err(|e| Error::Protocol(format!("Failed to parse driver_id: {e}")))?;
 
         let a: BigDecimal = initial_lat.into();
 
         let float_value_a: f32 = match a.to_string().parse() {
             Ok(value) => value,
             Err(e) => {
-                println!("Error parsing string to f32: {}", e);
+                println!("Error parsing string to f32: {e}");
                 0.0
             }
         };
@@ -111,7 +111,7 @@ impl RouteExt for DBClient {
         let float_value_b: f32 = match b.to_string().parse() {
             Ok(value) => value,
             Err(e) => {
-                println!("Error parsing string to f32: {}", e);
+                println!("Error parsing string to f32: {e}");
                 0.0
             }
         };
@@ -121,7 +121,7 @@ impl RouteExt for DBClient {
         let float_value_c: f32 = match c.to_string().parse() {
             Ok(value) => value,
             Err(e) => {
-                println!("Error parsing string to f32: {}", e);
+                println!("Error parsing string to f32: {e}");
                 0.0
             }
         };
@@ -131,7 +131,7 @@ impl RouteExt for DBClient {
         let float_value_d: f32 = match d.to_string().parse() {
             Ok(value) => value,
             Err(e) => {
-                println!("Error parsing string to f32: {}", e);
+                println!("Error parsing string to f32: {e}");
                 0.0
             }
         };
@@ -181,23 +181,23 @@ impl RouteExt for DBClient {
         let initial_address_id = initial_address_id
             .map(|id| Uuid::parse_str(&id.into()))
             .transpose()
-            .map_err(|e| Error::Protocol(format!("Failed to parse initial_address_id: {}", e)))?;
+            .map_err(|e| Error::Protocol(format!("Failed to parse initial_address_id: {e}")))?;
 
         let final_address_id = final_address_id
             .map(|id| Uuid::parse_str(&id.into()))
             .transpose()
-            .map_err(|e| Error::Protocol(format!("Failed to parse final_address_id: {}", e)))?;
+            .map_err(|e| Error::Protocol(format!("Failed to parse final_address_id: {e}")))?;
 
         let vehicle_id = Uuid::parse_str(&vehicle_id.into())
-            .map_err(|e| Error::Protocol(format!("Failed to parse vehicle_id: {}", e)))?;
+            .map_err(|e| Error::Protocol(format!("Failed to parse vehicle_id: {e}")))?;
 
         let status_id = Uuid::parse_str(&status_id.into())
-            .map_err(|e| Error::Protocol(format!("Failed to parse status_id: {}", e)))?;
+            .map_err(|e| Error::Protocol(format!("Failed to parse status_id: {e}")))?;
 
         let driver_id = driver_id
             .map(|id| Uuid::parse_str(&id.into()))
             .transpose()
-            .map_err(|e| Error::Protocol(format!("Failed to parse driver_id: {}", e)))?;
+            .map_err(|e| Error::Protocol(format!("Failed to parse driver_id: {e}")))?;
 
         let route = sqlx::query_as!(
             Route,

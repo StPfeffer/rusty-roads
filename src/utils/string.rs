@@ -15,7 +15,7 @@ pub fn is_valid_uuid(city_id: &str) -> Result<(), ValidationError> {
 pub fn extract_endpoint_from_path(regex: &str, request: &HttpRequest) -> Result<String, HttpError> {
     let path = request.path();
     let re = Regex::new(regex)
-        .map_err(|e| HttpError::server_error(format!("Failed to compile regex: {}", e)))?;
+        .map_err(|e| HttpError::server_error(format!("Failed to compile regex: {e}")))?;
 
     let endpoint = re
         .captures(path)
