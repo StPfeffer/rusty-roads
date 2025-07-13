@@ -99,10 +99,10 @@ impl DriverExt for DBClient {
         collaborator_id: T,
     ) -> Result<Driver, sqlx::Error> {
         let cnh_type_id = Uuid::parse_str(&cnh_type_id.into())
-            .map_err(|e| Error::Protocol(format!("Failed to parse cnh_type_id: {}", e)))?;
+            .map_err(|e| Error::Protocol(format!("Failed to parse cnh_type_id: {e}")))?;
 
         let collaborator_id = Uuid::parse_str(&collaborator_id.into())
-            .map_err(|e| Error::Protocol(format!("Failed to parse collaborator_id: {}", e)))?;
+            .map_err(|e| Error::Protocol(format!("Failed to parse collaborator_id: {e}")))?;
 
         let driver = sqlx::query_as!(
             Driver,
